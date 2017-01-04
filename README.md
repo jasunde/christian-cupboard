@@ -2,6 +2,7 @@
 
 Steps to use [gulp](http://gulpjs.com/):
 
-1. `npm install gulp-cli -g`
+(you may need to use sudo)
+1. `npm install gulp-cli -g` 
 2. `npm install`
 3. `gulp`
