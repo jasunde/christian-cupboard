@@ -59,13 +59,14 @@ router.put('/', function (req, res) {
   var user = req.body
   pool.query(
     'UPDATE users '+
-    'SET first_name = $1, last_name = $2, email = $3, is_admin = $4 '+
-    'WHERE id = $5',
+    'SET first_name = $1, last_name = $2, email = $3, is_admin = $4, is_active = $5 '+
+    'WHERE id = $6',
     [
       user.first_name,
       user.last_name,
       user.email,
       user.is_admin,
+      user.is_active,
       user.id
     ]
   )
