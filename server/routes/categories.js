@@ -6,6 +6,19 @@ var pool = new pg.Pool({
   database: 'christian_cupboard'
 })
 
+router.get('/', function (req, res) {
+  pool.query(
+    'SELECT * FROM categories'
+  )
+  .then(function (result) {
+    res.send(result.rows)
+  })
+  .catch(function (err) {
+    console.log('GET all categories error:', err);
+    res.status(500).send(err)
+  })
+})
+
 router.post('/', function (req, res) {
   var category = req.body
   pool.query(
@@ -23,8 +36,8 @@ router.post('/', function (req, res) {
     res.sendStatus(200)
   })
   .catch(function (err) {
-    console.log('POST category error:', err);
-    res.sendStatus(500)
+    console.log('POST category error:', err)
+    res.status(500).send(err)
   })
 })
 
