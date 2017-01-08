@@ -72,4 +72,28 @@ router.post('/', function (req, res) {
   })
 })
 
+router.put('/', function (req, res) {
+  var category = req.body
+  pool.query(
+    'UPDATE categories '+
+    'SET name = $1, food_rescue = $2, food_drive = $3, daily_dist = $4, sub_dist = $5 '+
+    'WHERE id = $6',
+    [
+      category.name,
+      category.food_rescue,
+      category.food_drive,
+      category.daily_dist,
+      category.sub_dist,
+      category.id
+    ]
+  )
+  .then(function (response) {
+    res.sendStatus(204)
+  })
+  .catch(function (err) {
+    console.log('PUT category error:', err)
+    res.status(500).send(err)
+  })
+})
+
 module.exports = router
