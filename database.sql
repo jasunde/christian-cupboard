@@ -52,7 +52,7 @@ CREATE TABLE donations (
 
 CREATE TABLE categories (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(35),
+	name VARCHAR(35) UNIQUE,
 	food_rescue BOOLEAN DEFAULT FALSE,
 	food_drive BOOLEAN DEFAULT FALSE,
 	daily_dist BOOLEAN DEFAULT FALSE,
