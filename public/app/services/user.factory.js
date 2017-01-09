@@ -1,5 +1,4 @@
-angular.module('christianCupboardApp')
-.factory('User', ['Auth', function UserFactory(Auth) {
+app.factory('User', ['Auth', function UserFactory(Auth) {
   var currentUser = null;
   var idToken = null;
 

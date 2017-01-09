@@ -1,5 +1,4 @@
-angular.module('christianCupboardApp')
-.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory($firebaseAuth, $http, firebase) {
+app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory($firebaseAuth, $http, firebase) {
   var auth = $firebaseAuth();
   /**
    * Perform user log-in
@@ -18,8 +17,8 @@ angular.module('christianCupboardApp')
    */
   function onChange(callback) {
     auth.$onAuthStateChanged(function(firebaseUser){
-      console.log(firebase.auth().currentUser);
-      console.log(firebaseUser);
+      // console.log(firebase.auth().currentUser);
+      // console.log(firebaseUser);
       if(firebaseUser) {
         callback(firebaseUser);
       } else {

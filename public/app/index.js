@@ -1,5 +1,5 @@
 console.log('hello world');
-var app = angular.module("christianCupboard", ["ngRoute"]);
+var app = angular.module("christianCupboard", ["ngRoute", "firebase"]);
 
 app.config(["$routeProvider", function($routeProvider) {
   $routeProvider
