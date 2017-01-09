@@ -1,19 +1,18 @@
-console.log('hello world');
 var app = angular.module("christianCupboard", ["ngRoute", "firebase"]);
 
 app.config(["$routeProvider", function($routeProvider) {
   $routeProvider
   .when('/login', {
     templateUrl: '/views/templates/login.html',
-    controller: 'loginController',
-    controllerAs: 'lc'
+    controller: 'LoginController',
+    controllerAs: 'lc',
   })
   .when('/foodRescue', {
     templateUrl: '/views/templates/foodRescue.html',
-    controller: 'foodRescueController',
-    controllerAs: 'frc'
+    controller: 'FoodRescueController',
+    controllerAs: 'frc',
   })
   .otherwise({
-    redirectTo: 'login'
-  })
+    redirectTo: 'login',
+  });
 }]);

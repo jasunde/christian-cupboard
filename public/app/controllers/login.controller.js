@@ -1,4 +1,4 @@
-app.controller('loginController', ['Auth', function (Auth) {
+app.controller('LoginController', ['Auth', function (Auth) {
   var self = this;
 
   self.currentUser = Auth.currentUser();
@@ -9,6 +9,4 @@ app.controller('loginController', ['Auth', function (Auth) {
       self.currentUser = Auth.currentUser();
     });
   }
-  self.logOut = Auth.logOut;
-
 }]);
