@@ -1,11 +1,10 @@
-console.log('hello world');
 var app = angular.module("christianCupboard", ["ngRoute"]);
 
 app.config(["$routeProvider", function($routeProvider) {
   $routeProvider
   .when('/login', {
     templateUrl: '/views/templates/login.html',
-    controller: 'loginController',
+    controller: 'LoginController',
     controllerAs: 'lc'
   })
   .when('/foodRescue', {
