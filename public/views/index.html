@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <title>Christian Cupboard</title>
   <!-- Angular JS -->
-  <script src="/vendor/angular.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <!-- Angular Routes -->
   <script src="/vendor/angular-route.min.js" type="text/javascript"></script>
   <script src="app/index.js"></script>
   <!-- Factories -->
-
+  <script type="text/javascript" src="/app/services/food-rescue.factory.js"></script>
   <!-- Controllers -->
   <script type="text/javascript" src=/app/controllers/login.controller.js></script>
   <script type="text/javascript" src=/app/controllers/food-rescue.controller.js></script>
@@ -24,7 +24,7 @@
 
   <div ng-include="'/views/templates/nav.html'"></div>
 
-  <main ng-view></main>
+  <main ng-view id="mainPageStyle"></main>
 
 </body>
 </html>

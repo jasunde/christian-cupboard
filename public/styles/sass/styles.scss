@@ -3,3 +3,11 @@
 h1 {
   color: magenta;
 }
+
+// Variables
+$ccBlue: #255AA8;
+$ccYellow: #FFC600;
+
+.mainPageStyle {
+ background: $ccYellow;
+}

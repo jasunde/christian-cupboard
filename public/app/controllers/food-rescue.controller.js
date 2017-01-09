@@ -7,4 +7,9 @@ app.controller("foodRescueController", ["$http", "FoodRescueFactory", function($
   self.rescueCategories = FoodRescueFactory.categories();
   console.log("Categories for table", self.rescueCategories);
 
+// get organizations
+  // FoodRescueFactory.getOrganizations();
+  // self.rescueCategories = FoodRescueFactory.organizations();
+  // console.log("Organizations for table", self.rescueOrganizations);
+
 }]);

@@ -1,6 +1,7 @@
 app.factory("FoodRescueFactory", ["$http", function($http){
 
   var categories = undefined;
+  var organizations = undefined;
 
   //categories get request
   function getTableCategories(){
@@ -17,14 +18,34 @@ app.factory("FoodRescueFactory", ["$http", function($http){
     return promise;
   }
 
+  function getTableOrganizations(){
+    var promise = $http({
+      method: 'GET',
+      url: '/organizations',
+      headers: {
+        id_token: idToken
+      }
+    }).then(function(response){
+      organizations = response.data;
+      return organizations;
+    });
+    return promise;
+  }
+
   //food rescue API
   var foodRescueApi = {
     categories: function(){
       return categories;
     },
+    organizations: function(){
+      return organizations;
+    },
     getCategories: function(){
       return getTableCategories();
-    }
+    },
+    getOrganizations: function(){
+      return getTableOrganizations();
+    },
 
   };
 
