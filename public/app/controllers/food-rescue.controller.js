@@ -4,14 +4,6 @@ app.controller("foodRescueController", ["$http", "FoodRescueFactory", function($
 
 //get the categories
 
-  function getTableCategories(){
-    $http({
-        url:
-        method:
-        headers:
-    }).then(function (response) {
-      self.rescueCategories = response.data;
-    });
-  }
+
 
 }]);
