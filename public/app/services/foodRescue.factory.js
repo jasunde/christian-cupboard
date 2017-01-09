@@ -1,7 +1,11 @@
-app.factory("FoodRescueFactory", ["$http", function($http){
+app.factory("FoodRescueFactory", ["$http", "Auth", function($http, Auth){
 
   var categories = undefined;
   var organizations = undefined;
+  var idToken = undefined;
+
+
+  idToken = Auth.idToken();
 
   //categories get request
   function getTableCategories(){

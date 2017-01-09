@@ -9,13 +9,14 @@ admin.initializeApp({
 verify it against our firebase service account private_key.
 Then we add the decodedToken */
 var tokenDecoder = function(req, res, next){
-  if(req.headers.id_token != undefined) {
+  if(req.headers.id_token) {
     admin.auth().verifyIdToken(req.headers.id_token).then(function(decodedToken) {
       // Adding the decodedToken to the request so that downstream processes can use it
       req.decodedToken = decodedToken;
       next();
     })
     .catch(function(error) {
+      console.log(error);
       // If the id_token isn't right, you end up in this callback function
       // Here we are returning a forbidden error
       console.log('User token could not be verified');
@@ -24,4 +25,4 @@ var tokenDecoder = function(req, res, next){
   }
 }
 
-module.exports =  { token: tokenDecoder };
+module.exports = tokenDecoder;

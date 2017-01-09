@@ -8,11 +8,6 @@ var decoder = require('./modules/decoder');
 var users = require('./routes/users')
 var categories = require('./routes/categories')
 
-<<<<<<< HEAD
-// app.use(decoder)
-=======
-
->>>>>>> develop
 app.set('port', process.env.PORT || '3000');
 
 app.use(express.static('public'));
