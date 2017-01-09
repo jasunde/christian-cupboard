@@ -1,2 +1,4 @@
-<button>LOGIN</button>
-{{lc.loginMessage}}
+<button ng-click="lc.logIn()">Log In</button>
+<button ng-click="lc.logOut()">Log Out</button>
+
+{{ lc.currentUser.displayName }}
