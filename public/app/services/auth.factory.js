@@ -25,7 +25,13 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory(
     // console.log(firebaseUser);
     if(firebaseUser) {
       currentUser = firebaseUser;
-      idToken = firebaseUser.getToken();
+      firebaseUser.getToken()
+      .then(function (token) {
+        idToken = token;
+      })
+      .catch(function (err) {
+        console.log('firebase getToken error:', err);
+      });
     } else {
       console.log('Not logged in or not authorized.');
       currentUser = null;
