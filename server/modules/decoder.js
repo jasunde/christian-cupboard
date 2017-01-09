@@ -2,7 +2,7 @@ var admin = require("firebase-admin");
 
 admin.initializeApp({
   credential: admin.credential.cert("./server/firebase-service-account.json"),
-  databaseURL: "https://prime-1b0a0.firebaseio.com" // replace this line with your URL
+  databaseURL: "https://christian-cupboard.firebaseio.com" // replace this line with your URL
 });
 
 /* This is where the magic happens. We pull the id_token off of the request,
@@ -25,4 +25,3 @@ var tokenDecoder = function(req, res, next){
 }
 
 module.exports =  tokenDecoder;
-

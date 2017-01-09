@@ -1,5 +1,5 @@
-angular.module('secretsApp')
-.factory('User', ['Auth', 'Secrets', function UserFactory(Auth, Secrets) {
+angular.module('christianCupboardApp')
+.factory('User', ['Auth', function UserFactory(Auth) {
   var currentUser = null;
   var idToken = null;
 
@@ -21,7 +21,6 @@ angular.module('secretsApp')
     .then(function () {
       currentUser = null;
       idToken = null;
-      Secrets.get(null);
     });
   }
 
@@ -35,11 +34,7 @@ angular.module('secretsApp')
     if(currentUser) {
       currentUser.getToken()
       .then(function(token){
-        Secrets.get(token)
-        .then(function () {
-          idToken = token;
-          callback();
-        });
+
       })
       .catch(function (err) {
         console.trace('firebaseUser getToken error:', err);

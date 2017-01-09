@@ -1,4 +1,4 @@
-angular.module('secretsApp')
+angular.module('christianCupboardApp')
 .factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory($firebaseAuth, $http, firebase) {
   var auth = $firebaseAuth();
   /**
