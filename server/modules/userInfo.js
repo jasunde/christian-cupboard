@@ -11,7 +11,6 @@ module.exports = function (req, res, next) {
   )
   .then(function (result) {
     req.user = result.rows[0]
-    console.log('req.user:', req.user);
     next();
   })
   .catch(function (err) {

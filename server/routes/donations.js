@@ -12,7 +12,8 @@ router.post('/', function (req, res) {
   .then(function (client) {
     client.query(
       'INSERT INTO donations (organization_id, timestamp, date, added_by) '+
-      'VALUES ($1, $2, $3, $4)',
+      'VALUES ($1, $2, $3, $4) '+
+      'RETURNING id',
       [
         donation.organization_id,
         donation.timestamp,
@@ -20,10 +21,22 @@ router.post('/', function (req, res) {
         req.user.id
       ]
     )
-    .then(function (response) {
-      console.log('insert donation response', response);
-      client.release()
-      res.sendStatus(200)
+    .then(function (result) {
+      var donation_id = result.rows[0].id
+
+      donation.categories.forEach(function (category) {
+        client.query({
+          text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
+          'VALUES ($1, $2, $3)',
+          values: [donation_id, category.id, category.amount],
+          name: 'insert-donation-details'
+        })
+      })
+      
+      client.on('drain', function () {
+        client.end.bind(client)
+        res.sendStatus(200)
+      })
     })
     .catch(function (err) {
       console.log('POST donation error:', err)
