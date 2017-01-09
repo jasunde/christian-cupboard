@@ -11,7 +11,7 @@ app.use(bodyParser.json())
 app.set('port', process.env.PORT || '3000');
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/views/index.html'));
 });
 
 app.use('/users', users)
