@@ -44,10 +44,13 @@ CREATE TABLE donations (
 	id SERIAL PRIMARY KEY,
 	organization_id INTEGER REFERENCES organizations(id),
 	individual_id INTEGER REFERENCES individuals(id),
-	date TIMESTAMP,
+	date DATE,
+  timestamp TIMESTAMP,
   added_by INTEGER REFERENCES user(id),
   updated_by INTEGER REFERENCES user(id),
-  last_update TIMESTAMP
+  last_update TIMESTAMP,
+  UNIQUE (organization_id, individual_id, date),
+  CHECK (organization_id IS NULL OR individual_id IS NULL)
 );
 
 CREATE TABLE categories (
@@ -71,10 +74,12 @@ CREATE TABLE distributions (
 	organization_id INTEGER REFERENCES organizations(id),
 	first_name VARCHAR(35),
 	last_name VARCHAR(35),
-	date TIMESTAMP,
+	date DATE,
+  timestamp TIMESTAMP,
   added_by INTEGER REFERENCES user(id),
   updated_by INTEGER REFERENCES user(id),
-  last_update TIMESTAMP
+  last_update TIMESTAMP,
+  UNIQUE (organization_id, date)
 );
 
 CREATE TABLE distribution_details (
