@@ -5,14 +5,14 @@ app.config(["$routeProvider", function($routeProvider) {
   .when('/login', {
     templateUrl: '/views/templates/login.html',
     controller: 'LoginController',
-    controllerAs: 'lc'
+    controllerAs: 'lc',
   })
   .when('/foodRescue', {
     templateUrl: '/views/templates/foodRescue.html',
-    controller: 'foodRescueController',
-    controllerAs: 'frc'
+    controller: 'FoodRescueController',
+    controllerAs: 'frc',
   })
   .otherwise({
-    redirectTo: 'login'
-  })
+    redirectTo: 'login',
+  });
 }]);
