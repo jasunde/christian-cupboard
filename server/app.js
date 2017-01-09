@@ -6,10 +6,16 @@ var bodyParser = require('body-parser');
 // source routes
 var users = require('./routes/users')
 var categories = require('./routes/categories')
+var donations = require('./routes/donations')
 
-app.use(bodyParser.json())
+// custom middleware
+var userInfo = require('./modules/userInfo')
 
 app.set('port', process.env.PORT || '3000');
+
+// middleware
+app.use(bodyParser.json())
+app.use(userInfo)
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -18,6 +24,7 @@ app.get('/', function (req, res) {
 // route the routes
 app.use('/users', users)
 app.use('/categories', categories)
+app.use('/donations', donations)
 
 app.use(express.static('public'));
 
