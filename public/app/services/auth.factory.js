@@ -25,11 +25,11 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
     // console.log(firebaseUser);
     if(firebaseUser) {
       currentUser = firebaseUser;
-
-
+      idToken = firebaseUser.getToken();
     } else {
       console.log('Not logged in or not authorized.');
       currentUser = null;
+      idToken = null;
     }
     console.log('currentUser:', currentUser);
   });
@@ -51,6 +51,9 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
     logOut: logOut,
     currentUser: function () {
       return currentUser;
+    },
+    idToken: function () {
+      return idToken;
     }
   };
 }]);

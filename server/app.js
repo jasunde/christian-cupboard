@@ -8,8 +8,14 @@ var decoder = require('./modules/decoder');
 var users = require('./routes/users')
 var categories = require('./routes/categories')
 
+<<<<<<< HEAD
 // app.use(decoder)
+=======
+
+>>>>>>> develop
 app.set('port', process.env.PORT || '3000');
+
+app.use(express.static('public'));
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/views/index.html'));
@@ -18,7 +24,7 @@ app.get('/', function (req, res) {
 app.use(express.static('public'));
 
 app.use(bodyParser.json())
-app.use(decoder.token);
+app.use(decoder)
 
 // route the routes
 app.use('/users', users)
