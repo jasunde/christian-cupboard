@@ -46,8 +46,8 @@ CREATE TABLE donations (
 	individual_id INTEGER REFERENCES individuals(id),
 	date DATE,
   timestamp TIMESTAMP,
-  added_by INTEGER REFERENCES user(id),
-  updated_by INTEGER REFERENCES user(id),
+  added_by INTEGER REFERENCES users(id),
+  updated_by INTEGER REFERENCES users(id),
   last_update TIMESTAMP,
   UNIQUE (organization_id, individual_id, date),
   CHECK ((organization_id IS NULL AND individual_id IS NOT NULL) OR (organization_id IS NOT NULL AND individual_id IS NULL))
@@ -76,8 +76,8 @@ CREATE TABLE distributions (
 	last_name VARCHAR(35),
 	date DATE,
   timestamp TIMESTAMP,
-  added_by INTEGER REFERENCES user(id),
-  updated_by INTEGER REFERENCES user(id),
+  added_by INTEGER REFERENCES users(id),
+  updated_by INTEGER REFERENCES users(id),
   last_update TIMESTAMP,
   UNIQUE (organization_id, date)
 );
