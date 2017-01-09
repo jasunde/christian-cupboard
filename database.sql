@@ -49,7 +49,8 @@ CREATE TABLE donations (
   added_by INTEGER REFERENCES users(id),
   updated_by INTEGER REFERENCES users(id),
   last_update TIMESTAMP,
-  UNIQUE (organization_id, individual_id, date),
+  UNIQUE (organization_id, date),
+  UNIQUE (individual_id, date),
   CHECK ((organization_id IS NULL AND individual_id IS NOT NULL) OR (organization_id IS NOT NULL AND individual_id IS NULL))
 );
 
