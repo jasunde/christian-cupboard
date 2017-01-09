@@ -2,6 +2,7 @@ app.factory("FoodRescueFactory", ["$http", function($http){
 
   var categories = undefined;
 
+  //categories get request
   function getTableCategories(){
     var promise = $http({
       method: 'GET',
@@ -16,9 +17,13 @@ app.factory("FoodRescueFactory", ["$http", function($http){
     return promise;
   }
 
+  //food rescue API
   var foodRescueApi = {
     categories: function(){
       return categories;
+    },
+    getCategories: function(){
+      return getTableCategories();
     }
 
   };

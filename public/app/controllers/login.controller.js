@@ -1,7 +1,7 @@
 app.controller("LoginController", ["$http", function($http){
 
   var self = this;
-  self.loginMessage = "Sah dudes!";
+  self.loginMessage = "CC has fed this many families!";
 
 
 
