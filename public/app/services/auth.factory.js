@@ -1,11 +1,16 @@
 app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory($firebaseAuth, $http, firebase) {
   var auth = $firebaseAuth();
+  var currentUser = null;
+  var idToken = null;
+
   /**
    * Perform user log-in
    */
   function logIn() {
     return auth.$signInWithPopup("google")
     .then(function(firebaseUser) {
+      // console.log('firebaseUser', firebaseUser);
+      currentUser = firebaseUser.user;
       return firebaseUser;
     }).catch(function(error) {
       console.log("Authentication failed: ", error);
@@ -15,18 +20,17 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory(
   /**
    * Add state change listener to auth
    */
-  function onChange(callback) {
-    auth.$onAuthStateChanged(function(firebaseUser){
-      // console.log(firebase.auth().currentUser);
-      // console.log(firebaseUser);
-      if(firebaseUser) {
-        callback(firebaseUser);
-      } else {
-        console.log('Not logged in or not authorized.');
-        callback();
-      }
-    });
-  }
+  auth.$onAuthStateChanged(function(firebaseUser){
+    // console.log(firebase.auth().currentUser);
+    // console.log(firebaseUser);
+    if(firebaseUser) {
+      currentUser = firebaseUser;
+    } else {
+      console.log('Not logged in or not authorized.');
+      currentUser = null;
+    }
+    console.log('currentUser:', currentUser);
+  });
 
   // This code runs when the user logs out
   /**
@@ -43,9 +47,8 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory(
   return {
     logIn: logIn,
     logOut: logOut,
-    onChange: onChange,
     currentUser: function () {
-      return auth.currentUser;
+      return currentUser;
     }
   };
 }]);

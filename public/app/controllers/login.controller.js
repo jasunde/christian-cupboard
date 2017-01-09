@@ -1,15 +1,14 @@
-app.controller('loginController', ['User', function (User) {
+app.controller('loginController', ['Auth', function (Auth) {
   var self = this;
 
-  self.currentUser = User.currentUser();
+  self.currentUser = Auth.currentUser();
+
   //runs whenever the user logs in
-  self.logIn = User.logIn;
-
-  User.onChange(function() {
-    self.currentUser = User.currentUser();
-    console.log(User.currentUser());
-  });
-
-  self.logOut = User.logOut;
+  self.logIn = function () {
+    Auth.logIn().then(function (firebaseUser) {
+      self.currentUser = Auth.currentUser();
+    });
+  }
+  self.logOut = Auth.logOut;
 
 }]);
