@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", ["$http", "FoodRescueFactory", function($http, FoodRescueFactory){
+app.controller("FoodRescueController", ["$firebaseAuth", "$http", "FoodRescueFactory", function( $firebaseAuth, $http, FoodRescueFactory){
   var self = this;
   self.rescueCategories = {};
 

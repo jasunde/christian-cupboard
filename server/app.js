@@ -8,20 +8,21 @@ var decoder = require('./modules/decoder');
 var users = require('./routes/users')
 var categories = require('./routes/categories')
 
-
-app.use(bodyParser.json())
-app.use(decoder)
+// app.use(decoder)
 app.set('port', process.env.PORT || '3000');
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/views/index.html'));
 });
 
+app.use(express.static('public'));
+
+app.use(bodyParser.json())
+app.use(decoder.token);
+
 // route the routes
 app.use('/users', users)
 app.use('/categories', categories)
-
-app.use(express.static('public'));
 
 app.listen(app.get('port'), function () {
   console.log('Listening on port', app.get('port'));

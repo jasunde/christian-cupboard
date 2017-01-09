@@ -1,4 +1,4 @@
-app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory($firebaseAuth, $http, firebase) {
+app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function AuthFactory($firebaseAuth, $http, firebase, $location) {
   var auth = $firebaseAuth();
   var currentUser = null;
   var idToken = null;
@@ -25,6 +25,8 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory(
     // console.log(firebaseUser);
     if(firebaseUser) {
       currentUser = firebaseUser;
+
+
     } else {
       console.log('Not logged in or not authorized.');
       currentUser = null;
