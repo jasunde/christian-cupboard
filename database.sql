@@ -50,7 +50,7 @@ CREATE TABLE donations (
   updated_by INTEGER REFERENCES user(id),
   last_update TIMESTAMP,
   UNIQUE (organization_id, individual_id, date),
-  CHECK (organization_id IS NULL OR individual_id IS NULL)
+  CHECK ((organization_id IS NULL AND individual_id IS NOT NULL) OR (organization_id IS NOT NULL AND individual_id IS NULL))
 );
 
 CREATE TABLE categories (
