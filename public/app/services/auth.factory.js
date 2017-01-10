@@ -52,6 +52,11 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
     return auth.$signOut();
   };
 
+  function setUser(user){
+    currentUser = user;
+    idToken = null;
+  }
+
   return {
     logIn: logIn,
     logOut: logOut,
@@ -60,6 +65,9 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
     },
     idToken: function () {
       return idToken;
+    },
+    setUser: function (user) {
+      return setUser(user);
     }
   };
 }]);

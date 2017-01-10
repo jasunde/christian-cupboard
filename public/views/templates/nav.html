@@ -1,16 +1,12 @@
 <div ng-controller="NavController as nc">
-<div class="row ">
-  <div class="col-md-6 com-md-offset3">
-    <ul class="nav nav-justified">
-      <li><img src="/resources/CCEFS-AbbrevLogo-2c.png" id="logo"></li>
-      <li><a href="#foodRescue">Food Rescue</a></li>
-      <li><a href="#foodDrive">Food Drive</a></li>
-  </div>
-  <button ng-click="nc.logOut()">Log Out</button>
-  {{ nc.currentUser.displayName }}
-</div>
-
-
-
-
+  <div class="row">
+    <div class="col-md-6 com-md-offset3">
+      <ul class="nav nav-justified" id="navStyle">
+        <li><img src="/resources/CCEFS-AbbrevLogo-2c.png" id="logo"></li>
+        <li><a href="#foodRescue">Food Rescue</a></li>
+        <li><a href="#foodDrive">Food Drive</a></li>
+        <li> {{ nc.currentUser.displayName }} </li>
+      </div>
+      <button ng-click="nc.logOut()">Log Out</button>
+    </div>
 </div>

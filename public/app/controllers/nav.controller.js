@@ -1,12 +1,33 @@
-app.controller('NavController', ['Auth', function (Auth) {
+app.controller('NavController', ["$firebaseAuth", '$location', 'Auth', function ($firebaseAuth, $location, Auth) {
+  var auth = $firebaseAuth();
   var self = this;
+  self.currentUser = undefined;
 
-  self.currentUser = Auth.currentUser();
-  console.log("Nav Ctrl Say", self.currentUser);
+  auth.$onAuthStateChanged(function(firebaseUser){
+    if(firebaseUser) {
+      self.currentUser = firebaseUser;
+      firebaseUser.getToken()
+      .then(function (token) {
+        idToken = token;
+      })
+      .catch(function (err) {
+        console.log('firebase getToken error:', err);
+      });
+    } else {
+      console.log('Not logged in or not authorized.');
+      self.currentUser = null;
+      idToken = null;
+    }
+    console.log('currentUser:', self.currentUser);
+  });
 
-  // self.logOut(){
-  //   return auth.$signOut();
-  // };
 
-  //runs whenever the user logs in
+// This code runs when the user logs out
+  self.logOut = function(){
+    auth.$signOut().then(function(){
+      self.currentUser = undefined;
+      Auth.setUser(undefined);
+      $location.path("/login");
+    });
+  };
 }]);

@@ -4,10 +4,9 @@ app.controller("FoodRescueController", ["$firebaseAuth", "$http", "FoodRescueFac
 
 //get the categories
   FoodRescueFactory.getCategories();
-  self.rescueCategories = FoodRescueFactory.categories();
+  self.rescueCategories = FoodRescueFactory.categories;
   console.log("Categories for table", self.rescueCategories);
 
-  auth.logOut();
 // get organizations
   // FoodRescueFactory.getOrganizations();
   // self.rescueCategories = FoodRescueFactory.organizations();

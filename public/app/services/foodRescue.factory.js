@@ -1,9 +1,8 @@
 app.factory("FoodRescueFactory", ["$http", "Auth", function($http, Auth){
 
-  var categories = undefined;
+  var categories = {};
   var organizations = undefined;
   var idToken = undefined;
-
 
   idToken = Auth.idToken();
 
@@ -16,8 +15,8 @@ app.factory("FoodRescueFactory", ["$http", "Auth", function($http, Auth){
         id_token: idToken
       }
     }).then(function(response){
-      categories = response.data;
-      return categories;
+      categories.list = response.data;
+      // return categories;
     });
     return promise;
   }
@@ -38,9 +37,7 @@ app.factory("FoodRescueFactory", ["$http", "Auth", function($http, Auth){
 
   //food rescue API
   var foodRescueApi = {
-    categories: function(){
-      return categories;
-    },
+    categories: categories,
     organizations: function(){
       return organizations;
     },

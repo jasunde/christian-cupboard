@@ -5734,8 +5734,11 @@ button.close {
 h1 {
   color: gainsboro; }
 
+.mainPageStyle {
+  background: #FFC600; }
+
 #logo {
+  max-width: 100px;
   height: auto;
   width: auto;
-  max-height: 50px;
 }
