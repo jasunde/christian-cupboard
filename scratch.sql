@@ -36,8 +36,24 @@ CREATE TABLE organizations (
 	phone_number VARCHAR(20)
 );
 
-INSERT INTO organizations (type, name, address, city, state, postal_code, email, phone_number)
+CREATE TABLE contacts (
+	id SERIAL PRIMARY KEY,
+	org BOOLEAN DEFAULT FALSE,
+	org_type org_type,
+	name VARCHAR(75) NOT NULL,
+	address VARCHAR (75),
+	city VARCHAR(35),
+	state VARCHAR(2),
+	postal_code VARCHAR(12),
+	email VARCHAR(255),
+	phone_number VARCHAR(20)
+	CHECK ((org IS TRUE AND org_type IS NOT NULL) OR (org IS FALSE AND org_type IS NULL))
+);
+
+
+INSERT INTO contacts (org, org_type, name, address, city, state, postal_code, email, phone_number)
 VALUES (
+  true,
 	'food_rescue',
 	'Jerrys',
 	'123 Road St',
@@ -51,40 +67,6 @@ VALUES (
 SELECT * FROM organizations;
 
 DROP TABLE organizations;
-
-CREATE TABLE individuals (
-	id SERIAL PRIMARY KEY,
-	first_name VARCHAR(35) NOT NULL,
-	last_name VARCHAR(35),
-	address VARCHAR (75),
-	city VARCHAR(35),
-	state VARCHAR(2),
-	postal_code VARCHAR(12),
-	email VARCHAR(255),
-	organization_id INTEGER REFERENCES organizations(id),
-	phone_number VARCHAR(20)
-);
-
-INSERT INTO individuals (first_name, last_name, address, city, state, postal_code, email, phone_number, organization_id)
-VALUES (
-	'John',
-	'Smith',
-	'678 Road St',
-	'Woodbury',
-	'MN',
-	'55555',
-	'john@smith.com',
-	'612-555-1234',
-	1
-);
-
-SELECT * FROM individuals;
-
-SELECT first_name, last_name
-FROM individuals
-WHERE organization_id = 1;
-
-DROP TABLE individuals;
 
 CREATE TABLE donations (
 	id SERIAL PRIMARY KEY,
