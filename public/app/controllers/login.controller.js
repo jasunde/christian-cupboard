@@ -7,7 +7,7 @@ app.controller('LoginController', ['Auth', '$location', function (Auth, $locatio
   self.logIn = function () {
     Auth.logIn().then(function (firebaseUser) {
       self.currentUser = Auth.currentUser();
-            $location.path("/foodRescue");
+      $location.path("/foodRescue");
     });
   }
 }]);
