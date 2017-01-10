@@ -7,6 +7,7 @@ var decoder = require('./modules/decoder');
 // source routes
 var users = require('./routes/users')
 var categories = require('./routes/categories')
+var organizations = require('./routes/organizations')
 
 app.set('port', process.env.PORT || '3000');
 
@@ -19,11 +20,12 @@ app.get('/', function (req, res) {
 app.use(express.static('public'));
 
 app.use(bodyParser.json())
-app.use(decoder)
+// app.use(decoder)
 
 // route the routes
 app.use('/users', users)
 app.use('/categories', categories)
+app.use('/organizations', organizations)
 
 app.listen(app.get('port'), function () {
   console.log('Listening on port', app.get('port'));
