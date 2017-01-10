@@ -55,6 +55,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
   function setUser(user){
     currentUser = user;
     idToken = null;
+    firebaseUser = null;
   }
 
   return {
