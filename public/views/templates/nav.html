@@ -1,12 +1,29 @@
-<div class="row">
-  <div class="col-md-6 com-md-offset3">
-    <ul class="nav nav-justified">
-      <li><a href="#foodRescue">Food Rescue</a></li>
-      <li><a href="#foodDrive">Food Drive</a></li>
+<div ng-controller="NavController as nc" id="navStyle">
+
+<img src="/resources/CCEFS-Logo-ReverseWhite.png" id="logo">  
+<div class="dropdown">
+  <button class="dropbtn">Inbound</button>
+  <div class="dropdown-content">
+    <a href="#foodRescue">Food Rescue</a>
+    <a href="#foodDrive">Food Drive</a>
   </div>
-  <button ng-click="lc.logOut()">Log Out</button>
 </div>
 
+<div class="dropdown">
+  <button class="dropbtn">Outbound</button>
+  <div class="dropdown-content">
+    <a href="#">Distribution</a>
+    <a href="#">Sub Distribution</a>
+  </div>
+</div>
 
+<div class="dropdown">
+  <button class="dropbtn">Admin</button>
+  <div class="dropdown-content">
+    <a href="#">Reports</a>
+    <a href="#">Users</a>
+  </div>
+</div>
 
-{{ nc.currentUser.displayName }}
+<button ng-click="nc.logOut()">Log Out</button>
+</div>
