@@ -41,13 +41,14 @@ function buildQuery(query) {
     param++
     result.values.push(query.start_date, query.end_date)
   } else {
-    result.text += ' LIMIT ' + MAX_GET 
+    result.text += ' LIMIT ' + MAX_GET
   }
 
   console.log('result', result)
   return result
 }
 
+//Takes care of getBy ContactID, getBYDateRange, and getByOrgType
 router.get('/', function (req, res) {
   pool.connect()
   .then(function (client) {
@@ -56,7 +57,7 @@ router.get('/', function (req, res) {
     client.query(query)
     .then(function (result) {
       var donations = result.rows
-      
+
       donations.forEach(function (donation) {
         client.query(
           'SELECT * FROM donation_details '+
@@ -143,7 +144,7 @@ router.post('/', function (req, res) {
           name: 'insert-donation-details'
         })
       })
-      
+
       client.on('drain', client.end.bind(client) )
 
       client.on('end', function () {
@@ -190,7 +191,7 @@ router.put('/', function (req, res) {
           name: 'upsert-donation-details'
         })
       })
-      
+
       client.on('drain', client.end.bind(client) )
 
       client.on('end', function () {
