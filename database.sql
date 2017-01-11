@@ -44,15 +44,19 @@ CREATE TABLE donations (
 	id SERIAL PRIMARY KEY,
 	organization_id INTEGER REFERENCES organizations(id),
 	individual_id INTEGER REFERENCES individuals(id),
-	date TIMESTAMP,
-  added_by INTEGER REFERENCES user(id),
-  updated_by INTEGER REFERENCES user(id),
-  last_update TIMESTAMP
+	date DATE,
+  timestamp TIMESTAMP,
+  added_by INTEGER REFERENCES users(id),
+  updated_by INTEGER REFERENCES users(id),
+  last_update TIMESTAMP,
+  UNIQUE (organization_id, date),
+  UNIQUE (individual_id, date),
+  CHECK ((organization_id IS NULL AND individual_id IS NOT NULL) OR (organization_id IS NOT NULL AND individual_id IS NULL))
 );
 
 CREATE TABLE categories (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(35),
+	name VARCHAR(35) UNIQUE,
 	food_rescue BOOLEAN DEFAULT FALSE,
 	food_drive BOOLEAN DEFAULT FALSE,
 	daily_dist BOOLEAN DEFAULT FALSE,
@@ -71,10 +75,12 @@ CREATE TABLE distributions (
 	organization_id INTEGER REFERENCES organizations(id),
 	first_name VARCHAR(35),
 	last_name VARCHAR(35),
-	date TIMESTAMP,
-  added_by INTEGER REFERENCES user(id),
-  updated_by INTEGER REFERENCES user(id),
-  last_update TIMESTAMP
+	date DATE,
+  timestamp TIMESTAMP,
+  added_by INTEGER REFERENCES users(id),
+  updated_by INTEGER REFERENCES users(id),
+  last_update TIMESTAMP,
+  UNIQUE (organization_id, date)
 );
 
 CREATE TABLE distribution_details (
