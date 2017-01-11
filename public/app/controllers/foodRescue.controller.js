@@ -1,9 +1,14 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', function($scope, Auth, CategoryFactory){
+app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, DonationsFactory){
   var self = this;
   self.rescueCategories = CategoryFactory.categories;
 
+
+  CategoryFactory.getCategories();
+  DonationsFactory.getDonations();
+
   $scope.$on('user:updated', function (event, data) {
       CategoryFactory.getCategories();
+      DonationsFactory.getDonations();
   });
 
   //get the categories
