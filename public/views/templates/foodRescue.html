@@ -1,17 +1,17 @@
-<div class="col-md-6">
-    <table class="rescueTable">
-        <tr>
-            <th>Donor</th>
-            <th>Date</th>
-            <th ng-repeat="category in frc.rescueCategories.list">{{category.name}}</th>
-        </tr>
-        <tr>
+<div class="col-md-6 foodRescue">
+  <table class="rescueTable">
+    <tr>
+      <th>Donor</th>
+      <th>Date</th>
+      <th ng-repeat="category in frc.rescueCategories.list">{{category.name}}</th>
+    </tr>
+    <tr>
                   <!--insert this code into the select when organization route is complete-->
                   <!--ng-options="organization.name for organization in frc.organizations"-->
-            <td><select></select></td>
-            <td><input type="date" /></td>
-            <td ng-repeat="category in frc.rescueCategories.list"><input type="number" placeholder="# of pounds"/></td>
-            <td><button ng-click="frc.submitDonation">Submit</button></td>
-        </tr>
-    </table>
+      <td><select></select></td>
+      <td><input type="date" /></td>
+      <td ng-repeat="category in frc.rescueCategories.list"><input type="number" placeholder="# of pounds"/></td>
+      <td><button ng-click="frc.submitDonation">Submit</button></td>
+    </tr>
+  </table>
 </div>
