@@ -1,4 +1,4 @@
-app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function AuthFactory($firebaseAuth, $http, firebase, $location) {
+app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootScope', function AuthFactory($firebaseAuth, $http, firebase, $location, $rootScope) {
   var auth = $firebaseAuth();
   var currentUser = null;
   var idToken = null;
@@ -21,13 +21,13 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
    * Add state change listener to auth
    */
   auth.$onAuthStateChanged(function(firebaseUser){
-    // console.log(firebase.auth().currentUser);
-    // console.log(firebaseUser);
+    console.log(firebase.auth().currentUser);
     if(firebaseUser) {
-      currentUser = firebaseUser;
       firebaseUser.getToken()
       .then(function (token) {
         idToken = token;
+        currentUser = firebaseUser;
+        $rootScope.$broadcast('user:updated');
       })
       .catch(function (err) {
         console.log('firebase getToken error:', err);
@@ -36,8 +36,8 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
       console.log('Not logged in or not authorized.');
       currentUser = null;
       idToken = null;
+      $rootScope.$broadcast('user:updated');
     }
-    console.log('currentUser:', currentUser);
   });
 
   // This code runs when the user logs out
@@ -62,7 +62,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function
     logIn: logIn,
     logOut: logOut,
     currentUser: function () {
-      return currentUser;
+      return currentUser; 
     },
     idToken: function () {
       return idToken;
