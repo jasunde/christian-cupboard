@@ -22,6 +22,11 @@ app.config(["$routeProvider", function($routeProvider) {
     controller: 'FoodRescueController',
     controllerAs: 'frc',
   })
+  .when('/foodDrive', {
+    templateUrl: '/views/templates/foodDrive.html',
+    controller: 'FoodDriveController',
+    controllerAs: 'fdc',
+  })
   .otherwise({
     redirectTo: 'login',
   });

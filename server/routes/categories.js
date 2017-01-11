@@ -1,10 +1,9 @@
 var express = require('express')
 var router = express.Router()
 var pg = require('pg')
+var config = require('../config')
 
-var pool = new pg.Pool({
-  database: 'christian_cupboard'
-})
+var pool = new pg.Pool(config.pg)
 
 router.get('/', function (req, res) {
   pool.query(

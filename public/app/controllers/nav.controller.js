@@ -1,12 +1,11 @@
-app.controller('NavController', ['Auth', function (Auth) {
+app.controller('NavController', ['$location', 'Auth', function ($location, Auth) {
   var self = this;
+  self.currentUser = Auth.user.currentUser;
 
-  self.currentUser = Auth.currentUser();
-
-  //runs whenever the user logs in
-  self.logIn = function () {
-    Auth.logIn().then(function (firebaseUser) {
-      self.currentUser = Auth.currentUser();
+// This code runs when the user logs out
+  self.logOut = function(){
+    Auth.logOut().then(function(){
+      $location.path("/login");
     });
-  }
+  };
 }]);
