@@ -14,7 +14,8 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
     .then(function(firebaseUser) {
       // console.log('firebaseUser', firebaseUser);
       user.currentUser = firebaseUser.user;
-      return firebaseUser;
+      console.log('logged in');
+      $rootScope.$broadcast('user:login');
     }).catch(function(error) {
       console.log("Authentication failed: ", error);
     });
