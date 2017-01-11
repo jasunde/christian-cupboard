@@ -12,8 +12,8 @@ function buildQuery(query) {
   var param = 1;
   var result = {
     text: 'SELECT distributions.id as distribution.id, contacts.id as contact.id, * FROM distributions '+
-    'JOIN contacts ON distributions.contact.id = contacts.id',
-    values: [];
+    'JOIN contacts ON distributions.contact_id = contacts.id',
+    values: []
   }
 
   console.log('query: ', query);
@@ -56,7 +56,7 @@ router.get('/organizations', function(req, res) {
   )
   .then(function(result) {
     res.send(result.rows)
-  });
+  })
   .catch(function(err) {
     console.log('GET organizations error: ', err);
     res.status(500).send(err)
@@ -71,7 +71,7 @@ router.get('/individuals', function(req, res) {
   )
   .then(function(result) {
     res.send(result.rows)
-  });
+  })
   .catch(function(err) {
     console.log('GET individuals error: ', err);
     res.status(500).send(err)
@@ -113,19 +113,19 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-  var distributor = req.body;
+  var distribution = req.body;
 
   pool.connect()
   .then(function(client) {
     client.query(
-      'INSERT INTO distributions (contact_id, date, timestamp, added_by) '+
+      'INSERT INTO distributions (organization_id, date, timestamp, added_by) '+
       'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        distributor.contact_id
-        distributor.date,
-        distributor.timestamp,
-        distributor.added_by,
+        distribution.organization_id,
+        distribution.timestamp,
+        distribution.timestamp,
+        distribution.added_by,
         req.user.id
       ]
     )
@@ -137,7 +137,7 @@ router.post('/', function (req, res) {
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
           'VALUES ($1, $2, $3)',
           values: [distribution_id, category.id, category.amount],
-          nameL 'insert-distribution-details'
+          name: 'insert-distribution-details'
         })
       })
 
@@ -165,13 +165,13 @@ router.put('/', function(req, res) {
     var date = new Date();
     client.query(
       'UPDATE distributions '+
-      'SET contact_id, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
+      'SET organization_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
       'WHERE id = $6',
       [
-        distribution.contact_id,
+        distribution.organization_id,
         distribution.timestamp,
         distribution.timestamp,
-        req.user.id
+        req.user.id,
         date.toISOString(),
         distribution.distribution_id
       ]
@@ -198,10 +198,12 @@ router.put('/', function(req, res) {
       console.log('UPDATE distribution detail error: ', err);
       res.status(500).send(err)
       });
-    });
+    })
     .catch(function(err) {
       console.log('POST distribution error: ', err);
       res.status(500).send(err)
     });
   });
 });
+
+module.exports = router;
