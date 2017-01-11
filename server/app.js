@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -19,7 +20,7 @@ app.get('/', function (req, res) {
 app.use(express.static('public'));
 
 app.use(bodyParser.json())
-app.use(decoder)
+// app.use(decoder)
 
 // route the routes
 app.use('/users', users)
