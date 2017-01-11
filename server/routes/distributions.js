@@ -10,8 +10,8 @@ var MAX_GET = 1000;
 function buildQuery(query) {
   var param = 1;
   var result = {
-    text: 'SELECT distributions.id as distribution.id, contacts.id as contact.id, * FROM distributions '+
-    'JOIN contacts ON distributions.contact_id = contacts.id',
+    text: 'SELECT distributions.id as distribution_id, contacts.id as contact_id, * FROM distributions '+
+    'JOIN contacts ON distributions.organization_id = contacts.id',
     values: []
   }
 
@@ -78,7 +78,7 @@ router.get('/individuals', function(req, res) {
 });
 
 //get by date range
-router.get('/', function (req, res) {
+router.get('/:date', function (req, res) {
   pool.connect()
   .then(function(client) {
     var query = buildQuery(req.query)
@@ -114,18 +114,20 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
   var distribution = req.body;
 
+  console.log(req.user);
   pool.connect()
   .then(function(client) {
     client.query(
-      'INSERT INTO distributions (organization_id, date, timestamp, added_by) '+
-      'VALUES ($1, $2, $3, $4) '+
+      'INSERT INTO distributions (organization_id, first_name, last_name, date, added_by, timestamp) '+
+      'VALUES ($1, $2, $3, $4, $5, $6) '+
       'RETURNING id',
       [
         distribution.organization_id,
-        distribution.timestamp,
-        distribution.timestamp,
-        distribution.added_by,
-        req.user.id
+        distribution.first_name,
+        distribution.last_name,
+        distribution.date,
+        req.user.id,
+        distribution.timestamp
       ]
     )
     .then(function(result) {
