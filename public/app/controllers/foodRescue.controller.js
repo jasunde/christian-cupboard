@@ -1,6 +1,8 @@
 app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, DonationsFactory){
   var self = this;
   self.rescueCategories = CategoryFactory.categories;
+  self.rescueDonations = DonationsFactory.donations;
+  console.log(self.rescueDonations);
 
 
   CategoryFactory.getCategories();
