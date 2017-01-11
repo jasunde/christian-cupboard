@@ -1,7 +1,7 @@
 var pg = require('pg')
-var pool = new pg.Pool({
-  database: 'christian_cupboard'
-})
+var config = require('../config')
+
+var pool = new pg.Pool(config.pg)
 
 module.exports = function (req, res, next) {
   pool.query(
