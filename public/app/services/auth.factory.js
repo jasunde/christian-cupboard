@@ -3,6 +3,11 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
   var currentUser = null;
   var idToken = null;
 
+  var user = {
+    currentUser: null,
+    idToken: null
+  }
+
   /**
    * Perform user log-in
    */
@@ -52,23 +57,9 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
     return auth.$signOut();
   };
 
-  function setUser(user){
-    currentUser = user;
-    idToken = null;
-    firebaseUser = null;
-  }
-
   return {
     logIn: logIn,
     logOut: logOut,
-    currentUser: function () {
-      return currentUser; 
-    },
-    idToken: function () {
-      return idToken;
-    },
-    setUser: function (user) {
-      return setUser(user);
-    }
+    user: user
   };
 }]);
