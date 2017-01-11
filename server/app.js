@@ -26,7 +26,7 @@ app.use(express.static('public'));
 
 app.use(bodyParser.json())
 // app.use(decoder)
-// app.use(userInfo)
+app.use(userInfo)
 
 // route the routes
 app.use('/users', users)
