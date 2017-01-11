@@ -15,8 +15,8 @@ app.factory("CategoryFactory", ["$http", "Auth", function ($http, Auth) {
         }
       })
         .then(function (result) {
-          if(verbose) {console.log('list', categories.list);}
           categories.list = result.data;
+          if(verbose) {console.log('list', categories.list);}
         })
         .catch(function (err) {
           console.log('GET categories error:', err);
