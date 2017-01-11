@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Christian Cupboard</title>
   <!-- Angular JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -14,12 +15,6 @@
   <!-- Firebase Config -->
   <script src="/app/config.js" type="text/javascript"></script>
   <script src="app/index.js"></script>
-  <!-- Factories -->
-
-  <!-- Controllers -->
-  <script type="text/javascript" src="/app/controllers/login.controller.js"></script>
-  <script type="text/javascript" src="/app/controllers/foodRescue.controller.js"></script>
-  <script type="text/javascript" src="/app/services/foodRescue.factory.js"></script>
   <!-- favicon -->
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -28,14 +23,20 @@
   <script src="app/index.js"></script>
   <!-- Factories -->
   <script src="/app/services/auth.factory.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/app/services/foodRescue.factory.js"></script>
+  <script type="text/javascript" src="/app/services/foodDrive.factory.js"></script>
+
   <!-- Controllers -->
   <script src="/app/controllers/login.controller.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/app/controllers/foodRescue.controller.js"></script>
+  <script type="text/javascript" src="/app/controllers/nav.controller.js"></script>
+  <script type="text/javascript" src="/app/controllers/foodDrive.controller.js"></script>
 </head>
 <body ng-app="christianCupboard">
 
   <div ng-include="'/views/templates/nav.html'"></div>
 
-  <main ng-view></main>
+  <main ng-view id="mainPageStyle"></main>
 
 </body>
 </html>

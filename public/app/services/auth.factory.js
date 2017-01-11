@@ -1,4 +1,4 @@
-app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory($firebaseAuth, $http, firebase) {
+app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', function AuthFactory($firebaseAuth, $http, firebase, $location) {
   var auth = $firebaseAuth();
   var currentUser = null;
   var idToken = null;
@@ -52,6 +52,12 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory(
     return auth.$signOut();
   };
 
+  function setUser(user){
+    currentUser = user;
+    idToken = null;
+    firebaseUser = null;
+  }
+
   return {
     logIn: logIn,
     logOut: logOut,
@@ -60,6 +66,9 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', function AuthFactory(
     },
     idToken: function () {
       return idToken;
+    },
+    setUser: function (user) {
+      return setUser(user);
     }
   };
 }]);

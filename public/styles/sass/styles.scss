@@ -3,3 +3,32 @@
 h1 {
   color: gainsboro;
 }
+
+// Variables
+$ccBlue: #255AA8;
+$ccYellow: #FFC600;
+
+.mainPageStyle {
+ background: $ccYellow;
+}
+
+#logo {
+  max-width: 100px;
+  height: auto;
+  width: auto;
+}
+
+#loginLogo {
+  display: block;
+  margin: auto;
+  width: 40%;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+.button {
+    position: absolute;
+    top: 50%;
+}
