@@ -15,29 +15,22 @@ CREATE TABLE users (
 
 CREATE TYPE org_type AS ENUM ('sub_distribution', 'food_rescue', 'donor');
 
-CREATE TABLE organizations (
+CREATE TABLE contacts (
 	id SERIAL PRIMARY KEY,
-	type org_type,
-	name VARCHAR(75) NOT NULL,
+	donor BOOLEAN DEFAULT FALSE,
+	org BOOLEAN DEFAULT FALSE,
+	org_type org_type,
+	org_id INTEGER REFERENCES contacts(id),
+	org_name VARCHAR(75),
+	first_name VARCHAR(35),
+	last_name VARCHAR(35),
 	address VARCHAR (75),
 	city VARCHAR(35),
 	state VARCHAR(2),
 	postal_code VARCHAR(12),
 	email VARCHAR(255),
 	phone_number VARCHAR(20)
-);
-
-CREATE TABLE individuals (
-	id SERIAL PRIMARY KEY,
-	first_name VARCHAR(35) NOT NULL,
-	last_name VARCHAR(35) NOT NULL,
-	address VARCHAR (75),
-	city VARCHAR(35),
-	state VARCHAR(2),
-	postal_code VARCHAR(12),
-	email VARCHAR(255),
-	organization_id INTEGER REFERENCES organizations(id),
-	phone_number VARCHAR(20)
+	CHECK ((org IS TRUE AND org_type IS NOT NULL) OR (org IS FALSE AND org_type IS NULL))
 );
 
 CREATE TABLE donations (
@@ -60,7 +53,7 @@ CREATE TABLE categories (
 	food_rescue BOOLEAN DEFAULT FALSE,
 	food_drive BOOLEAN DEFAULT FALSE,
 	daily_dist BOOLEAN DEFAULT FALSE,
-	sub_dist BOOLEAN DEFAULT FALSE	
+	sub_dist BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE donation_details (
@@ -89,7 +82,3 @@ CREATE TABLE distribution_details (
 	amount NUMERIC(11,2),
 	PRIMARY KEY (distribution_id, category_id)
 );
-
-
-
-
