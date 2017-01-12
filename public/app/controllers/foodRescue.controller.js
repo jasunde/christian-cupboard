@@ -12,11 +12,6 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', fun
     }
   });
 
-  $scope.$on('user:login', function (event, data) {
-    if(verbose) {console.log('user login. getting categories');}
-    CategoryFactory.getCategories();
-  });
-
   //get the categories
   // $scope.$on('user:updated', function (event, data) {
   //   console.log('user:updated:', event, data);

@@ -4,6 +4,10 @@ app.factory("CategoryFactory", ["$http", "Auth", function ($http, Auth) {
     list: null
   };
 
+  if(Auth.user.idToken) {
+    getCategories();
+  }
+
   function getCategories() {
     if(Auth.user.idToken) {
       if(verbose) {console.log('getting categories');}

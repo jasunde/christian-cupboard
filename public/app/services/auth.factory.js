@@ -14,8 +14,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
     .then(function(firebaseUser) {
       // console.log('firebaseUser', firebaseUser);
       user.currentUser = firebaseUser.user;
-      console.log('logged in');
-      $rootScope.$broadcast('user:login');
+      user.idToken = firebaseUser.credential.idToken;
     }).catch(function(error) {
       console.log("Authentication failed: ", error);
     });
@@ -28,8 +27,8 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
     if(firebaseUser) {
       firebaseUser.getToken()
       .then(function (token) {
-        user.idToken = token;
         user.currentUser = firebaseUser;
+        user.idToken = token;
         $rootScope.$broadcast('user:updated');
       })
       .catch(function (err) {
