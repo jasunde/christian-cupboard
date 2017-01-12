@@ -137,7 +137,22 @@ input[type="text"].focus {
   border-bottom: solid 2px #969696;
 }
 
-#rescueForm {
-  padding: 10px;
-  margin: 20px;
+.foodRescue {
+  padding: 20px;
+}
+
+// .rescueTable {
+//   background-color: $ccBlue;
+// }
+
+.rescueForm {
+  background-color: $ccBlue;
+  th{
+    text-align: center;
+    color: white;
+  }
+  td{
+    padding: 10px;
+  }
+
 }
