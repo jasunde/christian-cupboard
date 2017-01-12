@@ -8,6 +8,7 @@ var decoder = require('./modules/decoder');
 // source routes
 var users = require('./routes/users')
 var categories = require('./routes/categories')
+var contacts = require('./routes/contacts')
 var donations = require('./routes/donations')
 
 // custom middleware
@@ -31,6 +32,7 @@ app.use(userInfo)
 // route the routes
 app.use('/users', users)
 app.use('/categories', categories)
+app.use('/contacts', contacts)
 app.use('/donations', donations)
 
 app.listen(app.get('port'), function () {
