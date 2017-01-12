@@ -7,8 +7,7 @@ module.exports = function (req, res, next) {
   pool.query(
     'SELECT * FROM users '+
     'WHERE email = $1',
-    ['jason@gmail.com']
-    // [req.decodedToken.email]
+    [req.decodedToken.email]
   )
   .then(function (result) {
     req.user = result.rows[0]
