@@ -1,4 +1,4 @@
-<div class="col-md-6 foodRescue">
+<div class="foodRescue">
   <table class="rescueTable">
     <!-- TABLE HEADS -->
     <tr>
@@ -7,16 +7,19 @@
       <th ng-repeat="category in frc.rescueCategories.list">{{category.name}}</th>
     </tr>
     <!-- INPUTS FOR SUBMISSION -->
+  <form id="rescueForm" ng-submit="" onsubmit="alert('Donation Submitted!')"
     <tr>
       <td><select></select></td>
-      <td><input type="date" /></td>
-      <td ng-repeat="category in frc.rescueCategories.list"><input type="number" placeholder="# of pounds"/></td>
-      <td><button>SUBMIT</button></td>
+      <td><input type="date"/></td>
+      <td ng-repeat="category in frc.rescueCategories.list"><input type="number" placeholder="# of pounds" style="width:60px;"></td>
+      <td><input type="submit" value="Submit" class ="action-button filebtn"></input></td>
     </tr>
+  </form>
     <!-- INPUTS TO DISPLAY DATA AND EDIT -->
     <tr ng-repeat="donation in frc.rescueDonations.list">
-      <td ng-repeat="organization in frc.rescueDonations.list.org_name"><input type="text" value="{{organization.list.org_name}}"></td>
-      <td ng-repeat="category in frc.rescueCategories.list"><input type="text" value="{{donation.city}}"></td>
+      <td>{{donation.org_name}}</td>
+      <td>{{donation.date | date: 'MM/dd/yyyy'}}</td>
+      <td ng-repeat="category in frc.rescueCategories.list"><input type="text" value="{{donation.categories[category.id]}}" style="width:60px;"></td>
       <td><button>EDIT</button></td>
       <td><button>DELETE</button></td>
     </tr>

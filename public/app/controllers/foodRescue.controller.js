@@ -1,8 +1,13 @@
 app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, DonationsFactory){
+
   var self = this;
+  var verbose = true;
+
+  self.newDonation = {};
+
   self.rescueCategories = CategoryFactory.categories;
   self.rescueDonations = DonationsFactory.donations;
-  console.log(self.rescueDonations);
+  if(verbose){console.log("Rescue Donations from Factory", self.rescueDonations)};
 
 
   CategoryFactory.getCategories();
@@ -12,6 +17,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Do
       CategoryFactory.getCategories();
       DonationsFactory.getDonations();
   });
+
 
   //get the categories
   // $scope.$on('user:updated', function (event, data) {
