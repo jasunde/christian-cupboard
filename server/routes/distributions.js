@@ -132,7 +132,7 @@ router.post('/', function (req, res) {
       ]
     )
     .then(function(result) {
-      var distribution_id = result.rows[0]
+      var distribution_id = result.rows[0].id
 
       distribution.categories.forEach(function(category) {
         client.query({
@@ -154,7 +154,7 @@ router.post('/', function (req, res) {
       })
     })
     .catch(function(err) {
-      console.log('POST distributons error:' , err);
+      console.log('POST distributions error:' , err);
       res.status(500).send(err)
     });
   })
@@ -186,7 +186,7 @@ router.put('/', function(req, res) {
           'ON CONFLICT (distribution_id, category_id) DO UPDATE '+
           'SET amount = $3',
           values: [category.distribution_id, category.category_id, category.amount],
-          name: 'update-distribution-details'
+          name: 'upsert-distribution-details'
         });
       });
 
