@@ -1,5 +1,5 @@
 app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootScope', function AuthFactory($firebaseAuth, $http, firebase, $location, $rootScope) {
-  var verbose = false;
+  var verbose = true;
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt: 'select_account'});
   var auth = $firebaseAuth();
@@ -7,7 +7,8 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
   var is_user = false;
   var user = {
     currentUser: null,
-    idToken: null
+    idToken: null,
+    is_admin: false
   }
 
 
@@ -29,16 +30,21 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
               }
             })
               .then(function (result) {
+                console.log('result', result);
                 if(firebaseUser.user.email === result.data.email) {
                   if(verbose) {console.log('logged in');}
                   user.currentUser = firebaseUser.user;
                   user.idToken = token;
+                  user.is_admin = result.data.is_admin;
                   $rootScope.$broadcast('user:login');
+                } else {
+                  logOut();
                 }
               })
               .catch(function (err) {
                 console.log('GET user by email error:', err);
                 is_user = false;
+                logOut();
               });
           })
           .catch(function (err) {
@@ -69,23 +75,34 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
             })
               .then(function (result) {
                 if(verbose) {console.log('user updated');}
-                user.currentUser = firebaseUser;
-                user.idToken = token;
+                if(firebaseUser.email === result.data.email) {
+                  user.currentUser = firebaseUser;
+                  user.idToken = token;
+                  user.is_admin = result.data.is_admin;
+                } else {
+                  user.currentUser = null;
+                  user.idToken = null;
+                  user.is_admin = false;
+                  logOut();
+                }
                 $rootScope.$broadcast('user:updated');
               })
               .catch(function (err) {
                 console.log('GET user by email error:', err);
+                logOut();
                 is_user = false;
               });
           })
           .catch(function (err) {
             console.log('firebase getToken error:', err);
+            logOut();
             is_user = false;
           });
       }
     } else {
       user.currentUser = null;
       user.idToken = null;
+      user.is_admin = false;
       is_user = false;
       $rootScope.$broadcast('user:updated');
     }

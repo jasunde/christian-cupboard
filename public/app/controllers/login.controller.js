@@ -7,7 +7,9 @@ app.controller('LoginController', ['Auth', '$location', '$scope', function (Auth
   self.logIn = function () {
     Auth.logIn()
     .then(function () {
-      $location.path('/foodRescue');
+      if(Auth.user.currentUser) {
+        $location.path('/foodRescue');
+      }
     })
   }
 
