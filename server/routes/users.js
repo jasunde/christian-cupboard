@@ -18,11 +18,26 @@ router.get('/', function (req, res) {
   })
 })
 
-router.get('/:id', function (req, res) {
+router.get('/id/:id', function (req, res) {
   pool.query(
     'SELECT * FROM users '+
     'WHERE id = $1',
     [req.params.id]
+  )
+  .then(function (result) {
+    res.send(result.rows[0])
+  })
+  .catch(function (err) {
+    console.log('GET user by id error:', err);
+    res.sendStatus(500)
+  })
+})
+
+router.get('/email/:email', function (req, res) {
+  pool.query(
+    'SELECT * FROM users '+
+    'WHERE email = $1',
+    [req.params.email]
   )
   .then(function (result) {
     res.send(result.rows[0])

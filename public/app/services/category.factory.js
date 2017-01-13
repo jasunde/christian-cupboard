@@ -1,10 +1,22 @@
-app.factory("CategoryFactory", ["$http", "Auth", function ($http, Auth) {
-
-  var verbose = true;
+app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, Auth, $rootScope) {
+  var verbose = false;
   var categories = {
     list: null,
     map: undefined
   };
+
+  if(Auth.user.idToken) {
+    getCategories();
+  }
+
+  $rootScope.$on('user:updated', function (event, data) {
+    if(verbose) {console.log('user update categories');}
+
+    if(Auth.user.currentUser) {
+      if(verbose) {console.log('getting categories')}
+      getCategories();
+    }
+  });
 
   function getCategories() {
     if(Auth.user.idToken) {
