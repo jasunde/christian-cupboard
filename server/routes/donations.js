@@ -15,8 +15,6 @@ function buildQuery(query) {
     values: []
   }
 
-  console.log('query', query);
-
   if(query.contact_id) {
     result.text += ' WHERE contact_id = $' + param
     result.values.push(query.contact_id)
@@ -43,7 +41,6 @@ function buildQuery(query) {
     result.text += ' LIMIT ' + MAX_GET
   }
 
-  console.log('result', result)
   return result
 }
 
@@ -96,7 +93,6 @@ router.get('/:id', function (req, res) {
     )
     .then(function (result) {
       var donation = result.rows[0]
-      console.log(donation);
 
       client.query(
         'SELECT * FROM donation_details '+
