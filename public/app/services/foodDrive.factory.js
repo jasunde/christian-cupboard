@@ -1,27 +1,31 @@
-app.factory("FoodDriveFactory", ["$http", function($http){
+app.factory("FoodDriveFactory", ["$http", "Auth", function($http, Auth){
 
-  // var categories = undefined;
-  // var organizations = undefined;
-  // var idToken = undefined;
-  //
-  //
+  var contacts = undefined;
+  var organizations = undefined;
+  var idToken = undefined;
+  
+  
   // idToken = Auth.idToken();
-  //
-  // //categories get request
-  // function getTableCategories(){
-  //   var promise = $http({
-  //     method: 'GET',
-  //     url: '/categories',
-  //     headers: {
-  //       id_token: idToken
-  //     }
-  //   }).then(function(response){
-  //     categories = response.data;
-  //     return categories;
-  //   });
-  //   return promise;
-  // }
-  //
+  
+  //contacts get request
+  function getTableContacts(){
+    var promise = $http({
+      method: 'GET',
+      url: '/contacts',
+      headers: {
+        id_token: idToken
+      }
+    }).then(function(response){
+      contacts = response.data;
+      return contacts;
+    });
+    return promise;
+  }
+  
+
+
+
+  
   // function getTableOrganizations(){
   //   var promise = $http({
   //     method: 'GET',
@@ -35,21 +39,21 @@ app.factory("FoodDriveFactory", ["$http", function($http){
   //   });
   //   return promise;
   // }
-  //
+  
   //food drive API
   var foodDriveApi = {
-    categories: function(){
-      return categories;
+    contacts: function(){
+      return contacts;
     },
-    organizations: function(){
-      return organizations;
+    // organizations: function(){
+    //   return organizations;
+    // },
+    getContacts: function(){
+      return getTableContacts();
     },
-    getCategories: function(){
-      return getTableCategories();
-    },
-    getOrganizations: function(){
-      return getTableOrganizations();
-    },
+    // getOrganizations: function(){
+    //   return getTableOrganizations();
+    // },
 
   };
   //

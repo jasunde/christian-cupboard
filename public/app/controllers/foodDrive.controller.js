@@ -1,15 +1,46 @@
-app.controller("FoodDriveController", ["$firebaseAuth", "$http", "FoodDriveFactory", function( $firebaseAuth, $http, FoodDriveFactory){
-//   var self = this;
-//   self.driveCategories = {};
+app.controller("FoodDriveController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory){
+  
 
-// //get the categories
-//   FoodDriveFactory.getCategories();
-//   self.driveCategories = FoodDriveFactory.categories();
-//   console.log("Categories for table", self.driveCategories);
+  var self = this;
+  var verbose = true;
 
-// // get organizations
-//   // FoodDriveFactory.getOrganizations();
-//   // self.driveCategories = FoodDriveFactory.organizations();
-//   // console.log("Organizations for table", self.driveOrganizations);
+  self.newDonation = {
+    contact_id: undefined,
+    timestamp: new Date(),
+  }
+
+  self.thisDonation = {};
+
+//   self.rescueCategories = CategoryFactory.categories;
+  self.rescueContacts = ContactsFactory.contacts;
+  self.rescueDonations = DonationsFactory.donations;
+
+  ContactsFactory.getContacts();
+  DonationsFactory.getDonations();
+
+  $scope.$on('user:updated', function (event, data) {
+      // CategoryFactory.getCategories();
+      DonationsFactory.getDonations();
+      ContactsFactory.getContacts();
+  });
+
+  self.submitDonation = function() {
+      if(verbose) {console.log("Submitting newDonation", self.newDonation)};
+      DonationsFactory.submitDonations(self.newDonation)
+      self.newDonation = {
+        contact_id: undefined,
+        timestamp: new Date(),
+      }
+  }
+
+  self.editDonation = function(donation) {
+      if(verbose) {console.log("editing", donation)};
+      DonationsFactory.editDonations(donation);
+  }
+
+  self.deleteDonation = function(donation) {
+      if(verbose) {console.log("deleting")};
+      DonationsFactory.deleteDonations(donation)
+  }
 
 }]);
