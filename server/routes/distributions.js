@@ -90,9 +90,9 @@ router.get('/:date', function (req, res) {
 
       distributions.forEach(function(distribution) {
         client.query(
-          'SELECT * FROM distribution_details '+
-          'WHERE distribution_id = $1',
-          [distribution.distribution_id]
+          'SELECT * FROM distributions '+
+          'WHERE date = $1',
+          [distribution.date]
         )
         .then(function(result) {
           distribution.categories = result.rows
@@ -138,7 +138,7 @@ router.post('/', function (req, res) {
         client.query({
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
           'VALUES ($1, $2, $3)',
-          values: [distribution_id, category.id, category.amount],
+          values: [distribution_id, category.category_id, category.amount],
           name: 'insert-distribution-details'
         })
       })
@@ -179,6 +179,7 @@ router.put('/', function(req, res) {
       ]
     )
     .then(function(result) {
+
       distribution.categories.forEach(function(category) {
         client.query({
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
