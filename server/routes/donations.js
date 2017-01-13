@@ -156,7 +156,7 @@ router.post('/', function (req, res) {
       client.on('drain', client.end.bind(client) )
 
       client.on('end', function () {
-        res.sendStatus(200)
+        res.sendStatus(201)
       })
 
       client.on('error', function (err) {
@@ -217,6 +217,36 @@ router.put('/', function (req, res) {
     .catch(function (err) {
       console.log('POST donation error:', err)
       res.status(500).send(err)
+    })
+  })
+})
+
+router.delete('/:id', function (req, res) {
+  pool.connect() 
+  .then(function (client) {
+    client.query(
+      'DELETE FROM donation_details '+
+      'WHERE donation_id = $1',
+      [req.params.id]
+    )
+    .then(function () {
+      client.query(
+        'DELETE FROM donations '+
+        'WHERE id = $1',
+        [req.params.id]
+      )
+      .then(function () {
+        client.release();
+        res.sendStatus(200);
+      })
+      .catch(function (err) {
+        console.log('DELETE donation error:', err)
+        req.sendStatus(500)
+      })
+    })
+    .catch(function (err) {
+      console.log('DELETE donation_details error:', err)
+      req.sendStatus(500)
     })
   })
 })
