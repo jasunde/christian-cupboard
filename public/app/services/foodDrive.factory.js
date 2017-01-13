@@ -22,10 +22,6 @@ app.factory("FoodDriveFactory", ["$http", "Auth", function($http, Auth){
     return promise;
   }
   
-
-
-
-  
   // function getTableOrganizations(){
   //   var promise = $http({
   //     method: 'GET',

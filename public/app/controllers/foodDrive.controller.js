@@ -11,9 +11,9 @@ app.controller("FoodDriveController", ['$scope', 'Auth', 'CategoryFactory', 'Con
 
   self.thisDonation = {};
 
-//   self.rescueCategories = CategoryFactory.categories;
-  self.rescueContacts = ContactsFactory.contacts;
-  self.rescueDonations = DonationsFactory.donations;
+//   self.driveCategories = CategoryFactory.categories;
+  self.driveContacts = ContactsFactory.contacts;
+  self.driveDonations = DonationsFactory.donations;
 
   ContactsFactory.getContacts();
   DonationsFactory.getDonations();

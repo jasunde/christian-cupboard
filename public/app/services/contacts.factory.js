@@ -33,8 +33,4 @@ app.factory("ContactsFactory", ["$http", "Auth", function($http, Auth){
      contacts: contacts
    };
 
-<<<<<<< HEAD
 }]);
-=======
-}]);
->>>>>>> develop
