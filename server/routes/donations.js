@@ -183,22 +183,25 @@ router.put('/', function (req, res) {
         donation.contact_id,
         donation.timestamp,
         donation.timestamp,
-        req.user.id,
+        // req.user.id,
+        1,
         d.toISOString(),
         donation.donation_id
       ]
     )
     .then(function (result) {
-      donation.categories.forEach(function (category) {
+      var categories = Object.keys(donation.categories);
+      categories.forEach(function (category) {
         client.query({
           text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
           'VALUES ($1, $2, $3) '+
           'ON CONFLICT (donation_id, category_id) DO UPDATE '+
           'SET amount = $3',
-          values: [category.donation_id, category.category_id, category.amount],
+          values: [donation.donation_id, category, donation.categories[category]],
           name: 'upsert-donation-details'
         })
       })
+
 
       client.on('drain', client.end.bind(client) )
 
