@@ -10,4 +10,6 @@ app.controller('LoginController', ['Auth', '$location', function (Auth, $locatio
       $location.path('/foodRescue');
     }); 
   }
+
+  
 }]);
