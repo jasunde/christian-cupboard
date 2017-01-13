@@ -12,8 +12,6 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueCategories = CategoryFactory.categories;
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
-  if(verbose){console.log("Rescue Contacts from Factory", self.rescueContacts)};
-
 
   CategoryFactory.getCategories();
   ContactsFactory.getContacts();

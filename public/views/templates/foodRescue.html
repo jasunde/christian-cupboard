@@ -12,7 +12,10 @@
     <!-- INPUTS FOR SUBMISSION -->
     <tbody>
       <tr>
-        <td><select></select></td>
+        <td>
+          <select ng-model="frc.newDonation.contact_id">
+            <option ng-repeat="contact in frc.rescueContacts.list" value="{{contact.id}}">{{contact.org_name}}</option>
+          </select></td>
         <td><input type="date" ng-model="frc.newDonation.timestamp"></td>
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}"><input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]"></td>
         <td><button type="submit" class ="action-button filebtn">SUBMIT</button></td>
