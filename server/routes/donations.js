@@ -141,11 +141,13 @@ router.post('/', function (req, res) {
     .then(function (result) {
       var donation_id = result.rows[0].id
 
-      donation.categories.forEach(function (category) {
+      var categories = Object.keys(donation.categories);
+
+      categories.forEach(function (category) {
         client.query({
           text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
           'VALUES ($1, $2, $3)',
-          values: [donation_id, category.id, category.amount],
+          values: [donation_id, category, donation.categories[category]],
           name: 'insert-donation-details'
         })
       })
