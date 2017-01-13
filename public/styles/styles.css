@@ -5834,7 +5834,8 @@ input.focus {
 
 .rescueTable {
   background-color: #255AA8;
-  max-width: 500px; }
+  max-width: 500px;
+  margin: 20px; }
   .rescueTable input {
     width: 70px; }
   .rescueTable table {

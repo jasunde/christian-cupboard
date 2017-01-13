@@ -20,6 +20,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   $scope.$on('user:updated', function (event, data) {
       CategoryFactory.getCategories();
       DonationsFactory.getDonations();
+      ContactsFactory.getContacts();
   });
 
   self.submitDonation = function() {
