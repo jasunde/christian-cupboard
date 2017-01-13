@@ -95,7 +95,10 @@ router.get('/:date', function (req, res) {
           [distribution.date]
         )
         .then(function(result) {
-          distribution.categories = result.rows
+          distribution.categories = result.rows.reduce(function(total, current) {
+            total[current.category_id] = current.amount;
+            return total;
+          }, {})
         });
       });
 
@@ -133,12 +136,13 @@ router.post('/', function (req, res) {
     )
     .then(function(result) {
       var distribution_id = result.rows[0].id
+      var categories = Object.keys(donation.categories);
 
-      distribution.categories.forEach(function(category) {
+      categories.forEach(function(category) {
         client.query({
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
           'VALUES ($1, $2, $3)',
-          values: [distribution_id, category.category_id, category.amount],
+          values: [distribution_id, category, distribution.categories[category]],
           name: 'insert-distribution-details'
         })
       })
@@ -179,15 +183,15 @@ router.put('/', function(req, res) {
       ]
     )
     .then(function(result) {
-
+      var categories = Object.keys(distribution.categories);
       distribution.categories.forEach(function(category) {
         client.query({
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
           'VALUES ($1, $2, $3) '+
           'ON CONFLICT (distribution_id, category_id) DO UPDATE '+
           'SET amount = $3',
-          values: [category.distribution_id, category.category_id, category.amount],
-          name: 'upsert-distribution-details'
+          values: [distribution_id, category, distribution.categories[category]],
+          name: 'update-distribution-details'
         });
       });
 
@@ -205,6 +209,36 @@ router.put('/', function(req, res) {
     .catch(function(err) {
       console.log('POST distribution error: ', err);
       res.status(500).send(err)
+    });
+  });
+});
+
+router.delete('/:id', function(req, res) {
+  pool.connect()
+  .then(function(client) {
+    client.query(
+      'DELETE FROM distribution_details '+
+      'WHERE donation_id = $1',
+      [req.params.id]
+    )
+    .then(function() {
+      client.query(
+        'DELETE FROM distributions '+
+        'WHERE id = $1',
+        [req.params.id]
+      )
+      .then(function() {
+        client.release();
+        res.sendStatus(200);
+      })
+      .catch(function(err) {
+        console.log('DELETE distribution error: ', err);
+        res.sendStatus(500)
+      })
+    })
+    .catch(function(err) {
+      console.log('DELETE distribution_details error: ', err);
+      res.sendStatus(500)
     });
   });
 });
