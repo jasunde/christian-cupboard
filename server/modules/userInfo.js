@@ -7,11 +7,15 @@ module.exports = function (req, res, next) {
   pool.query(
     'SELECT * FROM users '+
     'WHERE email = $1',
-    ['jlaurits@gmail.com']
+    [req.decodedToken.email]
   )
   .then(function (result) {
     req.user = result.rows[0]
-    next();
+    if(req.user) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
   })
   .catch(function (err) {
     console.log('User access error:', err);
