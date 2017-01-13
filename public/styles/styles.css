@@ -5837,10 +5837,23 @@ input.focus {
   max-width: 500px;
   margin: 20px; }
   .rescueTable input {
-    width: 70px; }
+    width: 70px;
+    color: black; }
+  .rescueTable select {
+    color: black; }
   .rescueTable table {
     table-layout: fixed;
     width: 100%; }
+  .rescueTable table.center {
+    margin-left: auto;
+    margin-right: auto; }
+  .rescueTable th {
+    color: #FFC600;
+    text-decoration: underline; }
+  .rescueTable td {
+    color: white; }
   .rescueTable th, .rescueTable td {
     padding: 5px;
     word-wrap: break-word; }
+  .rescueTable button {
+    color: black; }

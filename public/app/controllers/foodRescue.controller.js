@@ -13,7 +13,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
 
-  // CategoryFactory.getCategories();
+  // CategoryFactory.gepublic/app/services/category.factory.jstCategories();
   ContactsFactory.getContacts();
   DonationsFactory.getDonations();
 

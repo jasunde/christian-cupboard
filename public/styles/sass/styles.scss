@@ -141,22 +141,40 @@ input.focus {
   padding: 20px;
 }
 
-.rescueTable {
+.rescueTable { //basic table styles
   background-color: $ccBlue;
   max-width: 500px;
   margin: 20px;
   input{
     width: 70px;
+    color: black;
+  }
+  select{
+    color: black;
   }
   table {
     table-layout: fixed;
     width: 100%;
   }
+  table.center {
+  margin-left:auto;
+  margin-right:auto;
+  }
+  th{
+    color: $ccYellow;
+    text-decoration: underline;
+  }
+  td{
+    color: white;
+  }
   th,td {
     padding: 5px;
     word-wrap: break-word;
   }
-}
+  button {
+    color: black;
+  }
+} //end table styles
 
 // .rescueForm {
 //   background-color: $ccBlue;

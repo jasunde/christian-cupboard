@@ -1,5 +1,5 @@
 app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
- var verbose = false;
+ var verbose = true;
  var donations = {
    list: null
  }
@@ -11,7 +11,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
        method: 'GET',
        url: '/donations',
        headers: {
-         id_token: Auth.user.token
+         id_token: Auth.user.idToken
        }
      })
      .then(function (result) {
@@ -36,7 +36,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         url: '/donations',
         data: newDonation,
         headers: {
-          id_token: Auth.user.token
+          id_token: Auth.user.idToken
         }
       })
       .then(function (result){
@@ -65,6 +65,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
   return {
     getDonations: getDonations,
     donations: donations,
-    submitDonations: submitDonations
+    submitDonations: submitDonations,
+    editDonations: editDonations 
   };
 }]);
