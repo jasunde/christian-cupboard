@@ -135,7 +135,8 @@ router.post('/', function (req, res) {
         donation.contact_id,
         donation.timestamp,
         donation.timestamp,
-        req.user.id
+        // req.user.id
+        1
       ]
     )
     .then(function (result) {
