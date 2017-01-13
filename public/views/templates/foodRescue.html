@@ -1,17 +1,67 @@
-<div class="col-md-6 foodRescue">
-  <table class="rescueTable">
-    <tr>
-      <th>Donor</th>
-      <th>Date</th>
-      <th ng-repeat="category in frc.rescueCategories.list">{{category.name}}</th>
-    </tr>
-    <tr>
-                  <!--insert this code into the select when organization route is complete-->
-                  <!--ng-options="organization.name for organization in frc.organizations"-->
-      <td><select></select></td>
-      <td><input type="date" /></td>
-      <td ng-repeat="category in frc.rescueCategories.list"><input type="number" placeholder="# of pounds"/></td>
-      <td><button ng-click="frc.submitDonation">Submit</button></td>
-    </tr>
+<!-- <div class="foodRescue"> -->
+<form ng-submit="frc.submitDonation();">
+  <table class="rescueTable center">
+    <!-- TABLE HEADS -->
+    <thead class="rescueForm">
+      <tr>
+        <th>Donor</th>
+        <th>Date</th>
+        <th 
+          ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}"
+        >{{category.name}}</th>
+      </tr>
+    </thead>
+    <!-- INPUTS FOR SUBMISSION -->
+    <tbody>
+      <tr>
+        <!-- Organization dropdown -->
+        <td>
+          <select ng-model="frc.newDonation.contact_id">
+            <option 
+              ng-repeat="contact in frc.rescueContacts.list" 
+              value="{{contact.id}}"
+            >{{contact.org_name}}</option>
+          </select>
+        </td>
+        
+        <!-- Donation Date -->
+        <td>
+          <input type="date" ng-model="frc.newDonation.timestamp">
+        </td>
+
+        <!-- Donation Categories -->
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">
+          <input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]">
+        </td>
+
+        <td>
+          <button type="submit" class ="action-button filebtn">SUBMIT</button>
+        </td>
+      </tr>
+    </tbody>
   </table>
-</div>
+</form>
+    <!-- INPUTS TO DISPLAY DATA AND EDIT -->
+  <table class="rescueTable">
+    <thead class="rescueForm">
+      <tr>
+        <th>Donor</th>
+        <th>Date</th>
+        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">
+          {{category.name}}
+        </th>
+      </tr>
+    </thead>
+  <tbody>
+    <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
+      <td>{{donation.org_name}}</td>
+      <td>{{donation.date | date: 'MM/dd/yyyy'}}</td>
+      <td ng-repeat="category in frc.rescueCategories.list">
+        <input type="text" ng-model="donation.categories[category.id]" style="width:60px;">
+      </td>
+      <td><button ng-click="frc.editDonation(donation)">EDIT</button></td>
+      <td><button ng-click="frc.deleteDonation(donation)">DELETE</button></td>
+    </tr>
+  </tbody>
+  </table>
+<!-- </div> -->
