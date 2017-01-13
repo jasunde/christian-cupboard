@@ -36,9 +36,9 @@
     <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
       <td>{{donation.org_name}}</td>
       <td>{{donation.date | date: 'MM/dd/yyyy'}}</td>
-      <td ng-repeat="category in frc.rescueCategories.list"><input type="text" value="{{donation.categories[category.id]}}" style="width:60px;"></td>
-      <td><button ng-click="frc.editDonation()">EDIT</button></td>
-      <td><button ng-click="frc.deleteDonation()">DELETE</button></td>
+      <td ng-repeat="category in frc.rescueCategories.list"><input type="text" ng-model="donation.categories[category.id]" style="width:60px;"></td>
+      <td><button ng-click="frc.editDonation(donation)">EDIT</button></td>
+      <td><button ng-click="frc.deleteDonation(donation)">DELETE</button></td>
     </tr>
   </tbody>
   </table>

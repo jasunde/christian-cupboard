@@ -28,13 +28,13 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
     }
   }
 
-  function submitDonations(newDonation) {
+  function submitDonations(donation) {
     if(Auth.user.idToken) {
       if(verbose){console.log("Posting Donation");}
       $http({
         method: 'POST',
         url: '/donations',
-        data: newDonation,
+        data: donation,
         headers: {
           id_token: Auth.user.idToken
         }
@@ -45,15 +45,32 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
     }
   }
 
-  function editDonations() {
+  function editDonations(donation) {
     if(Auth.user.idToken) {
       if(verbose){console.log("Editing Donation");}
       $http({
         method: 'PUT',
         url: '/donations',
-        data: newDonation,
+        data: donation,
         headers: {
-          id_token: Auth.user.token
+          id_token: Auth.user.idToken
+        }
+      })
+      .then(function (result){
+        getDonations();
+      })
+    }
+  }
+
+  function deleteDonations(donation) {
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Deleting Donation", donation.donation_id);}
+      $http({
+        method: 'DELETE',
+        url: '/donations/' + donation.donation_id,
+        data: donation,
+        headers: {
+          id_token: Auth.user.idToken
         }
       })
       .then(function (result){
@@ -66,6 +83,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
     getDonations: getDonations,
     donations: donations,
     submitDonations: submitDonations,
-    editDonations: editDonations 
+    editDonations: editDonations,
+    deleteDonations: deleteDonations
   };
 }]);

@@ -9,6 +9,8 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
     // categories: CategoryFactory.categories.map
   }
 
+  self.thisDonation = {};
+
   self.rescueCategories = CategoryFactory.categories;
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
@@ -26,14 +28,20 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.submitDonation = function() {
       if(verbose) {console.log("Submitting newDonation", self.newDonation)};
       DonationsFactory.submitDonations(self.newDonation)
+      self.newDonation = {
+        contact_id: undefined,
+        timestamp: new Date(),
+      }
   }
 
-  self.editDonation = function() {
-      if(verbose) {console.log("editing")};
+  self.editDonation = function(donation) {
+      if(verbose) {console.log("editing", donation)};
+      DonationsFactory.editDonations(donation);
   }
 
-  self.deleteDonation = function() {
+  self.deleteDonation = function(donation) {
       if(verbose) {console.log("deleting")};
+      DonationsFactory.deleteDonations(donation)
   }
 
 //utility functions
