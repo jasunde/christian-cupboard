@@ -1,7 +1,9 @@
 app.factory("CategoryFactory", ["$http", "Auth", function ($http, Auth) {
-  var verbose = false;
+
+  var verbose = true;
   var categories = {
-    list: null
+    list: null,
+    map: undefined
   };
 
   function getCategories() {
@@ -16,7 +18,11 @@ app.factory("CategoryFactory", ["$http", "Auth", function ($http, Auth) {
       })
         .then(function (result) {
           categories.list = result.data;
-          if(verbose) {console.log('list', categories.list);}
+          categories.map = categories.list.reduce(function (catMap, category) {
+            catMap[category.id] = undefined;
+            return catMap;
+          }, {});
+          if(verbose) {console.log('map', categories.map);}
         })
         .catch(function (err) {
           console.log('GET categories error:', err);

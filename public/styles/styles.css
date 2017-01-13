@@ -5814,33 +5814,32 @@ h1 {
   to {
     opacity: 1; } }
 
-#navStyle ul:after {
-  content: "";
-  display: block;
-  clear: both; }
-
 #logOutButton {
   position: absolute;
   right: 0px;
   margin: 30px; }
 
-input[type="text"] {
+input {
   padding: 10px;
   border: none;
   border-bottom: solid 2px #c9c9c9;
   transition: border 0.3s; }
 
-input[type="text"]:focus,
-input[type="text"].focus {
+input:focus,
+input.focus {
   border-bottom: solid 2px #969696; }
 
 .foodRescue {
   padding: 20px; }
 
-.rescueForm {
-  background-color: #255AA8; }
-  .rescueForm th {
-    text-align: center;
-    color: white; }
-  .rescueForm td {
-    padding: 10px; }
+.rescueTable {
+  background-color: #255AA8;
+  max-width: 500px; }
+  .rescueTable input {
+    width: 70px; }
+  .rescueTable table {
+    table-layout: fixed;
+    width: 100%; }
+  .rescueTable th, .rescueTable td {
+    padding: 5px;
+    word-wrap: break-word; }

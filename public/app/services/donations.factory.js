@@ -1,5 +1,5 @@
 app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
- var verbose = true;
+ var verbose = false;
  var donations = {
    list: null
  }
@@ -28,8 +28,43 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
     }
   }
 
+  function submitDonations(newDonation) {
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Posting Donation");}
+      $http({
+        method: 'POST',
+        url: '/donations',
+        data: newDonation,
+        headers: {
+          id_token: Auth.user.token
+        }
+      })
+      .then(function (result){
+        getDonations();
+      })
+    }
+  }
+
+  function editDonations() {
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Editing Donation");}
+      $http({
+        method: 'PUT',
+        url: '/donations',
+        data: newDonation,
+        headers: {
+          id_token: Auth.user.token
+        }
+      })
+      .then(function (result){
+        getDonations();
+      })
+    }
+  }
+
   return {
     getDonations: getDonations,
-    donations: donations
+    donations: donations,
+    submitDonations: submitDonations
   };
 }]);

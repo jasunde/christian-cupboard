@@ -1,31 +1,43 @@
-<div class="foodRescue">
+<!-- <div class="foodRescue"> -->
+<form ng-submit="frc.submitDonation();">
   <table class="rescueTable">
     <!-- TABLE HEADS -->
     <thead class="rescueForm">
-    <tr>
-      <th>Donor</th>
-      <th>Date</th>
-      <th ng-repeat="category in frc.rescueCategories.list">{{category.name}}</th>
-    </tr>
+      <tr>
+        <th>Donor</th>
+        <th>Date</th>
+        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">{{category.name}}</th>
+      </tr>
+    </thead>
     <!-- INPUTS FOR SUBMISSION -->
-  <form ng-submit="" onsubmit="alert('Donation Submitted!')" >
-    <tr>
-      <td><select></select></td>
-      <td><input type="date"/></td>
-      <td ng-repeat="category in frc.rescueCategories.list"><input type="number" placeholder="# of pounds" style="max-width:60px;"></td>
-      <td><input type="submit" value="Submit" class ="action-button filebtn"></input></td>
-    </tr>
-  </form>
+    <tbody>
+      <tr>
+        <td><select></select></td>
+        <td><input type="date" ng-model="frc.newDonation.timestamp"></td>
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}"><input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]"></td>
+        <td><button type="submit" class ="action-button filebtn">SUBMIT</button></td>
+      </tr>
+    </tbody>
+  </table>
+</form>
  </thead>
     <!-- INPUTS TO DISPLAY DATA AND EDIT -->
+  <table class="rescueTable">
+    <thead class="rescueForm">
+      <tr>
+        <th>Donor</th>
+        <th>Date</th>
+        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">{{category.name}}</th>
+      </tr>
+    </thead>
   <tbody>
-    <tr ng-repeat="donation in frc.rescueDonations.list">
+    <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
       <td>{{donation.org_name}}</td>
       <td>{{donation.date | date: 'MM/dd/yyyy'}}</td>
       <td ng-repeat="category in frc.rescueCategories.list"><input type="text" value="{{donation.categories[category.id]}}" style="width:60px;"></td>
-      <td><button>EDIT</button></td>
-      <td><button>DELETE</button></td>
+      <td><button ng-click="frc.editDonation()">EDIT</button></td>
+      <td><button ng-click="frc.deleteDonation()">DELETE</button></td>
     </tr>
   </tbody>
   </table>
-</div>
+<!-- </div> -->
