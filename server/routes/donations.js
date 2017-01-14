@@ -167,6 +167,7 @@ router.post('/', function (req, res) {
 
 router.put('/', function (req, res) {
   var donation = req.body
+  console.log(donation);
   pool.connect()
   .then(function (client) {
     var d = new Date();
@@ -216,7 +217,7 @@ router.put('/', function (req, res) {
 })
 
 router.delete('/:id', function (req, res) {
-  pool.connect() 
+  pool.connect()
   .then(function (client) {
     client.query(
       'DELETE FROM donation_details '+
