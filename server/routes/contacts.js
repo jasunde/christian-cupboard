@@ -1,13 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var contactService = require('../modules/contacts')
+var contactService = require('../modules/contactService')
 
 var pg = require('pg');
 var config = require('../config')
 
 var pool = new pg.Pool(config.pg);
-
-console.log('contactService', contactService);
 
 router.get('/', function(req, res) {
   pool.query(
