@@ -151,7 +151,7 @@ router.delete('/:id', function (req, res) {
 })
 
 router.use(contactService.find)
-router.use(contactService.upsert)
+// router.use(contactService.upsert)
 
 router.post('/', function (req, res) {
   var donation = req.body

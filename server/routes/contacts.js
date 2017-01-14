@@ -55,38 +55,22 @@ router.get('/id/:id', function(req, res) {
   });
 });
 
-router.post('/', contactService.post);
-
-router.put('/', function(req, res) {
-  var contact = req.body;
-  pool.query(
-    'UPDATE contacts '+
-    'SET donor = $1, org = $2, org_type = $3, org_id = $4, org_name = $5, first_name = $6, last_name = $7, address = $8, city = $9, state = $10, postal_code = $11, email = $12, phone_number = $13 '+
-    'WHERE id = $14',
-    [
-      contact.donor,
-      contact.org,
-      contact.org_type,
-      contact.org_id,
-      contact.org_name,
-      contact.first_name,
-      contact.last_name,
-      contact.address,
-      contact.city,
-      contact.state,
-      contact.postal_code,
-      contact.email,
-      contact.phone_number,
-      contact.id
-    ]
-  )
-  .then(function(response) {
-    res.sendStatus(204)
+router.post('/', function (req, res) {
+  contactService.post(req,res)
+  .then(function (response) {
+    if(response) {
+      res.sendStatus(204)
+    }
   })
-  .catch(function(err) {
-    console.log('PUT category error:', err);
-    res.status(500).send(err);
-  });
+});
+
+router.put('/', function (req, res) {
+  contactService.put(req, res)
+  .then(function (response) {
+    if(response) {
+      res.sendStatus(204)
+    }
+  })
 });
 
 router.get('/donors/org', function(req, res) {
