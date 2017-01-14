@@ -15,8 +15,6 @@ function buildQuery(query) {
     values: []
   }
 
-  console.log('query', query);
-
   if(query.contact_id) {
     result.text += ' WHERE contact_id = $' + param
     result.values.push(query.contact_id)
@@ -43,7 +41,6 @@ function buildQuery(query) {
     result.text += ' LIMIT ' + MAX_GET
   }
 
-  console.log('result', result)
   return result
 }
 
@@ -96,7 +93,6 @@ router.get('/:id', function (req, res) {
     )
     .then(function (result) {
       var donation = result.rows[0]
-      console.log(donation);
 
       client.query(
         'SELECT * FROM donation_details '+
@@ -141,11 +137,13 @@ router.post('/', function (req, res) {
     .then(function (result) {
       var donation_id = result.rows[0].id
 
-      donation.categories.forEach(function (category) {
+      var categories = Object.keys(donation.categories);
+
+      categories.forEach(function (category) {
         client.query({
           text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
           'VALUES ($1, $2, $3)',
-          values: [donation_id, category.id, category.amount],
+          values: [donation_id, category, donation.categories[category]],
           name: 'insert-donation-details'
         })
       })
@@ -153,7 +151,7 @@ router.post('/', function (req, res) {
       client.on('drain', client.end.bind(client) )
 
       client.on('end', function () {
-        res.sendStatus(200)
+        res.sendStatus(201)
       })
 
       client.on('error', function (err) {
@@ -169,6 +167,7 @@ router.post('/', function (req, res) {
 
 router.put('/', function (req, res) {
   var donation = req.body
+  console.log(donation);
   pool.connect()
   .then(function (client) {
     var d = new Date();
@@ -186,16 +185,18 @@ router.put('/', function (req, res) {
       ]
     )
     .then(function (result) {
-      donation.categories.forEach(function (category) {
+      var categories = Object.keys(donation.categories);
+      categories.forEach(function (category) {
         client.query({
           text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
           'VALUES ($1, $2, $3) '+
           'ON CONFLICT (donation_id, category_id) DO UPDATE '+
           'SET amount = $3',
-          values: [category.donation_id, category.category_id, category.amount],
+          values: [donation.donation_id, category, donation.categories[category]],
           name: 'upsert-donation-details'
         })
       })
+
 
       client.on('drain', client.end.bind(client) )
 
@@ -211,6 +212,36 @@ router.put('/', function (req, res) {
     .catch(function (err) {
       console.log('POST donation error:', err)
       res.status(500).send(err)
+    })
+  })
+})
+
+router.delete('/:id', function (req, res) {
+  pool.connect()
+  .then(function (client) {
+    client.query(
+      'DELETE FROM donation_details '+
+      'WHERE donation_id = $1',
+      [req.params.id]
+    )
+    .then(function () {
+      client.query(
+        'DELETE FROM donations '+
+        'WHERE id = $1',
+        [req.params.id]
+      )
+      .then(function () {
+        client.release();
+        res.sendStatus(200);
+      })
+      .catch(function (err) {
+        console.log('DELETE donation error:', err)
+        req.sendStatus(500)
+      })
+    })
+    .catch(function (err) {
+      console.log('DELETE donation_details error:', err)
+      req.sendStatus(500)
     })
   })
 })
