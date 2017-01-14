@@ -12,11 +12,9 @@ function buildQuery(query) {
   var param = 1;
   var result = {
     text: 'SELECT distributions.id as distribution_id, contacts.id as contact_id, * FROM distributions '+
-    'JOIN contacts ON distributions.organization_id = contacts.id',
+    'JOIN contacts ON distributions.contact_id = contacts.id',
     values: []
   }
-
-  console.log('query: ', query);
 
   if(query.contact_id) {
     result.text += ' WHERE contact_id = $' + param
@@ -35,7 +33,7 @@ function buildQuery(query) {
       result.text += ' WHERE'
     }
 
-    result.text += ' WHERE date >= $' + param
+    result.text += ' date >= $' + param
     param++
     result.text += ' AND date <= $' + param
     param++
@@ -48,69 +46,77 @@ function buildQuery(query) {
   return result
 }
 
-//get all organizations
-router.get('/organizations', function(req, res) {
-  pool.query(
-    'SELECT * FROM distributions '+
-    'WHERE organization_id IS NOT NULL'
-  )
-  .then(function(result) {
-    res.send(result.rows)
-  })
-  .catch(function(err) {
-    console.log('GET organizations error: ', err);
+function getDetails(distributions, client, res) {
+  distributions.forEach(function(distribution) {
+    client.query(
+      'SELECT * FROM distribution_details '+
+      'WHERE distribution_id = $1',
+      [distribution.id]
+    )
+      .then(function(result) {
+        distribution.categories = result.rows.reduce(function(total, current) {
+          total[current.category_id] = current.amount;
+          return total;
+        }, {})
+      });
+  });
+
+  client.on('drain', client.end.bind(client) )
+
+  client.on('end', function() {
+    res.send(distributions)
+  });
+
+  client.on('error', function(err) {
     res.status(500).send(err)
   });
+}
+
+//get all organizations
+router.get('/organizations', function(req, res) {
+  pool.connect()
+    .then(function (client) {
+      client.query(
+        'SELECT * FROM distributions '+
+        'WHERE organization_id IS NOT NULL'
+      )
+        .then(function(result) {
+          getDetails(result.rows, client, res)
+        })
+        .catch(function(err) {
+          console.log('GET organizations error: ', err);
+          res.status(500).send(err)
+        });
+    })
 });
 
 //get all individuals
 router.get('/individuals', function(req, res) {
-  pool.query(
-    'SELECT * FROM distributions '+
-    'WHERE organization_id IS NULL'
-  )
-  .then(function(result) {
-    res.send(result.rows)
-  })
-  .catch(function(err) {
-    console.log('GET individuals error: ', err);
-    res.status(500).send(err)
-  });
+  pool.connect()
+    .then(function (client) {
+      client.query(
+        'SELECT * FROM distributions '+
+        'WHERE organization_id IS NULL'
+      )
+        .then(function(result) {
+          getDetails(result.rows, client, res)
+        })
+        .catch(function(err) {
+          console.log('GET individuals error: ', err);
+          res.status(500).send(err)
+        });
+    })
 });
 
 //get by date range
-router.get('/:date', function (req, res) {
+router.get('/', function (req, res) {
   pool.connect()
   .then(function(client) {
     var query = buildQuery(req.query)
 
     client.query(query)
     .then(function(result) {
-      var distributions = result.rows
-
-      distributions.forEach(function(distribution) {
-        client.query(
-          'SELECT * FROM distributions '+
-          'WHERE date = $1',
-          [distribution.date]
-        )
-        .then(function(result) {
-          distribution.categories = result.rows.reduce(function(total, current) {
-            total[current.category_id] = current.amount;
-            return total;
-          }, {})
-        });
-      });
-
-      client.on('drain', client.end.bind(client) )
-
-      client.on('end', function() {
-        res.send(distributions)
-      });
-
-      client.on('error', function(err) {
-        res.status(500).send(err)
-      });
+      getDetails(result.rows, client, res)
     });
   });
 });
@@ -218,27 +224,27 @@ router.delete('/:id', function(req, res) {
   .then(function(client) {
     client.query(
       'DELETE FROM distribution_details '+
-      'WHERE donation_id = $1',
+      'WHERE distribution_id = $1',
       [req.params.id]
     )
-    .then(function() {
+    .then(function(result) {
       client.query(
         'DELETE FROM distributions '+
         'WHERE id = $1',
         [req.params.id]
       )
-      .then(function() {
+      .then(function(result) {
         client.release();
         res.sendStatus(200);
       })
       .catch(function(err) {
         console.log('DELETE distribution error: ', err);
-        res.sendStatus(500)
+        res.status(500).send(err);
       })
     })
     .catch(function(err) {
       console.log('DELETE distribution_details error: ', err);
-      res.sendStatus(500)
+      res.status(500).send(err)
     });
   });
 });
