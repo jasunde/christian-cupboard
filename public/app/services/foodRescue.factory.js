@@ -4,35 +4,19 @@ app.factory("FoodRescueFactory", ["$http", "Auth", function($http, Auth){
   var organizations = undefined;
   var idToken = Auth.idToken;
 
-  // idToken = Auth.idToken();
 
-  //categories get request
-  function getTableCategories(){
+
+  function submitDonations(){
     var promise = $http({
-      method: 'GET',
-      url: '/categories',
-      headers: {
+      method: 'POST',
+      url: '/donations',
+      data: self.newDonation,
+      header: {
         id_token: idToken
       }
-    }).then(function(response){
-      categories.list = response.data;
-      // return categories;
-    });
-    return promise;
-  }
-
-  function getTableOrganizations(){
-    var promise = $http({
-      method: 'GET',
-      url: '/organizations',
-      headers: {
-        id_token: idToken
-      }
-    }).then(function(response){
-      organizations = response.data;
-      return organizations;
-    });
-    return promise;
+    }).then(function (response) {
+      self.newDonation = {};
+    })
   }
 
   //food rescue API
