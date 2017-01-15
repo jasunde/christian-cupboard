@@ -60,9 +60,8 @@ function findIndividual(req, res, next) {
 
   pool.query(query)
   .then(function (result) {
-    if(result.rows) {
+    if(result.rows[0]) {
       req.contact = result.rows[0]
-      console.log('req.contact', req.contact)
     }
     next()
   })
@@ -72,6 +71,7 @@ function findIndividual(req, res, next) {
   })
 
 }
+
 function find(req, res, next) {
   if(!req.body.contact_id) {
     if(req.body.org_name) {
@@ -81,7 +81,6 @@ function find(req, res, next) {
     }
   }
 }
-
 
 function upsert(req, res) {
   // Compensate for empty strings
