@@ -7,6 +7,14 @@ var config = require('../config')
 
 var pool = new pg.Pool(config.pg);
 
+// middleware to facilitate contact upsert
+router.use(function (req, res, next) {
+  if(req.body) {
+    req.contact = req.body
+  }
+  next()
+})
+
 router.get('/', function(req, res) {
   pool.query(
     'SELECT * FROM contacts'

@@ -151,7 +151,26 @@ router.delete('/:id', function (req, res) {
 })
 
 router.use(contactService.find)
-// router.use(contactService.upsert)
+router.use(function (req, res, next) {
+  // Contacts managed by admin
+  if(req.body.org_type === 'sub_dist' || req.body.org_type === 'food_rescue') {
+    next()
+
+  // Contacts NOT managed by admin
+  } else {
+    req.body.donor = true
+    if(req.body.org_name) { 
+      req.body.org = true
+      req.body.org_type = 'donor'  
+    }
+
+    contactService.upsert(req, res)
+      .then(function (response) {
+        req.body.contact_id = req.contact.id
+        next()
+      })
+  }
+})
 
 router.post('/', function (req, res) {
   var donation = req.body

@@ -72,7 +72,7 @@ function findIndividual(req, res, next) {
   })
 
 }
-contacts.find = function (req, res, next) {
+function find(req, res, next) {
   if(!req.body.contact_id) {
     if(req.body.org_name) {
       findOrganization(req, res, next)
@@ -82,8 +82,35 @@ contacts.find = function (req, res, next) {
   }
 }
 
-contacts.post = function(req, res) {
-  var contact = req.body;
+
+function upsert(req, res) {
+  // Compensate for empty strings
+  var bodyKeys = Object.keys(req.body)
+  bodyKeys.forEach(function (property) {
+    if(typeof req.body[property] === 'string') {
+      if(!req.body[property].trim()) {
+        req.body[property] = null;
+      }
+    }
+  })
+
+  if(req.contact) {
+    bodyKeys.forEach(function (property) {
+      if(req.body[property]) {
+        return req.contact[property] = req.body[property]
+      }
+    })
+
+    return put(req, res)
+  } else {
+    req.contact = req.body
+
+    return post(req, res)
+  }
+}
+
+function post(req, res) {
+  var contact = req.contact;
   return pool.query(
     'INSERT INTO contacts (donor, org, org_type, org_id, org_name, first_name, last_name, address, city, state, postal_code, email, phone_number)'+
     'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) '+
@@ -105,6 +132,7 @@ contacts.post = function(req, res) {
     ]
   )
   .then(function(result) {
+    req.contact.id = result.rows[0].id
     return result
   })
   .catch(function(err) {
@@ -113,8 +141,8 @@ contacts.post = function(req, res) {
   });
 };
 
-contacts.put = function(req, res) {
-  var contact = req.body;
+function put(req, res) {
+  var contact = req.contact;
   return pool.query(
     'UPDATE contacts '+
     'SET donor = $1, org = $2, org_type = $3, org_id = $4, org_name = $5, first_name = $6, last_name = $7, address = $8, city = $9, state = $10, postal_code = $11, email = $12, phone_number = $13 '+
@@ -145,4 +173,9 @@ contacts.put = function(req, res) {
   });
 };
 
-module.exports = contacts;
+module.exports = {
+  find: find,
+  post: post,
+  put: put,
+  upsert: upsert
+};
