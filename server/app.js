@@ -28,18 +28,24 @@ app.get('/', function (req, res) {
 app.use(express.static('public'));
 
 app.use(bodyParser.json())
+
+// Authenticate
 app.use(decoder)
+
+// Get Authorization info
 app.use(userInfo)
 
 // general user routes
-app.use('/contacts/email', isUser)
-app.use('/categories', categories)
-app.use('/contacts', contacts)
+app.use('/users/email', isUser)
 app.use('/donations', donations)
 
+// limited user rights
+app.use('/categories', categories)
+app.use('/contacts', contacts)
+
+// exclusive admin user routes
 app.use(isAdmin)
 
-// admin user routes
 app.use('/users', users)
 
 app.listen(app.get('port'), function () {

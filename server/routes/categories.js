@@ -50,49 +50,57 @@ router.get('/:formName', function (req, res) {
 })
 
 router.post('/', function (req, res) {
-  var category = req.body
-  pool.query(
-    'INSERT INTO categories (name, food_rescue, food_drive, daily_dist, sub_dist) '+
-    'VALUES ($1, $2, $3, $4, $5)',
-    [
-      category.name,
-      category.food_rescue,
-      category.food_drive,
-      category.daily_dist,
-      category.sub_dist
-    ]
-  )
-  .then(function (response) {
-    res.sendStatus(200)
-  })
-  .catch(function (err) {
-    console.log('POST category error:', err)
-    res.status(500).send(err)
-  })
+  if(req.user.is_admin) {
+    var category = req.body
+    pool.query(
+      'INSERT INTO categories (name, food_rescue, food_drive, daily_dist, sub_dist) '+
+      'VALUES ($1, $2, $3, $4, $5)',
+      [
+        category.name,
+        category.food_rescue,
+        category.food_drive,
+        category.daily_dist,
+        category.sub_dist
+      ]
+    )
+      .then(function (response) {
+        res.sendStatus(200)
+      })
+      .catch(function (err) {
+        console.log('POST category error:', err)
+        res.status(500).send(err)
+      })
+  } else {
+    res.sendStatus(403)
+  }
 })
 
 router.put('/', function (req, res) {
-  var category = req.body
-  pool.query(
-    'UPDATE categories '+
-    'SET name = $1, food_rescue = $2, food_drive = $3, daily_dist = $4, sub_dist = $5 '+
-    'WHERE id = $6',
-    [
-      category.name,
-      category.food_rescue,
-      category.food_drive,
-      category.daily_dist,
-      category.sub_dist,
-      category.id
-    ]
-  )
-  .then(function (response) {
-    res.sendStatus(204)
-  })
-  .catch(function (err) {
-    console.log('PUT category error:', err)
-    res.status(500).send(err)
-  })
+  if(req.user.is_admin) {
+    var category = req.body
+    pool.query(
+      'UPDATE categories '+
+      'SET name = $1, food_rescue = $2, food_drive = $3, daily_dist = $4, sub_dist = $5 '+
+      'WHERE id = $6',
+      [
+        category.name,
+        category.food_rescue,
+        category.food_drive,
+        category.daily_dist,
+        category.sub_dist,
+        category.id
+      ]
+    )
+      .then(function (response) {
+        res.sendStatus(204)
+      })
+      .catch(function (err) {
+        console.log('PUT category error:', err)
+        res.status(500).send(err)
+      })
+  } else {
+    res.sendStatus(403)
+  }
 })
 
 module.exports = router
