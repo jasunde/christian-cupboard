@@ -33,21 +33,6 @@ router.get('/id/:id', function (req, res) {
   })
 })
 
-router.get('/email/:email', function (req, res) {
-  pool.query(
-    'SELECT * FROM users '+
-    'WHERE email = $1',
-    [req.params.email]
-  )
-  .then(function (result) {
-    res.send(result.rows[0])
-  })
-  .catch(function (err) {
-    console.log('GET user by id error:', err);
-    res.sendStatus(500)
-  })
-})
-
 router.post('/', function (req, res) {
   var user = req.body
   pool.query(
