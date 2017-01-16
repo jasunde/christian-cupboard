@@ -1,12 +1,10 @@
 app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
-
     var self = this;
     var verbose = true;
 
     self.newDonation = {
-      contact_id: 8975,
+      contact_id: undefined,
       timestamp: new Date(),
-
     };
 
     self.thisDonation = {};
@@ -28,6 +26,7 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
       }
         DonationsFactory.submitDonations(self.newDonation);
         self.newDonation = {
+          contact_id: undefined,
           timestamp: new Date(),
         };
     };
@@ -37,6 +36,7 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
       }
         DonationsFactory.editDonations(donation);
     };
+
     self.toggleEditable = function (donation) {
       if(donation.editable) {
         donation.editable = false;

@@ -54,4 +54,25 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
 
+    var myVar;
+
+self.myFunction = function() {
+    myVar = setTimeout(showPage, 3000);
+}
+
+function showPage() {
+  angular.element( document.querySelector("loader").style.display = "none");
+  angular.element( document.querySelector("myDiv").style.display = "block");
+  // angular.element("loader").style.display = "none";
+  // angular.element("myDiv").style.display = "block";
+}
+
+self.toggleEditable = function (donation) {
+  if(donation.editable) {
+    donation.editable = false;
+  } else {
+    donation.editable = true;
+  }
+};
+
 }]);

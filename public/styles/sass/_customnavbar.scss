@@ -1,0 +1,92 @@
+$ccBlue: #255AA8;
+$ccYellow: #FFC600;
+
+#navStyle { //start main nav style
+  background: $ccBlue;
+  ul{
+    width: 100%;
+    list-style-type:none;
+  }
+  li{
+    float:left;
+    width: 30%;
+  }
+  a{
+    color: $ccYellow;
+    text-decoration: none;
+    padding: 16px;
+    display: block;
+    text-align: center;
+  }
+  .dropbtn{
+      background-color: $ccBlue;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+  }
+  .dropdown{
+      z-index: 1000;
+      position: relative;
+      display: inline-block;
+  }
+  .dropdown-content{
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      border-radius: 10px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      -webkit-animation: fadein .4s; /* Safari, Chrome and Opera > 12.1 */
+         -moz-animation: fadein .4s; /* Firefox < 16 */
+          -ms-animation: fadein .4s; /* Internet Explorer */
+              animation: fadein .4s;
+  }
+  .dropdown-content a{
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+  }
+  .dropdown-content a:hover{
+    background-color: #f1f1f1;
+    border-radius: 10px;
+  }
+  .dropdown:hover .dropdown-content{
+      display: block;
+  }
+  .dropdown:hover .dropbtn{
+      background-color: $ccBlue;
+  }
+
+  @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+  }
+
+  /* Firefox < 16 */
+  @-moz-keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+  }
+
+  /* Safari, Chrome and Opera > 12.1 */
+  @-webkit-keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+  }
+} // END MAIN NAV
+
+
+#navStyle ul:after{
+  content:"";
+  display: block;
+  clear: both;
+}
+
+#logOutButton {
+position: absolute;
+right: 0px;
+margin: 30px;
+}

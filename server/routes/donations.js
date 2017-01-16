@@ -170,7 +170,7 @@ router.put('/', function (req, res) {
   console.log(donation);
   pool.connect()
   .then(function (client) {
-    var d = new Date();
+    var date = new Date();
     client.query(
       'UPDATE donations '+
       'SET contact_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
@@ -180,7 +180,7 @@ router.put('/', function (req, res) {
         donation.timestamp,
         donation.timestamp,
         req.user.id,
-        d.toISOString(),
+        date.toISOString(),
         donation.donation_id
       ]
     )

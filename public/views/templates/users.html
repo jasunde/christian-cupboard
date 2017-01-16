@@ -30,8 +30,8 @@
           </div>
         </td>
         <td>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn btn-success"
             ng-click="uc.add()">
             <add-glyph boolean="uc.newUser.saving"></add-glyph>
@@ -76,15 +76,15 @@
         <td>
           <!-- Not editable -->
           <span ng-if="!user.editable">
-            <button 
-                type="button" 
-                class="btn btn-primary" 
+            <button
+                type="button"
+                class="btn btn-primary"
                 ng-click="uc.toggleEditable(user)">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
-            <button 
-              type="button" 
-              class="btn btn-danger" 
+            <button
+              type="button"
+              class="btn btn-danger"
               ng-click="uc.delete(user)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
               <delete-glyph boolean="user.saving"></delete-glyph>
@@ -92,15 +92,15 @@
           </span>
           <!-- Editable -->
           <span ng-if="user.editable">
-            <button 
-                type="button" 
-                class="btn btn-primary" 
+            <button
+                type="button"
+                class="btn btn-primary"
                 ng-click="uc.update(user)">
               <save-glyph boolean="user.saving"></save-glyph>
             </button>
-            <button 
-                    type="button" 
-                    class="btn btn-default" 
+            <button
+                    type="button"
+                    class="btn btn-default"
                     ng-click="uc.toggleEditable(user)">
               <span class="glyphicon glyphicon-remove"></span> Cancel
             </button>

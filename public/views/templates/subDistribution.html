@@ -1,0 +1,95 @@
+<div class="container">
+<h2>Sub Distribution</h2>
+
+<table class="table admin">
+  <thead class="rescueForm">
+    <tr>
+      <th>Reciever</th>
+      <th>Date</th>
+      <!-- Switch to Angular Repeat from Category Factory -->
+      <th ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}">{{category.name}}</th>
+      <!-- End Angular Category Repeat -->
+    </tr>
+  </thead>
+    <tbody>
+
+      <!-- Add Distribution -->
+      <tr>
+        <td>
+          <input class="form-control" type="text" ng-model="sdc.newSubDistribution.reciever">
+        </td>
+        <td>
+            <input class="form-control" type="text" ng-model="sdc.newSubDistribution.date">
+        </td>
+        <td ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}"><input class="form-control" type= "number" placeholder = "# of lbs." ng-model="sdc.newSubDistribution.categories[category.id]"></input>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-success"
+            ng-click="sdc.addSubDistribution()">
+            <add-glyph boolean="sdc.newSubDistribution.saving"></add-glyph>
+          </button>
+        </td>
+      </tr>
+
+      <tr ng-repeat="subDistribution in sdc.subDist">
+        <!-- First Name -->
+        <td>
+          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.reciever}}</span>
+          <span ng-if="subDistribution.editable">
+            <input class="form-control" type="text" ng-model="subDistribution.reciever">
+          </span>
+        </td>
+        <!-- Last Name -->
+        <td>
+          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.date}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="subDistribution.date">
+          </span>
+        </td>
+        <!-- Categories -->
+        <td ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}">
+          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.categories[category.id]}}</span>
+          <span ng-if="subDistribution.editable">
+            <input class="form-control" type="number" ng-model="subDistribution.categories[category.id]">
+          </span>
+        </td>
+        <!-- Edit -->
+        <td>
+          <!-- Not editable -->
+          <span ng-if="!subDistribution.editable">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="sdc.toggleEditable(subDistribution)">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              ng-click="uc.delete(user)">
+              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
+              <delete-glyph boolean="user.saving"></delete-glyph>
+            </button>
+          </span>
+          <!-- Editable -->
+          <span ng-if="subDistribution.editable">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="ddc.updateSubDistribution(subDistribution)">
+              <save-glyph boolean="subDistribution.saving"></save-glyph>
+            </button>
+            <button
+                type="button"
+                class="btn btn-default"
+                ng-click="sdc.toggleEditable(subDistribution)">
+              <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

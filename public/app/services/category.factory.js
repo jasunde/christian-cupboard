@@ -30,11 +30,11 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
       })
         .then(function (result) {
           categories.list = result.data;
-          // categories.map = categories.list.reduce(function (catMap, category) {
-          //   catMap[category.id] = undefined;
-          //   return catMap;
-          // }, {});
-          if(verbose) {console.log('map', categories.map);}
+          categories.map = categories.list.reduce(function (catMap, category) {
+            catMap[category.id] = undefined;
+            return catMap;
+          }, {});
+          if(verbose) {console.log('map', categories.list);}
         })
         .catch(function (err) {
           console.log('GET categories error:', err);
@@ -92,7 +92,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           });
       } else {
         reject();
-      }    
+      }
     });
   }
 
