@@ -55,6 +55,12 @@ app.config(["$routeProvider", function($routeProvider) {
     controllerAs: 'cc',
     resolve: redirect
   })
+  .when('/users', {
+    templateUrl: '/views/templates/users.html',
+    controller: 'UserController',
+    controllerAs: 'uc',
+    resolve: redirect
+  })
   .otherwise({
     redirectTo: 'login',
   });

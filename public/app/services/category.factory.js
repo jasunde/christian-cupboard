@@ -65,6 +65,8 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           console.log('POST category error:', err);
           reject();
         });
+      } else {
+        reject();
       }
     });
   }
@@ -88,6 +90,8 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
             console.log('PUT category error:', err);
             reject();
           });
+      } else {
+        reject();
       }    
     });
   }
@@ -110,6 +114,8 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           console.log('DELETE category error:', err);
           reject();
         });
+      } else {
+        reject();
       }
     });
   }
