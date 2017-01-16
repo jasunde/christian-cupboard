@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Manage Categories</h1>
+  <h2>Manage Categories</h2>
 
   <table class="table admin">
     <thead>
@@ -13,6 +13,42 @@
       </tr>
     </thead>
     <tbody>
+
+      <!-- Add Category -->
+      <tr>
+        <td>
+          <input class="form-control" type="text" ng-model="cc.newCategory.name">
+        </td>
+        <td class="text-center">
+          <div class="checkbox">
+            <input type="checkbox" ng-model="cc.newCategory.food_rescue">
+          </div>
+        </td>
+        <td class="text-center">
+          <div class="checkbox">
+            <input type="checkbox" ng-model="cc.newCategory.food_drive">
+          </div>
+        </td>
+        <td class="text-center">
+          <div class="checkbox">
+            <input type="checkbox" ng-model="cc.newCategory.daily_dist">
+          </div>
+        </td>
+        <td class="text-center">
+          <div class="checkbox">
+            <input type="checkbox" ng-model="cc.newCategory.sub_dist">
+          </div>
+        </td>
+        <td>
+          <button 
+            type="button" 
+            class="btn btn-success"
+            ng-click="cc.add()">
+            <add-glyph boolean="cc.newCategory.saving"></add-glyph>
+          </button>
+        </td>
+      </tr>
+
       <tr ng-repeat="category in cc.categories.list | orderBy:'name'">
         <!-- Name -->
         <td>
