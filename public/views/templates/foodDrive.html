@@ -58,13 +58,13 @@
           <button
             type="button"
             class="btn btn-success"
-            ng-click="fdc.add()">
+            ng-click="fdc.submitDonation()">
             <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
           </button>
         </td>
       </tr>
 
-      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp'">
+      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {food_drive: true}">
            <!-- Date of Donation -->
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
@@ -155,7 +155,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              ng-click="fdc.delete(donation)">
+              ng-click="fdc.deleteDonation(donation)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
               <delete-glyph boolean="donation.saving"></delete-glyph>
             </button>

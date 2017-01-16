@@ -1,48 +1,53 @@
-app.controller("FoodDriveController", ['$scope', 'Auth', 'CategoryFactory', 'FoodDriveFactory', function($scope, Auth, CategoryFactory, FoodDriveFactory){
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
 
+    var self = this;
+    var verbose = true;
 
-  var self = this;
-  var verbose = true;
+    self.newDonation = {
+      contact_id: undefined,
+      timestamp: new Date(),
+    };
 
-  self.newDonation = {
-    contact_id: undefined,
-    timestamp: new Date(),
-  };
+    self.thisDonation = {};
 
-  self.driveCategories = CategoryFactory.categories;
+    self.driveCategories = CategoryFactory.categories;
+    self.driveContacts = ContactsFactory.contacts;
+    self.driveDonations = DonationsFactory.donations;
 
-  $scope.$on('user:updated', function (event, data) {
-    CategoryFactory.getCategories();
-    FoodDriveFactory.getDonations();
-  });
+    ContactsFactory.getContacts();
+    DonationsFactory.getDonations();
 
-  self.driveDonations = FoodDriveFactory.donations;
+    $scope.$on('user:updated', function (event, data) {
+        CategoryFactory.getCategories();
+        DonationsFactory.getDonations();
+    });
 
-  self.add = function() {
-      if(verbose) {console.log("Submitting newDonation", self.newDonation);
-    }
-      FoodDriveFactory.addDonation(self.newDonation);
-      self.newDonation = {
-        contact_id: undefined,
-        timestamp: new Date(),
-      };
-  };
+    self.submitDonation = function() {
+        if(verbose) {console.log("Submitting newDonation", self.newDonation);
+      }
+        DonationsFactory.submitDonations(self.newDonation);
+        self.newDonation = {
+          contact_id: undefined,
+          timestamp: new Date(),
+        };
+    };
 
-  self.toggleEditable = function (donation) {
-    if(donation.editable) {
-      donation.editable = false;
-    } else {
-      donation.editable = true;
-    }
-  };
+    self.editDonation = function(donation) {
+        if(verbose) {console.log("editing", donation);
+      }
+        DonationsFactory.editDonations(donation);
+    };
+    self.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
+    };
 
-  self.update = function (donation) {
-    donation.saving = true;
-
-    FoodDriveFactory.updateDonation(donation)
-      .then(function (result) {
-        donation.saving = false;
-      });
-  };
-
-}]);
+    self.deleteDonation = function(donation) {
+        if(verbose) {console.log("deleting");
+      }
+        DonationsFactory.deleteDonations(donation);
+    };
+  }]);

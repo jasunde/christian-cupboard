@@ -2,7 +2,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
  var verbose = true;
  var donations = {
    list: null
- }
+ };
 
  function getDonations(){
    if(Auth.user.idToken) {
@@ -15,13 +15,13 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
        }
      })
      .then(function (result) {
-       donations.list = result.data
+       donations.list = result.data;
        if (verbose) {console.log('donations', donations.list);}
      })
      .catch(function (err) {
        console.log('GET donations error:', err);
        donations.list = null;
-     })
+     });
    } else {
     if(verbose) {console.log('No token, no donations!');}
     donations.list = null;
@@ -41,7 +41,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
       })
       .then(function (result){
         getDonations();
-      })
+      });
     }
   }
 
@@ -58,7 +58,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
       })
       .then(function (result){
         getDonations();
-      })
+      });
     }
   }
 
@@ -75,7 +75,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
       })
       .then(function (result){
         getDonations();
-      })
+      });
     }
   }
 
