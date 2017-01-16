@@ -90,17 +90,9 @@ $ccYellow: #FFC600;
 //   }
 // } //end table styles
 
-// .rescueForm {
-//   background-color: $ccBlue;
-//   th{
-//     text-align: center;
-//     color: white;
-//   }
-//   td{
-//     padding: 10px;
-//   }
-//
-// }
+.rescueForm {
+  background-color: $ccBlue;
+}
 
 #loader { // BEGIN LOADER TEMPLATE
   position: absolute;
@@ -152,3 +144,10 @@ $ccYellow: #FFC600;
   display: none;
   text-align: center;
 } // END LOADER TEMPLATE
+
+//NO MOAR NUMBER SPINNERS
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}//END NO MOAR NUMBER SPINNERS

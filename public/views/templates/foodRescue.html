@@ -11,13 +11,14 @@
       <th>Donor</th>
       <th>Date</th>
       <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
+      <th></th>
     </tr>
   </thead>
     <tbody>
       <!-- Add Distribution -->
       <tr>
         <td>
-        <select ng-model="frc.newDonation.contact_id">
+        <select ng-model="frc.newDonation.contact_id" class="form-control">
           <option ng-repeat="contact in frc.rescueContacts.list" value="{{contact.id}}">{{contact.org_name}}</option>
         </select>
       </td>

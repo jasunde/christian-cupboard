@@ -6230,6 +6230,9 @@ h1 {
 .foodRescue {
   padding: 20px; }
 
+.rescueForm {
+  background-color: #255AA8; }
+
 #loader {
   position: absolute;
   left: 50%;
@@ -6270,3 +6273,8 @@ h1 {
 #myDiv {
   display: none;
   text-align: center; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
