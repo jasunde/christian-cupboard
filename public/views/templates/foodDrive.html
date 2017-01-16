@@ -134,7 +134,7 @@
         </td>
         <!-- Categories -->
         <td ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
+          <span class="form-control" disabled ng-if="!donation.editable">{{donation.categories[category.id] | number:0}}</span>
           <span ng-if="donation.editable">
             <input class="form-control" type="number" ng-model="donation.categories[category.id]">
           </span>
