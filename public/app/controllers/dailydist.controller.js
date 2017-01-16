@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', function(){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory){
   var self = this;
   var verbose = true;
 
@@ -12,8 +12,10 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactor
 	}
 }
 
+self.dailyDistributionCategories = CategoryFactory.categories;
+
+if (verbose) {console.log(self.dailyDistributionCategories);}
 
 
-if (verbose) {console.log(self.dailyDist);}
 
 }]);
