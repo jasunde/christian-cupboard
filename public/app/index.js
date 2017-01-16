@@ -53,13 +53,20 @@ app.config(["$routeProvider", function($routeProvider) {
     templateUrl: '/views/templates/dailyDistribution.html',
     controller: 'DailyDistributionController',
     controllerAs: 'ddc',
+    resolve: redirect
+  })
+  .when('/subDistribution', {
+    templateUrl: '/views/templates/subDistribution.html',
+    controller: 'SubDistributionController',
+    controllerAs: 'sdc',
+    resolve: redirect
   })
   .when('/categories', {
     templateUrl: '/views/templates/categories.html',
     controller: 'CategoryController',
     controllerAs: 'cc',
     resolve: redirect
-  })  
+  })
   .when('/users', {
     templateUrl: '/views/templates/users.html',
     controller: 'UserController',

@@ -25,9 +25,9 @@
             <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name">
         </td>
         <td>
-            <input class="form-control" type="email" ng-model="ddc.newDistribution.family_size">
+            <input class="form-control" type="text" ng-model="ddc.newDistribution.family_size">
         </td>
-        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}"><input class="form-control" ng-model="ddc.newDistribution.categories[category.id]"></input>
+        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}"><input class="form-control" type= "number" placeholder = "# of lbs." ng-model="ddc.newDistribution.categories[category.id]"></input>
         </td>
         <td><input class="form-control" ng-model="ddc.newDistribution.time_weighted"></td>
         <td><input class="form-control" ng-model="ddc.newDistribution.date_weighted"></td>
@@ -35,8 +35,8 @@
           <button
             type="button"
             class="btn btn-success"
-            ng-click="ddc.submitDistribution()">
-            <add-glyph boolean="uc.newUser.saving"></add-glyph>
+            ng-click="ddc.addDistribution()">
+            <add-glyph boolean="uc.newDistribution.saving"></add-glyph>
           </button>
         </td>
       </tr>
@@ -67,7 +67,7 @@
         <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}">
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.categories[category.id]}}</span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.categories[category.id]">
+            <input class="form-control" type="number" ng-model="distribution.categories[category.id]">
           </span>
         </td>
         <!-- Time Weighed -->
@@ -87,11 +87,11 @@
         <!-- Edit -->
         <td>
           <!-- Not editable -->
-          <span ng-if="!user.editable">
+          <span ng-if="!distribution.editable">
             <button
                 type="button"
                 class="btn btn-primary"
-                ng-click="uc.toggleEditable(user)">
+                ng-click="ddc.toggleEditable(distribution)">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
             <button
@@ -103,17 +103,17 @@
             </button>
           </span>
           <!-- Editable -->
-          <span ng-if="user.editable">
+          <span ng-if="distribution.editable">
             <button
                 type="button"
                 class="btn btn-primary"
-                ng-click="uc.update(user)">
-              <save-glyph boolean="user.saving"></save-glyph>
+                ng-click="ddc.updateDistribution(distribution)">
+              <save-glyph boolean="distribution.saving"></save-glyph>
             </button>
             <button
-                    type="button"
-                    class="btn btn-default"
-                    ng-click="uc.toggleEditable(user)">
+                type="button"
+                class="btn btn-default"
+                ng-click="ddc.toggleEditable(distribution)">
               <span class="glyphicon glyphicon-remove"></span> Cancel
             </button>
           </span>
