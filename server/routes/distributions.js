@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var contactService = require('../modules/contactService')
 var pg = require('pg');
 
 var config = require('../config')
@@ -77,8 +78,8 @@ router.get('/organizations', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT * FROM distributions '+
-        'WHERE organization_id IS NOT NULL'
+        'SELECT * FROM distributions JOIN contacts ON distributions.contact_id = contacts.id '+
+        'WHERE contacts.org IS TRUE'
       )
         .then(function(result) {
           getDetails(result.rows, client, res)
@@ -95,8 +96,7 @@ router.get('/individuals', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT * FROM distributions '+
-        'WHERE organization_id IS NULL'
+        'SELECT * FROM distributions JOIN contacts ON distributions.contact_id = contacts.id WHERE contacts.org IS FALSE'
       )
         .then(function(result) {
           getDetails(result.rows, client, res)
@@ -121,6 +121,55 @@ router.get('/', function (req, res) {
   });
 });
 
+router.delete('/:id', function(req, res) {
+  pool.connect()
+  .then(function(client) {
+    client.query(
+      'DELETE FROM distribution_details '+
+      'WHERE distribution_id = $1',
+      [req.params.id]
+    )
+    .then(function(result) {
+      client.query(
+        'DELETE FROM distributions '+
+        'WHERE id = $1',
+        [req.params.id]
+      )
+      .then(function(result) {
+        client.release();
+        res.sendStatus(200);
+      })
+      .catch(function(err) {
+        console.log('DELETE distribution error: ', err);
+        res.status(500).send(err);
+      })
+    })
+    .catch(function(err) {
+      console.log('DELETE distribution_details error: ', err);
+      res.status(500).send(err)
+    });
+  });
+});
+
+router.use(contactService.find)
+router.use(function (req, res, next) {
+  // Contacts managed by admin
+  if(req.body.org_type === 'sub_distribution') {
+    req.body.donor = false
+    req.body.org = true
+    next()
+  } else {
+    req.body.donor = false
+    req.body.org = false
+
+    contactService.upsert(req, res)
+    .then(function (response) {
+      req.body.contact_id = req.contact.id
+      next()
+    })
+  }
+})
+
 router.post('/', function (req, res) {
   var distribution = req.body;
 
@@ -128,21 +177,19 @@ router.post('/', function (req, res) {
   pool.connect()
   .then(function(client) {
     client.query(
-      'INSERT INTO distributions (organization_id, first_name, last_name, date, added_by, timestamp) '+
-      'VALUES ($1, $2, $3, $4, $5, $6) '+
+      'INSERT INTO distributions (contact_id, date, added_by, timestamp) '+
+      'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        distribution.organization_id,
-        distribution.first_name,
-        distribution.last_name,
-        distribution.date,
+        distribution.contact_id,
+        distribution.timestamp,
         req.user.id,
         distribution.timestamp
       ]
     )
     .then(function(result) {
       var distribution_id = result.rows[0].id
-      var categories = Object.keys(donation.categories);
+      var categories = Object.keys(distribution.categories);
 
       categories.forEach(function(category) {
         client.query({
@@ -214,36 +261,6 @@ router.put('/', function(req, res) {
     })
     .catch(function(err) {
       console.log('POST distribution error: ', err);
-      res.status(500).send(err)
-    });
-  });
-});
-
-router.delete('/:id', function(req, res) {
-  pool.connect()
-  .then(function(client) {
-    client.query(
-      'DELETE FROM distribution_details '+
-      'WHERE distribution_id = $1',
-      [req.params.id]
-    )
-    .then(function(result) {
-      client.query(
-        'DELETE FROM distributions '+
-        'WHERE id = $1',
-        [req.params.id]
-      )
-      .then(function(result) {
-        client.release();
-        res.sendStatus(200);
-      })
-      .catch(function(err) {
-        console.log('DELETE distribution error: ', err);
-        res.status(500).send(err);
-      })
-    })
-    .catch(function(err) {
-      console.log('DELETE distribution_details error: ', err);
       res.status(500).send(err)
     });
   });
