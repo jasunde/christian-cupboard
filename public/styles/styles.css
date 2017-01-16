@@ -5731,6 +5731,10 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+.admin .checkbox input[type="checkbox"] {
+  position: relative;
+  margin-left: 0; }
+
 h1 {
   color: gainsboro; }
 
