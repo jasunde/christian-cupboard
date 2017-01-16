@@ -24,6 +24,10 @@ function findOrganization(req, res, next) {
 
 function findIndividual(req, res, next) {
   var params = 3;
+  if(!req.body.first_name && !req.body.last_name) {
+    req.body.first_name = 'Anonymous';
+    req.body.last_name = 'Person';
+  }
   var query = {
     text: 'SELECT * FROM contacts WHERE '+
     ' first_name = $1 AND last_name = $2',
@@ -34,7 +38,7 @@ function findIndividual(req, res, next) {
     query.text += ' AND ('
   }
 
-  if(req.body.address) { 
+  if(req.body.address) {
     query.text += ' address = $' + params
     query.values.push(req.body.address)
     params++
@@ -60,10 +64,10 @@ function findIndividual(req, res, next) {
 
   pool.query(query)
   .then(function (result) {
-    if(result.rows) {
+    if(result.rows[0]) {
       req.contact = result.rows[0]
-      console.log('req.contact', req.contact)
     }
+    console.log('req.contact: ', req.contact);
     next()
   })
   .catch(function (err) {
@@ -72,8 +76,19 @@ function findIndividual(req, res, next) {
   })
 
 }
+
 function find(req, res, next) {
-  if(!req.body.contact_id) {
+  console.log('req.body', req.body);
+  if(req.body.contact_id) {
+    getByID(req, res, req.body.contact_id)
+    .then(function (result) {
+      if(result) {
+        console.log(result);
+        req.contact = result.rows[0]
+      }
+      next()
+    });
+  } else {
     if(req.body.org_name) {
       findOrganization(req, res, next)
     } else {
@@ -81,7 +96,6 @@ function find(req, res, next) {
     }
   }
 }
-
 
 function upsert(req, res) {
   // Compensate for empty strings
@@ -107,6 +121,23 @@ function upsert(req, res) {
 
     return post(req, res)
   }
+}
+
+function getByID(req, res, id) {
+  return pool.query(
+    'SELECT * FROM contacts WHERE id = $1',
+    [
+      id
+    ]
+  )
+  .then(function(result) {
+    return result;
+  })
+  .catch(function(err) {
+    console.log('GET by ID error:', err);
+    res.status(500).send(err);
+  });
+
 }
 
 function post(req, res) {
@@ -165,7 +196,7 @@ function put(req, res) {
     ]
   )
   .then(function(response) {
-    return response 
+    return response
   })
   .catch(function(err) {
     console.log('PUT category error:', err);
@@ -175,6 +206,7 @@ function put(req, res) {
 
 module.exports = {
   find: find,
+  getByID: getByID,
   post: post,
   put: put,
   upsert: upsert

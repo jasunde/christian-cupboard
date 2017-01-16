@@ -73,6 +73,7 @@ router.post('/', function (req, res) {
 
 router.put('/', function (req, res) {
   var category = req.body
+  console.log('category:', category);
   pool.query(
     'UPDATE categories '+
     'SET name = $1, food_rescue = $2, food_drive = $3, daily_dist = $4, sub_dist = $5 '+

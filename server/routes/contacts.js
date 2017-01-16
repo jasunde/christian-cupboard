@@ -47,20 +47,13 @@ router.get('/organizations/:org_type', function(req, res) {
 });
 
 router.get('/id/:id', function(req, res) {
-
-  pool.query(
-    'SELECT * FROM contacts WHERE id = $1',
-    [
-      req.params.id
-    ]
-  )
-  .then(function(result) {
-    res.send(result.rows);
+  
+  contactService.getByID(req, res, req.params.id)
+  .then(function (result) {
+    if(result) {
+      res.send(result.rows)
+    }
   })
-  .catch(function(err) {
-    console.log('GET by ID error:', err);
-    res.status(500).send(err);
-  });
 });
 
 router.post('/', function (req, res) {

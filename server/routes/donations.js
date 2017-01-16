@@ -154,24 +154,24 @@ router.use(contactService.find)
 router.use(function (req, res, next) {
   // Contacts managed by admin
   if(req.contact) {
-    if(req.body.org_type === 'food_rescue') {
+    if(req.contact.org_type === 'food_rescue') {
       next()
-
-    // Contacts NOT managed by admin
     } else {
-      req.body.donor = true
-      if(req.body.org_name) { 
-        req.body.org = true
-        req.body.org_type = 'donor'  
-      }
 
+      // Contacts not managed by admin
       contactService.upsert(req, res)
         .then(function (response) {
           req.body.contact_id = req.contact.id
           next()
         })
     }
+    next()
   } else {
+    contactService.upsert(req, res)
+      .then(function (response) {
+        req.body.contact_id = req.contact.id
+        next()
+      })
   }
 })
 
@@ -184,7 +184,7 @@ router.post('/', function (req, res) {
       'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        donation.contact_id,
+        donation.contact.id,
         donation.timestamp,
         donation.timestamp,
         req.user.id
