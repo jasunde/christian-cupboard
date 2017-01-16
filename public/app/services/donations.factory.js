@@ -30,7 +30,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
 
   function submitDonations(donation) {
     if(Auth.user.idToken) {
-      if(verbose){console.log("Posting Donation");}
+      if(verbose){console.log("Posting Donation", donation);}
       $http({
         method: 'POST',
         url: '/donations',

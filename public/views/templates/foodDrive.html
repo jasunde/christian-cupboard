@@ -55,16 +55,13 @@
           <input class="form-control" type="number" ng-model="fdc.newDonation.categories[category.id]">
         </td>
         <td>
-          <button
-            type="button"
-            class="btn btn-success"
-            ng-click="fdc.submitDonation()">
+          <button type="button" class="btn btn-success" ng-click="fdc.submitDonation()">
             <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
           </button>
         </td>
       </tr>
 
-      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {food_drive: true}">
+      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp'">
            <!-- Date of Donation -->
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>

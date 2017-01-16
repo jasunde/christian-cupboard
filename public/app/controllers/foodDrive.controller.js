@@ -4,8 +4,9 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     var verbose = true;
 
     self.newDonation = {
-      contact_id: undefined,
+      contact_id: 8975,
       timestamp: new Date(),
+
     };
 
     self.thisDonation = {};
@@ -27,7 +28,6 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
       }
         DonationsFactory.submitDonations(self.newDonation);
         self.newDonation = {
-          contact_id: undefined,
           timestamp: new Date(),
         };
     };
