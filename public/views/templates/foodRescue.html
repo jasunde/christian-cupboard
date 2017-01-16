@@ -8,19 +8,32 @@
       <tr>
         <th>Donor</th>
         <th>Date</th>
-        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
+        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}"
+        >{{category.name}}</th>
       </tr>
     </thead>
     <!-- INPUTS FOR SUBMISSION -->
     <tbody>
       <tr>
+        <!-- Organization dropdown -->
         <td>
           <select ng-model="frc.newDonation.contact_id">
-            <option ng-repeat="contact in frc.rescueContacts.list" value="{{contact.id}}">{{contact.org_name}}</option>
-          </select></td>
-        <td><input type="date" ng-model="frc.newDonation.timestamp"></td>
-        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}"><input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]"></td>
-        <td><button type="submit" class ="action-button filebtn">SUBMIT</button></td>
+            <option ng-repeat="contact in frc.rescueContacts.list"
+              value="{{contact.id}}">{{contact.org_name}}</option>
+          </select>
+        </td>
+        <!-- Donation Date -->
+        <td>
+          <input type="date" ng-model="frc.newDonation.timestamp">
+        </td>
+
+        <!-- Donation Categories -->
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">
+          <input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]">
+        </td>
+        <td>
+          <button type="submit" class ="action-button filebtn">SUBMIT</button>
+        </td>
       </tr>
     </tbody>
   </table>
