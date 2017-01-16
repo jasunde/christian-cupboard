@@ -1,6 +1,6 @@
 app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory){
   var self = this;
-  var verbose = true;
+  var verbose = false;
   self.newSubDistribution = {};
 
   self.subDistributionCategories = CategoryFactory.categories;
