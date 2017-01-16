@@ -153,7 +153,7 @@ router.delete('/:id', function (req, res) {
 router.use(contactService.find)
 router.use(function (req, res, next) {
   // Contacts managed by admin
-  if(req.body.org_type === 'sub_dist' || req.body.org_type === 'food_rescue') {
+  if(req.body.org_type === 'food_rescue') {
     next()
 
   // Contacts NOT managed by admin
@@ -162,6 +162,8 @@ router.use(function (req, res, next) {
     if(req.body.org_name) { 
       req.body.org = true
       req.body.org_type = 'donor'  
+    } else {
+      req.body.org = false
     }
 
     contactService.upsert(req, res)
