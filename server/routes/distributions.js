@@ -155,13 +155,14 @@ router.delete('/:id', function(req, res) {
 router.use(contactService.find)
 router.use(function (req, res, next) {
   // Contacts managed by admin
-  if(req.body.org_type === 'sub_dist') {
+  if(req.contact.org_type === 'sub_distribution') {
     req.body.donor = false
     req.body.org = true
     next()
   } else {
     req.body.donor = false
     req.body.org = false
+
 
     contactService.upsert(req, res)
     .then(function (response) {
