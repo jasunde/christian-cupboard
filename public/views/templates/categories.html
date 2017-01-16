@@ -14,12 +14,14 @@
     </thead>
     <tbody>
       <tr ng-repeat="category in cc.categories.list | orderBy:'name'">
+        <!-- Name -->
         <td>
           <span class="form-control" disabled ng-if="!category.editable">{{category.name}}</span>
           <span ng-if="category.editable">
             <input class="form-control" type="text" ng-model="category.name">
           </span>
         </td>
+        <!-- Food Rescue -->
         <td class="text-center">
           <span class="checkbox" ng-if="!category.editable">
             <glyph-checkbox boolean="category.food_rescue"></glyph-checkbox>
@@ -30,6 +32,7 @@
             </div>
           </span>
         </td>
+        <!-- Food Drive -->
         <td class="text-center">
           <span class="checkbox" ng-if="!category.editable">
             <glyph-checkbox boolean="category.food_drive"></glyph-checkbox>
@@ -40,6 +43,7 @@
             </div>
           </span>
         </td>
+        <!-- Daily Dist -->
         <td class="text-center">
           <span class="checkbox" ng-if="!category.editable">
             <glyph-checkbox boolean="category.daily_dist"></glyph-checkbox>
@@ -50,6 +54,7 @@
             </div>
           </span>
         </td>
+        <!-- Sub Dist -->
         <td class="text-center">
           <span class="checkbox" ng-if="!category.editable">
             <glyph-checkbox boolean="category.sub_dist"></glyph-checkbox>
@@ -60,7 +65,9 @@
             </div>
           </span>
         </td>
+        <!-- Edit -->
         <td>
+          <!-- Not editable -->
           <span ng-if="!category.editable">
             <button 
                 type="button" 
@@ -69,18 +76,20 @@
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
             <button 
-                    type="button" 
-                    class="btn btn-danger" 
-                    ng-click="cc.delete(category)">
-              <span class="glyphicon glyphicon-trash"></span> Delete
+              type="button" 
+              class="btn btn-danger" 
+              ng-click="cc.delete(category)">
+              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
+              <delete-glyph boolean="category.saving"></delete-glyph>
             </button>
           </span>
+          <!-- Editable -->
           <span ng-if="category.editable">
             <button 
                 type="button" 
                 class="btn btn-primary" 
                 ng-click="cc.update(category)">
-              <span class="glyphicon glyphicon-ok"></span> Save
+              <save-glyph boolean="category.saving"></save-glyph>
             </button>
             <button 
                     type="button" 

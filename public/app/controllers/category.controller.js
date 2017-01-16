@@ -6,8 +6,11 @@ app.controller('CategoryController', ['$scope', 'Auth', 'CategoryFactory', funct
   self.categories = CategoryFactory.categories;
 
   self.update = function (category) {
+    category.saving = true;
+
     CategoryFactory.updateCategory(category)
       .then(function (result) {
+        category.saving = false;
       });
   }
 
