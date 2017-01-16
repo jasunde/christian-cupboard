@@ -1,4 +1,6 @@
 <!-- <div class="foodRescue"> -->
+<h3>Food Rescue Form</h3>
+
 <form ng-submit="frc.submitDonation();">
   <table class="rescueTable center">
     <!-- TABLE HEADS -->
@@ -6,7 +8,7 @@
       <tr>
         <th>Donor</th>
         <th>Date</th>
-        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">{{category.name}}</th>
+        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       </tr>
     </thead>
     <!-- INPUTS FOR SUBMISSION -->
@@ -17,7 +19,7 @@
             <option ng-repeat="contact in frc.rescueContacts.list" value="{{contact.id}}">{{contact.org_name}}</option>
           </select></td>
         <td><input type="date" ng-model="frc.newDonation.timestamp"></td>
-        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}"><input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]"></td>
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}"><input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]"></td>
         <td><button type="submit" class ="action-button filebtn">SUBMIT</button></td>
       </tr>
     </tbody>
@@ -29,14 +31,14 @@
       <tr>
         <th>Donor</th>
         <th>Date</th>
-        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_drive: true}">{{category.name}}</th>
+        <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       </tr>
     </thead>
   <tbody>
     <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
       <td>{{donation.org_name}}</td>
       <td>{{donation.date | date: 'MM/dd/yyyy'}}</td>
-      <td ng-repeat="category in frc.rescueCategories.list"><input type="text" ng-model="donation.categories[category.id]" style="width:60px;"></td>
+      <td ng-repeat="category in frc.rescueCategories.list  | filter: {food_rescue: true}"><input type="text" ng-model="donation.categories[category.id]" style="width:60px;"></td>
       <td><button ng-click="frc.editDonation(donation)">EDIT</button></td>
       <td><button ng-click="frc.deleteDonation(donation)">DELETE</button></td>
     </tr>

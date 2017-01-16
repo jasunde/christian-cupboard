@@ -1,0 +1,54 @@
+<h3>Daily Distribution</h3>
+<!-- <div class="foodRescue"> -->
+<form>
+  <table class="rescueTable center">
+    <!-- TABLE HEADS -->
+    <thead class="rescueForm">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name Initals</th>
+        <th>Family Size</th>
+        <!-- Switch to Angular Repeat from Category Factory -->
+        <th ng-repeat="category in ddc.dailyDist">{{category.categories[category.id]}}</th>
+        <!-- End Angular Category Repeat -->
+        <th>Hygeine Product Weight</th>
+        <th>Time Weighed</th>
+        <th>Date Weighed</th>
+      </tr>
+    </thead>
+    <!-- INPUTS FOR SUBMISSION -->
+    <tbody>
+      <tr>
+        <td><input></input></td>
+        <td><input></input></td>
+        <td ng-repeat="category in ddc.dailyDist.categories"><input type="number" placeholder="# of lbs" ng-model="ddc.dailyDist.categories[category.id]"></td>
+        <td><input></input></td>
+        <td><input></input></td>
+        <td><button>SUBMIT</button></td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+    <!-- INPUTS TO DISPLAY DATA AND EDIT -->
+  <table class="rescueTable">
+    <thead class="rescueForm">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <!-- Switch to Angular Repeat from Category Factory -->
+        <th>Family Size</th>
+        <th>Food Weight</th>
+        <th>Produce Weight</th>
+        <!-- End Angular Category Repeat -->
+        <th>Hygeine Product Weight</th>
+        <th>Time Weighed</th>
+        <th>Date Weighed</th>
+      </tr>
+    </thead>
+  <tbody>
+    <tr>
+      <td ng-repeat="name in ddc.dailyDist.first_name">{{name.first_name}}</td>
+    </tr>
+  </tbody>
+  </table>
+<!-- </div> -->

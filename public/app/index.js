@@ -17,7 +17,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
     if (error === "AUTH_REQUIRED") {
       $location.path("/login");
     }
-  }); 
+  });
 }]);
 
 app.config(["$routeProvider", function($routeProvider) {
@@ -47,6 +47,12 @@ app.config(["$routeProvider", function($routeProvider) {
     templateUrl: '/views/templates/foodDrive.html',
     controller: 'FoodDriveController',
     controllerAs: 'fdc',
+    resolve: redirect
+  })
+  .when('/dailyDistribution', {
+    templateUrl: '/views/templates/dailyDistribution.html',
+    controller: 'DailyDistributionController',
+    controllerAs: 'ddc',
     resolve: redirect
   })
   .otherwise({

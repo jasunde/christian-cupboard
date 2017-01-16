@@ -1,4 +1,4 @@
-app.controller("FoodDriveController", ["$firebaseAuth", "$http", "FoodDriveFactory", function( $firebaseAuth, $http, FoodDriveFactory){
+app.controller("FoodDriveController", ["$firebaseAuth", "$http", function( $firebaseAuth, $http){
 //   var self = this;
 //   self.driveCategories = {};
 

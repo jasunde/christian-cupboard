@@ -1,5 +1,5 @@
 app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
- var verbose = true;
+ var verbose = false;
  var donations = {
    list: null
  }

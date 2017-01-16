@@ -1,5 +1,5 @@
 app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, Auth, $rootScope) {
-  var verbose = false;
+  var verbose = true;
   var categories = {
     list: null,
     map: undefined
@@ -34,7 +34,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
             catMap[category.id] = undefined;
             return catMap;
           }, {});
-          if(verbose) {console.log('map', categories.map);}
+          if(verbose) {console.log('map', categories.list);}
         })
         .catch(function (err) {
           console.log('GET categories error:', err);

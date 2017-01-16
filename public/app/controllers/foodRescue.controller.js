@@ -1,7 +1,7 @@
 app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory){
 
   var self = this;
-  var verbose = true;
+  var verbose = false;
 
   self.newDonation = {
     contact_id: undefined,
@@ -40,7 +40,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   }
 
   self.deleteDonation = function(donation) {
-      if(verbose) {console.log("deleting")};
+      if(verbose) {console.log("deleting", donation)};
       DonationsFactory.deleteDonations(donation)
   }
 
