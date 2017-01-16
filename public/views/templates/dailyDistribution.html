@@ -1,44 +1,137 @@
-<h3>Daily Distribution</h3>
-<!-- <div class="foodRescue"> -->
-<form>
-  <table class="rescueTable center">
-    <!-- TABLE HEADS -->
-    <thead class="rescueForm">
-      <tr>
-        <th>First Name</th>
-        <th>Last Name Initals</th>
-        <th>Family Size</th>
-        <!-- Switch to Angular Repeat from Category Factory -->
-        <th ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}"</th>
-        <!-- End Angular Category Repeat -->
-        <th>Time Weighed</th>
-        <th>Date Weighed</th>
-      </tr>
-    </thead>
-    <!-- INPUTS FOR SUBMISSION -->
+<div class="container">
+<h2>Daily Distribution</h2>
+
+<table class="table admin">
+  <thead class="rescueForm">
+    <tr>
+      <th>First Name</th>
+      <th>Last Name Initals</th>
+      <th>Family Size</th>
+      <!-- Switch to Angular Repeat from Category Factory -->
+      <th ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}">{{category.name}}</th>
+      <!-- End Angular Category Repeat -->
+      <th>Time Weighed</th>
+      <th>Date Weighed</th>
+    </tr>
+  </thead>
     <tbody>
+
+      <!-- Add Distribution -->
       <tr>
-        <td><input></input></td>
-        <td><input></input></td>
-        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}"><input type="text" ng-model="donation.categories[category.id]" style="width:60px;"></td>
-        <td><input></input></td>
-        <td><input></input></td>
-        <td><button>SUBMIT</button></td>
+        <td>
+          <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+        </td>
+        <td>
+            <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name">
+        </td>
+        <td>
+            <input class="form-control" type="email" ng-model="ddc.newDistribution.family_size">
+        </td>
+        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}"><input class="form-control" ng-model="ddc.newDistribution.categories[category.id]"></input>
+        </td>
+        <td><input class="form-control" ng-model="ddc.newDistribution.time_weighted"></td>
+        <td><input class="form-control" ng-model="ddc.newDistribution.date_weighted"></td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-success"
+            ng-click="ddc.submitDistribution()">
+            <add-glyph boolean="uc.newUser.saving"></add-glyph>
+          </button>
+        </td>
+      </tr>
+
+      <tr ng-repeat="distribution in ddc.dailyDist">
+        <!-- First Name -->
+        <td>
+          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.first_name}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.first_name">
+          </span>
+        </td>
+        <!-- Last Name -->
+        <td>
+          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.last_name}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.last_name">
+          </span>
+        </td>
+        <!-- Family Size -->
+        <td>
+          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.family_size}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.family_size">
+          </span>
+        </td>
+        <!-- Categories -->
+        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}">
+          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.categories[category.id]}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.categories[category.id]">
+          </span>
+        </td>
+        <!-- Time Weighed -->
+        <td>
+          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.time_weighed}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.time_weighed">
+          </span>
+        </td>
+        <!-- Date Weighed -->
+        <td>
+          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.date_weighed}}</span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.date_weighed">
+          </span>
+        </td>
+        <!-- Edit -->
+        <td>
+          <!-- Not editable -->
+          <span ng-if="!user.editable">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="uc.toggleEditable(user)">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              ng-click="uc.delete(user)">
+              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
+              <delete-glyph boolean="user.saving"></delete-glyph>
+            </button>
+          </span>
+          <!-- Editable -->
+          <span ng-if="user.editable">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="uc.update(user)">
+              <save-glyph boolean="user.saving"></save-glyph>
+            </button>
+            <button
+                    type="button"
+                    class="btn btn-default"
+                    ng-click="uc.toggleEditable(user)">
+              <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>
-</form>
+</div>
+
     <!-- INPUTS TO DISPLAY DATA AND EDIT -->
-  <table class="rescueTable">
+  <!-- <table class="rescueTable">
     <thead class="rescueForm">
       <tr>
         <th>First Name</th>
         <th>Last Name</th>
-        <!-- Switch to Angular Repeat from Category Factory -->
         <th>Family Size</th>
         <th>Food Weight</th>
         <th>Produce Weight</th>
-        <!-- End Angular Category Repeat -->
         <th>Hygeine Product Weight</th>
         <th>Time Weighed</th>
         <th>Date Weighed</th>
@@ -49,5 +142,4 @@
       <td ng-repeat="name in ddc.dailyDist.first_name">{{name.first_name}}</td>
     </tr>
   </tbody>
-  </table>
-<!-- </div> -->
+  </table> -->
