@@ -30,68 +30,35 @@ app.factory("FoodDriveFactory", ["$http", "Auth", "$q", function($http, Auth, $q
   }
 
 
-    function addDonation(donation) {
-      return $q(function (resolve, reject) {
-      if(Auth.user.is_admin) {
-          return $http({
-            method: 'POST',
-            url: '/donations',
-            data: donation,
-            headers: {
-              id_token: Auth.user.idToken
-            }
-          })
-          .then(function (result) {
-            getDonations()
-            .then(function (result) {
-              resolve(result);
-            })
-            .catch(function (err) {
-              console.log('GET donations error:', err);
-              reject();
-            });
-          })
-          .catch(function (err) {
-            console.log('POST donations error:', err);
-            reject();
-          });
-        } else {
-          reject();
-        }
-      });
-    }
+  function addDonation(){
+    var promise = $http({
+      method: 'POST',
+      url: '/donations',
+      data: self.newDonation,
+      header: {
+        id_token: Auth.user.idToken
+      }
+    }).then(function (response) {
+      self.newDonation = {};
+    });
+  }
 
-    function updateDonation(donation) {
-      return $q(function (resolve, reject) {
-        if(Auth.user.is_admin) {
-          return $http({
-            method: 'PUT',
-            url: '/donations',
-            data: donation,
-            headers: {
-              id_token: Auth.user.idToken
-            }
-          })
-          .then(function (result) {
-            getDonations()
-            .then(function (result) {
-              resolve(result);
-            })
-            .catch(function (err) {
-              console.log('GET donations error:', err);
-              reject();
-            });
-          })
-          .catch(function (err) {
-            console.log('PUT donation error:', err);
-            reject();
-          });
-        } else {
-          reject();
+  function updateDonation(donation) {
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Editing Donation");}
+      $http({
+        method: 'PUT',
+        url: '/donations',
+        data: donation,
+        headers: {
+          id_token: Auth.user.idToken
         }
-      });
+      })
+      .then(function (result){
+        getDonations();
+      })
     }
-
+  }
     return {
       addDonation: addDonation,
       getDonations: getDonations,

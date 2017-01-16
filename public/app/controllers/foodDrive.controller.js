@@ -18,14 +18,14 @@ app.controller("FoodDriveController", ['$scope', 'Auth', 'CategoryFactory', 'Foo
 
   self.driveDonations = FoodDriveFactory.donations;
 
-  self.add = function () {
-    self.newDonation.saving = true;
-
-    FoodDriveFactory.addDonation(self.newDonation)
-    .then(function (result) {
-      self.newDonation = {};
-      self.newDonation.saving = false;
-    });
+  self.add = function() {
+      if(verbose) {console.log("Submitting newDonation", self.newDonation);
+    }
+      FoodDriveFactory.addDonation(self.newDonation);
+      self.newDonation = {
+        contact_id: undefined,
+        timestamp: new Date(),
+      };
   };
 
   self.toggleEditable = function (donation) {

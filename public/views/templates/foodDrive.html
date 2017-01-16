@@ -36,7 +36,7 @@
         <td>
           <input class="form-control" type="text" ng-model="fdc.newDonation.city">
         </td>
-                <td>
+        <td>
           <input class="form-control" type="text" ng-model="fdc.newDonation.state">
         </td>
         <td>
@@ -55,8 +55,8 @@
           <input class="form-control" type="number" ng-model="fdc.newDonation.categories[category.id]">
         </td>
         <td>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="btn btn-success"
             ng-click="fdc.add()">
             <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
@@ -67,9 +67,9 @@
       <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp'">
            <!-- Date of Donation -->
         <td>
-          <span class="form-control" disabled ng-if="!user.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
+          <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="date" ng-model="donation.date">
+            <input class="form-control" type="date" ng-model="donation.date | date: 'MM/dd/yyyy'">
           </span>
         </td>
         <!-- First Name -->
@@ -132,7 +132,7 @@
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.org_name}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="number" ng-model="donation.org_name">
+            <input class="form-control" type="text" ng-model="donation.org_name">
           </span>
         </td>
         <!-- Categories -->
@@ -146,32 +146,32 @@
         <td>
           <!-- Not editable -->
           <span ng-if="!donation.editable">
-            <button 
-                type="button" 
-                class="btn btn-primary" 
-                ng-click="uc.toggleEditable(donation)">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="fdc.toggleEditable(donation)">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
-            <button 
-              type="button" 
-              class="btn btn-danger" 
-              ng-click="uc.delete(donation)">
+            <button
+              type="button"
+              class="btn btn-danger"
+              ng-click="fdc.delete(donation)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
               <delete-glyph boolean="donation.saving"></delete-glyph>
             </button>
           </span>
           <!-- Editable -->
           <span ng-if="donation.editable">
-            <button 
-                type="button" 
-                class="btn btn-primary" 
-                ng-click="uc.update(donation)">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="fdc.update(donation)">
               <save-glyph boolean="donation.saving"></save-glyph>
             </button>
-            <button 
-                    type="button" 
-                    class="btn btn-default" 
-                    ng-click="uc.toggleEditable(donation)">
+            <button
+                    type="button"
+                    class="btn btn-default"
+                    ng-click="fdc.toggleEditable(donation)">
               <span class="glyphicon glyphicon-remove"></span> Cancel
             </button>
           </span>

@@ -11,7 +11,7 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
     if(Auth.user.is_admin) {
       getUsers();
     }
-  })
+  });
 
   function getUsers() {
     return $q(function (resolve, reject) {
@@ -31,12 +31,12 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
             console.log('GET users error:', err);
             users.list = null;
             reject();
-          })
+          });
       } else {
         users.list = null;
         reject();
       }
-    })
+    });
   }
 
   function addUser(user) {
@@ -58,7 +58,7 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
           .catch(function (err) {
             console.log('GET users error:', err);
             reject();
-          })
+          });
         })
         .catch(function (err) {
           console.log('POST user error:', err);
@@ -67,7 +67,7 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
       } else {
         reject();
       }
-    }); 
+    });
   }
 
   function updateUser(user) {
@@ -106,5 +106,5 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
     getUsers: getUsers,
     updateUser: updateUser,
     users: users
-  }
+  };
 }]);
