@@ -15,7 +15,8 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
        }
      })
      .then(function (result) {
-       donations.list = result.data;
+       donations.list = result.data
+       console.log('donations', donations.list);
        if (verbose) {console.log('donations', donations.list);}
      })
      .catch(function (err) {
