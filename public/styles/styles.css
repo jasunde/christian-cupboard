@@ -5857,15 +5857,3 @@ input.focus {
     word-wrap: break-word; }
   .rescueTable button {
     color: black; }
-
-.driveForm{
-  background-color: #255AA8;
-  margin: 20px;}
-  .driveForm input {
-    color: black;
-    padding: 5px;}
-  .driveForm label{
-    background-color: #255AA8;
-    color: #FFC600;
-    padding: 5px;
-  }
