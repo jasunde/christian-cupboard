@@ -96,7 +96,7 @@ router.get('/individuals', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT * FROM distributions JOIN contacts ON distributions.contact_id = contacts.id WHERE contacts.org IS FALSE'
+        'SELECT *, distributions.id AS distribution_id FROM distributions JOIN contacts ON distributions.contact_id = contacts.id WHERE contacts.org IS FALSE'
       )
         .then(function(result) {
           getDetails(result.rows, client, res)
@@ -155,7 +155,15 @@ router.use(contactService.find)
 router.use(function (req, res, next) {
   // Contacts managed by admin
   if(req.contact) {
-    next()
+    if(req.contact.org_type === 'sub_distribution') {
+      next();
+    } else {
+      contactService.upsert(req, res)
+      .then(function (response) {
+        req.body.contact_id = req.contact.id
+        next()
+      })
+    }
   } else {
     req.body.donor = false
     req.body.org = false
@@ -180,7 +188,7 @@ router.post('/', function (req, res) {
       'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        distribution.contact_id,
+        req.contact.id,
         distribution.timestamp,
         req.user.id,
         distribution.timestamp
@@ -223,10 +231,10 @@ router.put('/', function(req, res) {
     var date = new Date();
     client.query(
       'UPDATE distributions '+
-      'SET organization_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
+      'SET contact_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
       'WHERE id = $6',
       [
-        distribution.organization_id,
+        distribution.contact_id,
         distribution.timestamp,
         distribution.timestamp,
         req.user.id,
@@ -236,13 +244,13 @@ router.put('/', function(req, res) {
     )
     .then(function(result) {
       var categories = Object.keys(distribution.categories);
-      distribution.categories.forEach(function(category) {
+      categories.forEach(function(category) {
         client.query({
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
           'VALUES ($1, $2, $3) '+
           'ON CONFLICT (distribution_id, category_id) DO UPDATE '+
           'SET amount = $3',
-          values: [distribution_id, category, distribution.categories[category]],
+          values: [distribution.distribution_id, category, distribution.categories[category]],
           name: 'update-distribution-details'
         });
       });

@@ -24,6 +24,10 @@ function findOrganization(req, res, next) {
 
 function findIndividual(req, res, next) {
   var params = 3;
+  if(!req.body.first_name && !req.body.last_name) {
+    req.body.first_name = 'Anonymous';
+    req.body.last_name = 'Person';
+  }
   var query = {
     text: 'SELECT * FROM contacts WHERE '+
     ' first_name = $1 AND last_name = $2',
@@ -34,7 +38,7 @@ function findIndividual(req, res, next) {
     query.text += ' AND ('
   }
 
-  if(req.body.address) { 
+  if(req.body.address) {
     query.text += ' address = $' + params
     query.values.push(req.body.address)
     params++
@@ -63,6 +67,7 @@ function findIndividual(req, res, next) {
     if(result.rows[0]) {
       req.contact = result.rows[0]
     }
+    console.log('req.contact: ', req.contact);
     next()
   })
   .catch(function (err) {
@@ -191,7 +196,7 @@ function put(req, res) {
     ]
   )
   .then(function(response) {
-    return response 
+    return response
   })
   .catch(function(err) {
     console.log('PUT category error:', err);
