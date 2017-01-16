@@ -1,5 +1,4 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', '$scope', function(DonationsFactory, CategoryFactory, $scope){
-
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
     var self = this;
     var verbose = true;
 
@@ -11,14 +10,15 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', '$
     self.thisDonation = {};
 
     self.driveCategories = CategoryFactory.categories;
+    self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
 
+    ContactsFactory.getContacts();
     DonationsFactory.getDonations();
 
     $scope.$on('user:updated', function (event, data) {
         CategoryFactory.getCategories();
         DonationsFactory.getDonations();
-        // ContactsFactory.getContacts();
     });
 
     self.submitDonation = function() {
@@ -35,6 +35,14 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', '$
         if(verbose) {console.log("editing", donation);
       }
         DonationsFactory.editDonations(donation);
+    };
+
+    self.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
     };
 
     self.deleteDonation = function(donation) {

@@ -16,7 +16,7 @@ app.factory("FoodRescueFactory", ["$http", "Auth", function($http, Auth){
       }
     }).then(function (response) {
       self.newDonation = {};
-    })
+    });
   }
 
   //food rescue API
