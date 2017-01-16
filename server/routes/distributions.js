@@ -154,9 +154,7 @@ router.delete('/:id', function(req, res) {
 router.use(contactService.find)
 router.use(function (req, res, next) {
   // Contacts managed by admin
-  if(req.contact.org_type === 'sub_distribution') {
-    req.body.donor = false
-    req.body.org = true
+  if(req.contact) {
     next()
   } else {
     req.body.donor = false
@@ -168,6 +166,7 @@ router.use(function (req, res, next) {
       next()
     })
   }
+
 })
 
 router.post('/', function (req, res) {
