@@ -6227,44 +6227,8 @@ h1 {
   position: absolute;
   top: 50%; }
 
-input {
-  padding: 10px;
-  border: none;
-  border-bottom: solid 2px #c9c9c9;
-  transition: border 0.3s; }
-
-input:focus,
-input.focus {
-  border-bottom: solid 2px #969696; }
-
 .foodRescue {
   padding: 20px; }
-
-.rescueTable {
-  background-color: #255AA8;
-  max-width: 500px;
-  margin: 20px; }
-  .rescueTable input {
-    width: 70px;
-    color: black; }
-  .rescueTable select {
-    color: black; }
-  .rescueTable table {
-    table-layout: fixed;
-    width: 100%; }
-  .rescueTable table.center {
-    margin-left: auto;
-    margin-right: auto; }
-  .rescueTable th {
-    color: #FFC600;
-    text-decoration: underline; }
-  .rescueTable td {
-    color: white; }
-  .rescueTable th, .rescueTable td {
-    padding: 5px;
-    word-wrap: break-word; }
-  .rescueTable button {
-    color: black; }
 
 #loader {
   position: absolute;

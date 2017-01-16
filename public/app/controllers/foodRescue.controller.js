@@ -1,7 +1,7 @@
 app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory){
 
   var self = this;
-  var verbose = false;
+  var verbose = true;
 
   self.newDonation = {
     contact_id: undefined,
@@ -63,5 +63,13 @@ function showPage() {
   // angular.element("loader").style.display = "none";
   // angular.element("myDiv").style.display = "block";
 }
+
+self.toggleEditable = function (donation) {
+  if(donation.editable) {
+    donation.editable = false;
+  } else {
+    donation.editable = true;
+  }
+};
 
 }]);
