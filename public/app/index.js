@@ -49,23 +49,21 @@ app.config(["$routeProvider", function($routeProvider) {
     controllerAs: 'fdc',
     resolve: redirect
   })
-<<<<<<< HEAD
   .when('/dailyDistribution', {
     templateUrl: '/views/templates/dailyDistribution.html',
     controller: 'DailyDistributionController',
     controllerAs: 'ddc',
-=======
+  })
   .when('/categories', {
     templateUrl: '/views/templates/categories.html',
     controller: 'CategoryController',
     controllerAs: 'cc',
     resolve: redirect
-  })
+  })  
   .when('/users', {
     templateUrl: '/views/templates/users.html',
     controller: 'UserController',
     controllerAs: 'uc',
->>>>>>> develop
     resolve: redirect
   })
   .otherwise({
