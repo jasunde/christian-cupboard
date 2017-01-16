@@ -7,7 +7,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
     contact_id: undefined,
     timestamp: new Date(),
     // categories: CategoryFactory.categories.map
-  }
+  };
 
   self.thisDonation = {};
 
@@ -26,23 +26,26 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   });
 
   self.submitDonation = function() {
-      if(verbose) {console.log("Submitting newDonation", self.newDonation)};
-      DonationsFactory.submitDonations(self.newDonation)
+      if(verbose) {console.log("Submitting newDonation", self.newDonation);
+    }
+      DonationsFactory.submitDonations(self.newDonation);
       self.newDonation = {
         contact_id: undefined,
         timestamp: new Date(),
-      }
-  }
+      };
+  };
 
   self.editDonation = function(donation) {
-      if(verbose) {console.log("editing", donation)};
+      if(verbose) {console.log("editing", donation);
+    }
       DonationsFactory.editDonations(donation);
-  }
+  };
 
   self.deleteDonation = function(donation) {
-      if(verbose) {console.log("deleting")};
-      DonationsFactory.deleteDonations(donation)
-  }
+      if(verbose) {console.log("deleting");
+    }
+      DonationsFactory.deleteDonations(donation);
+  };
 
 //utility functions
 //adding current time to scope, possibly helpful for filtering results by today's date.
