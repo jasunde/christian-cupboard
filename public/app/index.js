@@ -49,6 +49,12 @@ app.config(["$routeProvider", function($routeProvider) {
     controllerAs: 'fdc',
     resolve: redirect
   })
+  .when('/categories', {
+    templateUrl: '/views/templates/categories.html',
+    controller: 'CategoryController',
+    controllerAs: 'cc',
+    resolve: redirect
+  })
   .otherwise({
     redirectTo: 'login',
   });

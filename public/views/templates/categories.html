@@ -1,0 +1,97 @@
+<div class="container">
+  <h1>Manage Categories</h1>
+
+  <table class="table admin">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th class="text-center">Food Rescue</th>
+        <th class="text-center">Food Drive</th>
+        <th class="text-center">Daily Distribution</th>
+        <th class="text-center">Sub-Distribution</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="category in cc.categories.list | orderBy:'name'">
+        <td>
+          <span class="form-control" disabled ng-if="!category.editable">{{category.name}}</span>
+          <span ng-if="category.editable">
+            <input class="form-control" type="text" ng-model="category.name">
+          </span>
+        </td>
+        <td class="text-center">
+          <span class="checkbox" ng-if="!category.editable">
+            <glyph-checkbox boolean="category.food_rescue"></glyph-checkbox>
+          </span>
+          <span ng-if="category.editable">
+            <div class="checkbox">
+              <input type="checkbox" ng-model="category.food_rescue">
+            </div>
+          </span>
+        </td>
+        <td class="text-center">
+          <span class="checkbox" ng-if="!category.editable">
+            <glyph-checkbox boolean="category.food_drive"></glyph-checkbox>
+          </span>
+          <span ng-if="category.editable">
+            <div class="checkbox">
+              <input type="checkbox" ng-model="category.food_drive">
+            </div>
+          </span>
+        </td>
+        <td class="text-center">
+          <span class="checkbox" ng-if="!category.editable">
+            <glyph-checkbox boolean="category.daily_dist"></glyph-checkbox>
+          </span>
+          <span ng-if="category.editable">
+            <div class="checkbox">
+              <input type="checkbox" ng-model="category.daily_dist">
+            </div>
+          </span>
+        </td>
+        <td class="text-center">
+          <span class="checkbox" ng-if="!category.editable">
+            <glyph-checkbox boolean="category.sub_dist"></glyph-checkbox>
+          </span>
+          <span ng-if="category.editable">
+            <div class="checkbox">
+              <input type="checkbox" ng-model="category.sub_dist">
+            </div>
+          </span>
+        </td>
+        <td>
+          <span ng-if="!category.editable">
+            <button 
+                type="button" 
+                class="btn btn-primary" 
+                ng-click="cc.toggleEditable(category)">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+            <button 
+                    type="button" 
+                    class="btn btn-danger" 
+                    ng-click="cc.delete(category)">
+              <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
+          </span>
+          <span ng-if="category.editable">
+            <button 
+                type="button" 
+                class="btn btn-primary" 
+                ng-click="cc.update(category)">
+              <span class="glyphicon glyphicon-ok"></span> Save
+            </button>
+            <button 
+                    type="button" 
+                    class="btn btn-default" 
+                    ng-click="cc.toggleEditable(category)">
+              <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

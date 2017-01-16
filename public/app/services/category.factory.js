@@ -1,4 +1,4 @@
-app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, Auth, $rootScope) {
+app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($http, Auth, $rootScope, $q) {
   var verbose = false;
   var categories = {
     list: null,
@@ -30,10 +30,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
       })
         .then(function (result) {
           categories.list = result.data;
-          categories.map = categories.list.reduce(function (catMap, category) {
-            catMap[category.id] = undefined;
-            return catMap;
-          }, {});
+          // categories.map = categories.list.reduce(function (catMap, category) {
+          //   catMap[category.id] = undefined;
+          //   return catMap;
+          // }, {});
           if(verbose) {console.log('map', categories.map);}
         })
         .catch(function (err) {
@@ -46,8 +46,32 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
     }
   }
 
+  function updateCategory(category) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        return $http({
+          method: 'PUT',
+          url: '/categories',
+          data: category,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+          .then(function (result) {
+            getCategories();
+            resolve(result);
+          })
+          .catch(function (err) {
+            console.log('PUT category error:', err);
+            reject();
+          })
+      }    
+    })
+  }
+
   return {
     getCategories: getCategories,
-    categories: categories
+    categories: categories,
+    updateCategory: updateCategory
   };
 }]);
