@@ -7,7 +7,7 @@ app.factory("ContactsFactory", ["$http", "Auth", function($http, Auth){
     if(verbose){console.log("Token in contact factory", Auth.user.idToken);}
     if(Auth.user.idToken) {
       if(verbose){console.log("Getting Contacts");}
-      $http({
+      return $http({
         method: 'GET',
         url: '/contacts',
         headers: {

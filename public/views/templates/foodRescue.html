@@ -1,14 +1,15 @@
 <!-- <div class="foodRescue"> -->
-<!-- <div onload="rfc.myFunction()" style="margin:0;">
+<div ng-hide="frc.gotData" class="ng-hide">
 <div id="loader"></div>
-<div style="display:none;" id="myDiv" class="animate-bottom"> -->
-<div class="container">
+</div>
+<!-- <div style="display:none;" id="myDiv" class="animate-bottom"> -->
+<div class="container" ng-show="frc.gotData">
 <h2>Food Rescue Form</h2>
 
 <table class="table admin">
   <thead class="rescueForm">
     <tr>
-      <th class= "col-md-6 col-lg-3">Donor</th>
+      <th>Donor</th>
       <th>Date</th>
       <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       <th></th>
@@ -17,7 +18,7 @@
     <tbody>
       <!-- Add Distribution -->
       <tr>
-        <td class= "col-md-6 col-lg-3">
+        <td>
         <select ng-model="frc.newDonation.contact_id" class="form-control">
           <option ng-repeat="contact in frc.rescueContacts.list" value="{{contact.id}}">{{contact.org_name}}</option>
         </select>
@@ -41,23 +42,32 @@
     <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
         <!-- Donor -->
         <td>
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.org_name}}</span>
+          <span class="form-control"
+                disabled ng-if="!donation.editable">{{donation.org_name}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="text" ng-model="donation.org_name">
+            <input class="form-control"
+                   type="text"
+                   ng-model="donation.org_name">
           </span>
         </td>
         <!-- Last Name -->
         <td>
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
+          <span class="form-control"
+                disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="text" ng-model="donation.date">
+            <input class="form-control"
+                   type="text"
+                   ng-model="donation.date">
           </span>
         </td>
         <!-- Categories -->
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
+          <span class="form-control"
+                disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="number" ng-model="donation.categories[category.id]">
+            <input class="form-control"
+                   type="number"
+                   ng-model="donation.categories[category.id]">
           </span>
         </td>
         <!-- Edit -->
@@ -98,6 +108,5 @@
     </tbody>
   </table>
 </div>
-<!-- </div> -->
-  <!-- </div> -->
 <!-- </div>
+  </div> -->

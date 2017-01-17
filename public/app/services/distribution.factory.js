@@ -1,5 +1,5 @@
 app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
- var verbose = true;
+ var verbose = false;
  var self = this;
  var distributions = {};
 
@@ -10,7 +10,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
  function getDistributions(){
    if(Auth.user.idToken) {
      if(verbose){console.log("Getting distributions");}
-     $http({
+    return $http({
        method: 'GET',
        url: '/distributions',
        headers: {

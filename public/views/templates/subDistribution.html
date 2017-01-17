@@ -33,7 +33,7 @@
         </td>
       </tr>
 
-      <tr ng-repeat="subDistribution in sdc.subDist">
+      <tr ng-repeat="subDistribution in sdc.subDistributions.list">
         <!-- First Name -->
         <td>
           <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.reciever}}</span>
@@ -43,7 +43,7 @@
         </td>
         <!-- Last Name -->
         <td>
-          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.date}}</span>
+          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.date | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="distribution.editable">
             <input class="form-control" type="text" ng-model="subDistribution.date">
           </span>

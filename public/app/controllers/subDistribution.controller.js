@@ -1,13 +1,19 @@
 app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory){
   var self = this;
-  var verbose = false;
+  var verbose = true;
+
   self.newSubDistribution = {};
 
+  DistributionFactory.getDistributions();
+
   self.subDistributionCategories = CategoryFactory.categories;
-  console.log(self.subDistributionCategories);
+  self.subDistributionContacts = ContactsFactory.contacts;
+  self.subDistributionDonations = DonationsFactory.donations;
+  self.subDistributions = DistributionFactory.distributions;
+
+  console.log("More dists", self.subDistributions);
 
   self.addSubDistribution = function () {
-    console.log(self.newSubDistribution);
     self.newSubDistribution.saving = true;
     DistributionFactory.addDistribution(self.newSubDistribution)
     .then(function (result) {

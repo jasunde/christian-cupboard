@@ -1,5 +1,5 @@
 app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
- var verbose = true;
+ var verbose = false;
  var donations = {
    list: null
  };
@@ -7,7 +7,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
  function getDonations(){
    if(Auth.user.idToken) {
      if(verbose){console.log("Getting Donations");}
-     $http({
+     return $http({
        method: 'GET',
        url: '/donations',
        headers: {

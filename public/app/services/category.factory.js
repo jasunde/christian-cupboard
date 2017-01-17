@@ -5,23 +5,23 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
     map: undefined
   };
 
-  if(Auth.user.idToken) {
-    getCategories();
-  }
+  // if(Auth.user.idToken) {
+  //   getCategories();
+  // }
 
-  $rootScope.$on('user:updated', function (event, data) {
-    if(verbose) {console.log('user update categories');}
-
-    if(Auth.user.currentUser) {
-      if(verbose) {console.log('getting categories')}
-      getCategories();
-    }
-  });
+  // $rootScope.$on('user:updated', function (event, data) {
+  //   if(verbose) {console.log('user update categories');}
+  //
+  //   if(Auth.user.currentUser) {
+  //     if(verbose) {console.log('calling getting categories')}
+  //     getCategories();
+  //   }
+  // });
 
   function getCategories() {
     if(Auth.user.idToken) {
       if(verbose) {console.log('getting categories');}
-      $http({
+      return $http({
         method: 'GET',
         url: '/categories',
         headers: {
@@ -99,7 +99,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
   function deleteCategory(category) {
     return $q(function (resolve, reject) {
       if(Auth.user.idToken) {
-        return $http({
+        $http({
           method: 'DELETE',
           url: '/categories' + category.id,
           headers: {

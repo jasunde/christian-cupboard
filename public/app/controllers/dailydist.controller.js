@@ -2,7 +2,7 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactor
   var self = this;
   var verbose = false;
   var distribution = {};
-  self.newDistibution = {};
+  self.newDistribution = {};
 
   self.dailyDist = [
     {first_name: "John",
@@ -18,8 +18,14 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactor
 }];
 
 DistributionFactory.getDistributions();
+
 self.dailyDistributionCategories = CategoryFactory.categories;
-if (verbose) {console.log(self.dailyDist);}
+self.dailyDistributionContacts = ContactsFactory.contacts;
+self.dailyDistributionDonations = DonationsFactory.donations;
+self.dailyDistributions = DistributionFactory.distributions;
+
+
+if (verbose) {console.log("This be the distributions", self.dailyDistributions);}
 
 self.addDistribution = function () {
   console.log(self.newDistribution);
@@ -39,15 +45,21 @@ self.toggleEditable = function (distribution) {
   }
 };
 
-self.updateDistribution = function () {
-  console.log("clicking");
-  distribution.saving = true;
-  DistributionFactory.updateDistribution(distribution)
-  .then(function (result) {
-    distribution.saving = false;
-    distribution = {};
-  });
+self.updateDistribution = function(donation) {
+    if(verbose) {console.log("editing", donation);
+  }
+    DistributionFactory.updateDistribution(distribution);
 };
+
+// self.updateDistribution = function () {
+//   console.log("clicking");
+//   distribution.saving = true;
+//   DistributionFactory.updateDistribution(distribution)
+//   .then(function (result) {
+//     distribution.saving = false;
+//     distribution = {};
+//   });
+// };
 
 
 }]);

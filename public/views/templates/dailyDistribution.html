@@ -41,7 +41,7 @@
         </td>
       </tr>
 
-      <tr ng-repeat="distribution in ddc.dailyDist">
+      <tr ng-repeat="distribution in ddc.dailyDistributions.list">
         <!-- First Name -->
         <td>
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.first_name}}</span>

@@ -1,6 +1,6 @@
 app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
     var self = this;
-    var verbose = true;
+    var verbose = false;
 
     self.newDonation = {
       contact_id: undefined,

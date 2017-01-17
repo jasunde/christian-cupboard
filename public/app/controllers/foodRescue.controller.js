@@ -1,12 +1,11 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory){
+app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q){
 
   var self = this;
-  var verbose = true;
+  var verbose = false;
 
   self.newDonation = {
     contact_id: undefined,
     timestamp: new Date(),
-    // categories: CategoryFactory.categories.map
   };
 
   self.thisDonation = {};
@@ -15,14 +14,36 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
 
-  // CategoryFactory.gepublic/app/services/category.factory.jstCategories();
-  ContactsFactory.getContacts();
-  DonationsFactory.getDonations();
+  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
+    self.gotData = true;
+  } else {
+    self.gotData = false;
+  }
+
+  // start loader
+  if(Auth.user.idToken){
+    $q.all([
+      CategoryFactory.getCategories(),
+      DonationsFactory.getDonations(),
+      ContactsFactory.getContacts()
+    ])
+    .then(function (response) {
+      self.gotData = true;
+    });
+}
 
   $scope.$on('user:updated', function (event, data) {
-      // CategoryFactory.getCategories();
-      DonationsFactory.getDonations();
-      ContactsFactory.getContacts();
+
+    if(Auth.user.idToken){
+      $q.all([
+        CategoryFactory.getCategories(),
+        DonationsFactory.getDonations(),
+        ContactsFactory.getContacts()
+      ])
+      .then(function (response) {
+        self.gotData = true;
+      });
+    }
   });
 
   self.submitDonation = function() {
@@ -54,36 +75,12 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
 
-    var myVar;
-
-self.myFunction = function() {
-    myVar = setTimeout(showPage, 3000);
-}
-
-function showPage() {
-  // angular.element( document.querySelector("loader").style.display = "none");
-  // angular.element( document.querySelector("myDiv").style.display = "block");
-  // angular.element("loader").style.display = "none";
-  // angular.element("myDiv").style.display = "block";
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
-
-self.toggleEditable = function (donation) {
-  if(donation.editable) {
-    donation.editable = false;
-  } else {
-    donation.editable = true;
-  }
-};
-
-function myFunction() {
-    myVar = setTimeout(showPage, 3000);
-}
-
-function showPage() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
+    self.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
+    };
 
 }]);

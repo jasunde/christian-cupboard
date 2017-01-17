@@ -151,3 +151,18 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }//END NO MOAR NUMBER SPINNERS
+
+// .accentImage {
+//   background-image: url("/resources/background.png");
+//   background-repeat: no-repeat;
+// }
+
+.accentImage {
+    position: relative;
+}
+.accentImage img {
+    position: absolute;
+    top: 0px;
+    left: -30px;
+    height: 50px;
+}

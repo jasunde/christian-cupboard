@@ -6211,3 +6211,12 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0; }
+
+.accentImage {
+  position: relative; }
+
+.accentImage img {
+  position: absolute;
+  top: 0px;
+  left: -30px;
+  height: 50px; }
