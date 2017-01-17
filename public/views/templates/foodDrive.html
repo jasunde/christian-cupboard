@@ -1,4 +1,7 @@
-<div class="container">
+<div ng-hide="fdc.gotData" class="ng-hide">
+<div id="loader"></div>
+</div>
+<div class="container" ng-show="fdc.gotData">
 <h2>Food Drive</h2>
 
 <table class="driveTable">
