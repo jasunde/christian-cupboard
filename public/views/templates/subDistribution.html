@@ -1,4 +1,8 @@
-<div class="container">
+<div ng-hide="sdc.gotData" class="ng-hide">
+<div id="loader"></div>
+</div>
+
+<div class="container" ng-show="sdc.gotData">
 <h2>Sub Distribution</h2>
 
 <table class="table admin">

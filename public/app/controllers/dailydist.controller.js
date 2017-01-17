@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q){
   var self = this;
   var verbose = false;
   var distribution = {};
@@ -17,18 +17,49 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactor
 	}
 }];
 
-DistributionFactory.getDistributions();
-
 self.dailyDistributionCategories = CategoryFactory.categories;
 self.dailyDistributionContacts = ContactsFactory.contacts;
 self.dailyDistributionDonations = DonationsFactory.donations;
 self.dailyDistributions = DistributionFactory.distributions;
 
+if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list && DistributionFactory.distributions.list) {
+  self.gotData = true;
+} else {
+  self.gotData = false;
+}
+
+// start loader
+if(Auth.user.idToken){
+  $q.all([
+    CategoryFactory.getCategories(),
+    DonationsFactory.getDonations(),
+    ContactsFactory.getContacts(),
+    DistributionFactory.getDistributions()
+  ])
+  .then(function (response) {
+    self.gotData = true;
+  });
+}
+
+$scope.$on('user:updated', function (event, data) {
+
+  if(Auth.user.idToken){
+    $q.all([
+      CategoryFactory.getCategories(),
+      DonationsFactory.getDonations(),
+      ContactsFactory.getContacts(),
+      DistributionFactory.getDistributions()
+    ])
+    .then(function (response) {
+      self.gotData = true;
+    });
+  }
+});
 
 if (verbose) {console.log("This be the distributions", self.dailyDistributions);}
 
 self.addDistribution = function () {
-  console.log(self.newDistribution);
+  if(verbose) {console.log(self.newDistribution);}
   self.newDistribution.saving = true;
   DistributionFactory.addDistribution(self.newDistribution)
   .then(function (result) {
@@ -46,20 +77,8 @@ self.toggleEditable = function (distribution) {
 };
 
 self.updateDistribution = function(donation) {
-    if(verbose) {console.log("editing", donation);
-  }
+    if(verbose) {console.log("editing", donation);}
     DistributionFactory.updateDistribution(distribution);
 };
-
-// self.updateDistribution = function () {
-//   console.log("clicking");
-//   distribution.saving = true;
-//   DistributionFactory.updateDistribution(distribution)
-//   .then(function (result) {
-//     distribution.saving = false;
-//     distribution = {};
-//   });
-// };
-
 
 }]);

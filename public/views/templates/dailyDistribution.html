@@ -1,4 +1,8 @@
-<div class="container">
+<div ng-hide="ddc.gotData" class="ng-hide">
+<div id="loader"></div>
+</div>
+
+<div class="container" ng-show="ddc.gotData">
 <h2>Daily Distribution</h2>
 
 <table class="table admin">
@@ -60,14 +64,14 @@
         <td>
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.family_size}}</span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.family_size">
+            <input class="form-control" type="number" ng-model="distribution.family_size">
           </span>
         </td>
         <!-- Categories -->
         <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}">
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.categories[category.id]}}</span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="number" ng-model="distribution.categories[category.id]">
+            <input class="form-control" type="text" ng-model="distribution.categories[category.id]">
           </span>
         </td>
         <!-- Time Weighed -->
@@ -79,9 +83,12 @@
         </td>
         <!-- Date Weighed -->
         <td>
-          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.date_weighed}}</span>
+          <span class="form-control"
+          disabled ng-if="!distribution.editable">{{distribution.date_weighed}}</span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.date_weighed">
+            <input class="form-control"
+            type="text"
+            ng-model="distribution.date_weighed">
           </span>
         </td>
         <!-- Edit -->
