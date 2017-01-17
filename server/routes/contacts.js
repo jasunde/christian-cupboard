@@ -15,9 +15,22 @@ router.use(function (req, res, next) {
   next()
 })
 
-router.get('/', function(req, res) {
+router.get('/all', function(req, res) {
   pool.query(
     'SELECT * FROM contacts'
+  )
+  .then(function(result) {
+    res.send(result.rows);
+  })
+  .catch(function(err) {
+    console.log('GET all contacts err:', err);
+    res.status(500).send(err);
+  });
+});
+
+router.get('/', function(req, res) {
+  pool.query(
+    'SELECT * FROM contacts WHERE is_active IS TRUE'
   )
   .then(function(result) {
     res.send(result.rows);
@@ -47,7 +60,7 @@ router.get('/organizations/:org_type', function(req, res) {
 });
 
 router.get('/id/:id', function(req, res) {
-  
+
   contactService.getByID(req, res, req.params.id)
   .then(function (result) {
     if(result) {
