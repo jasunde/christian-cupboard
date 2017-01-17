@@ -121,6 +121,7 @@ router.get('/:id', function (req, res) {
 
 router.post('/', function (req, res) {
   var donation = req.body;
+  console.log("Food Drive Donation", req.body);
   pool.connect()
   .then(function (client) {
     client.query(

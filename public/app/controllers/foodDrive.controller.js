@@ -22,8 +22,8 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     });
 
     self.submitDonation = function() {
-        if(verbose) {console.log("Submitting newDonation", self.newDonation);
-      }
+        if(verbose) {console.log("Submitting newDonation", self.newDonation);}
+        self.newDonation.contact_id = 3;
         DonationsFactory.submitDonations(self.newDonation);
         self.newDonation = {
           contact_id: undefined,

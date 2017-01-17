@@ -61,10 +61,12 @@ self.myFunction = function() {
 }
 
 function showPage() {
-  angular.element( document.querySelector("loader").style.display = "none");
-  angular.element( document.querySelector("myDiv").style.display = "block");
+  // angular.element( document.querySelector("loader").style.display = "none");
+  // angular.element( document.querySelector("myDiv").style.display = "block");
   // angular.element("loader").style.display = "none";
   // angular.element("myDiv").style.display = "block";
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("myDiv").style.display = "block";
 }
 
 self.toggleEditable = function (donation) {
@@ -74,5 +76,14 @@ self.toggleEditable = function (donation) {
     donation.editable = true;
   }
 };
+
+function myFunction() {
+    myVar = setTimeout(showPage, 3000);
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("myDiv").style.display = "block";
+}
 
 }]);
