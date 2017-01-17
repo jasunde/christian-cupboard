@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var pg = require('pg');
-var config = require('../config');
+var express = require('express')
+var router = express.Router()
+var contactService = require('../modules/contactService')
+var pg = require('pg')
+var config = require('../config')
 
 var pool = new pg.Pool(config.pg);
 
@@ -54,32 +55,38 @@ router.get('/', function (req, res) {
     .then(function (result) {
       var donations = result.rows;
 
-      donations.forEach(function (donation) {
-        client.query(
-          'SELECT * FROM donation_details '+
-          'WHERE donation_id = $1',
-          [donation.donation_id]
-        )
-        .then(function (result) {
-          donation.categories = result.rows.reduce(function (total, current) {
-            total[current.category_id] = current.amount;
-            return total;
-          }, {});
-        });
-      });
+      if(donations.length) {
+        donations.forEach(function (donation) {
+          client.query(
+            'SELECT * FROM donation_details '+
+            'WHERE donation_id = $1',
+            [donation.donation_id]
+          )
+            .then(function (result) {
+              donation.categories = result.rows.reduce(function (total, current) {
+                total[current.category_id] = current.amount;
+                return total;
+              }, {})
+            })
+        })
 
-      client.on('drain', client.end.bind(client) );
+        client.on('drain', client.end.bind(client) )
 
-      client.on('end', function () {
-        res.send(donations);
-      });
+        client.on('end', function () {
+          res.send(donations)
+        })
 
-      client.on('error', function (err) {
-        res.status(500).send(err);
-      });
-    });
-  });
-});
+        client.on('error', function (err) {
+          res.status(500).send(err)
+        })
+      } else {
+        client.release()
+        res.send(donations)
+      }
+
+    })
+  })
+})
 
 // Get by ID
 router.get('/:id', function (req, res) {
@@ -119,6 +126,68 @@ router.get('/:id', function (req, res) {
   });
 });
 
+router.delete('/:id', function (req, res) {
+  pool.connect()
+  .then(function (client) {
+    client.query(
+      'DELETE FROM donation_details '+
+      'WHERE donation_id = $1',
+      [req.params.id]
+    )
+    .then(function () {
+      client.query(
+        'DELETE FROM donations '+
+        'WHERE id = $1',
+        [req.params.id]
+      )
+      .then(function () {
+        client.release();
+        res.sendStatus(200);
+      })
+      .catch(function (err) {
+        console.log('DELETE donation error:', err)
+        req.sendStatus(500)
+      })
+    })
+    .catch(function (err) {
+      console.log('DELETE donation_details error:', err)
+      req.sendStatus(500)
+    })
+  })
+})
+
+router.use(contactService.find)
+router.use(function (req, res, next) {
+  // Contacts managed by admin
+  if(req.contact) {
+    if(req.contact.org_type === 'food_rescue') {
+      next()
+    } else {
+
+      // Contacts not managed by admin
+      contactService.upsert(req, res)
+        .then(function (response) {
+          req.body.contact_id = req.contact.id
+          next()
+        })
+    }
+  } else {
+    req.body.donor = true
+    if(req.body.org_name) {
+      req.body.org = true
+      req.body.org_type = 'donor'
+    } else {
+      req.body.org = false
+    }
+
+    contactService.upsert(req, res)
+      .then(function (response) {
+        req.body.contact_id = req.contact.id
+        next()
+      })
+  }
+})
+
 router.post('/', function (req, res) {
   var donation = req.body;
   console.log("Food Drive Donation", req.body);
@@ -129,7 +198,7 @@ router.post('/', function (req, res) {
       'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        donation.contact_id,
+        req.contact.id,
         donation.timestamp,
         donation.timestamp,
         req.user.id
