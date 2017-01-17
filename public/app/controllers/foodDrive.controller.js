@@ -1,4 +1,5 @@
 app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
+
     var self = this;
     var verbose = false;
 

@@ -37,7 +37,7 @@
           <input class="form-control" type="text" ng-model="fdc.newDonation.city">
         </td>
         <td>
-          <input class="form-control" type="text" ng-model="fdc.newDonation.state">
+          <input class="form-control" type="text" ng-model="fdc.newDonation.state" maxlength="2">
         </td>
         <td>
           <input class="form-control" type="number" ng-model="fdc.newDonation.postal_code">
@@ -61,12 +61,12 @@
         </td>
       </tr>
 
-      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp'">
+      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {org_type: '!food_rescue'}">
            <!-- Date of Donation -->
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="date" ng-model="donation.date | date: 'MM/dd/yyyy'">
+            <input class="form-control" type="date" ng-model="donation.date">
           </span>
         </td>
         <!-- First Name -->
@@ -101,7 +101,7 @@
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.state}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="text" ng-model="donation.state">
+            <input class="form-control" type="text" ng-model="donation.state" maxlength="2">
           </span>
         </td>
         <!-- Zip -->
@@ -134,7 +134,7 @@
         </td>
         <!-- Categories -->
         <td ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
+          <span class="form-control" disabled ng-if="!donation.editable">{{donation.categories[category.id] | number:0}}</span>
           <span ng-if="donation.editable">
             <input class="form-control" type="number" ng-model="donation.categories[category.id]">
           </span>
@@ -162,7 +162,7 @@
             <button
                 type="button"
                 class="btn btn-primary"
-                ng-click="fdc.update(donation)">
+                ng-click="fdc.editDonation(donation)">
               <save-glyph boolean="donation.saving"></save-glyph>
             </button>
             <button
