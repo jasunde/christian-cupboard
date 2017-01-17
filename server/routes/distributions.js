@@ -184,14 +184,15 @@ router.post('/', function (req, res) {
   pool.connect()
   .then(function(client) {
     client.query(
-      'INSERT INTO distributions (contact_id, date, added_by, timestamp) '+
-      'VALUES ($1, $2, $3, $4) '+
+      'INSERT INTO distributions (contact_id, date, added_by, timestamp, date_entered) '+
+      'VALUES ($1, $2, $3, $4, $5) '+
       'RETURNING id',
       [
         req.contact.id,
         distribution.timestamp,
         req.user.id,
-        distribution.timestamp
+        distribution.timestamp,
+        new Date()
       ]
     )
     .then(function(result) {
