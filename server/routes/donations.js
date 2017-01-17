@@ -1,8 +1,8 @@
-var express = require('express')
-var router = express.Router()
-var contactService = require('../modules/contactService')
-var pg = require('pg')
-var config = require('../config')
+var express = require('express');
+var router = express.Router();
+var contactService = require('../modules/contactService');
+var pg = require('pg');
+var config = require('../config');
 
 var pool = new pg.Pool(config.pg);
 
@@ -42,12 +42,7 @@ function buildQuery(query) {
     result.text += ' LIMIT ' + MAX_GET;
   }
 
-<<<<<<< HEAD
   return result;
-=======
-
-  return result
->>>>>>> feature-donations-route
 }
 
 //Takes care of getBy ContactID, getBYDateRange, and getByOrgType
@@ -60,34 +55,6 @@ router.get('/', function (req, res) {
     .then(function (result) {
       var donations = result.rows;
 
-<<<<<<< HEAD
-      donations.forEach(function (donation) {
-        client.query(
-          'SELECT * FROM donation_details '+
-          'WHERE donation_id = $1',
-          [donation.donation_id]
-        )
-        .then(function (result) {
-          donation.categories = result.rows.reduce(function (total, current) {
-            total[current.category_id] = current.amount;
-            return total;
-          }, {});
-        });
-      });
-
-      client.on('drain', client.end.bind(client) );
-
-      client.on('end', function () {
-        res.send(donations);
-      });
-
-      client.on('error', function (err) {
-        res.status(500).send(err);
-      });
-    });
-  });
-});
-=======
       if(donations.length) {
         donations.forEach(function (donation) {
           client.query(
@@ -99,28 +66,27 @@ router.get('/', function (req, res) {
               donation.categories = result.rows.reduce(function (total, current) {
                 total[current.category_id] = current.amount;
                 return total;
-              }, {})
-            })
-        })
+              }, {});
+            });
+        });
 
-        client.on('drain', client.end.bind(client) )
+        client.on('drain', client.end.bind(client) );
 
         client.on('end', function () {
-          res.send(donations)
-        })
+          res.send(donations);
+        });
 
         client.on('error', function (err) {
-          res.status(500).send(err)
-        })
+          res.status(500).send(err);
+        });
       } else {
-        client.release()
-        res.send(donations)
+        client.release();
+        res.send(donations);
       }
 
-    })
-  })
-})
->>>>>>> feature-donations-route
+    });
+  });
+});
 
 // Get by ID
 router.get('/:id', function (req, res) {
@@ -179,48 +145,48 @@ router.delete('/:id', function (req, res) {
         res.sendStatus(200);
       })
       .catch(function (err) {
-        console.log('DELETE donation error:', err)
-        req.sendStatus(500)
-      })
+        console.log('DELETE donation error:', err);
+        req.sendStatus(500);
+      });
     })
     .catch(function (err) {
-      console.log('DELETE donation_details error:', err)
-      req.sendStatus(500)
-    })
-  })
-})
+      console.log('DELETE donation_details error:', err);
+      req.sendStatus(500);
+    });
+  });
+});
 
-router.use(contactService.find)
+router.use(contactService.find);
 router.use(function (req, res, next) {
   // Contacts managed by admin
   if(req.contact) {
     if(req.contact.org_type === 'food_rescue') {
-      next()
+      next();
     } else {
 
       // Contacts not managed by admin
       contactService.upsert(req, res)
         .then(function (response) {
-          req.body.contact_id = req.contact.id
-          next()
-        })
+          req.body.contact_id = req.contact.id;
+          next();
+        });
     }
   } else {
-    req.body.donor = true
+    req.body.donor = true;
     if(req.body.org_name) {
-      req.body.org = true
-      req.body.org_type = 'donor'
+      req.body.org = true;
+      req.body.org_type = 'donor';
     } else {
-      req.body.org = false
+      req.body.org = false;
     }
 
     contactService.upsert(req, res)
       .then(function (response) {
-        req.body.contact_id = req.contact.id
-        next()
-      })
+        req.body.contact_id = req.contact.id;
+        next();
+      });
   }
-})
+});
 
 router.post('/', function (req, res) {
   var donation = req.body;
