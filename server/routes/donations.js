@@ -42,6 +42,7 @@ function buildQuery(query) {
     result.text += ' LIMIT ' + MAX_GET
   }
 
+
   return result
 }
 
@@ -55,29 +56,35 @@ router.get('/', function (req, res) {
     .then(function (result) {
       var donations = result.rows
 
-      donations.forEach(function (donation) {
-        client.query(
-          'SELECT * FROM donation_details '+
-          'WHERE donation_id = $1',
-          [donation.donation_id]
-        )
-        .then(function (result) {
-          donation.categories = result.rows.reduce(function (total, current) {
-            total[current.category_id] = current.amount;
-            return total;
-          }, {})
+      if(donations.length) {
+        donations.forEach(function (donation) {
+          client.query(
+            'SELECT * FROM donation_details '+
+            'WHERE donation_id = $1',
+            [donation.donation_id]
+          )
+            .then(function (result) {
+              donation.categories = result.rows.reduce(function (total, current) {
+                total[current.category_id] = current.amount;
+                return total;
+              }, {})
+            })
         })
-      })
 
-      client.on('drain', client.end.bind(client) )
+        client.on('drain', client.end.bind(client) )
 
-      client.on('end', function () {
+        client.on('end', function () {
+          res.send(donations)
+        })
+
+        client.on('error', function (err) {
+          res.status(500).send(err)
+        })
+      } else {
+        client.release()
         res.send(donations)
-      })
+      }
 
-      client.on('error', function (err) {
-        res.status(500).send(err)
-      })
     })
   })
 })
@@ -165,7 +172,6 @@ router.use(function (req, res, next) {
           next()
         })
     }
-    next()
   } else {
     contactService.upsert(req, res)
       .then(function (response) {
@@ -184,7 +190,7 @@ router.post('/', function (req, res) {
       'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        donation.contact.id,
+        req.contact.id,
         donation.timestamp,
         donation.timestamp,
         req.user.id
