@@ -2,66 +2,46 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
   var self = this;
 
   self.contacts = ContactsFactory.contacts;
-  self.filter = {
-  };
 
   self.search = '';
-  self.org_type = [];
-  self.ind_type = [];
+  self.org_type = '';
+  self.ind_type = '';
+  self.filter = {
+  }
+
 
   self.org_types = [ {
     name: '',
-    filter: [
-      {org_type: ''},
-      {org: ''}
-    ]
+    filter: {}
   }, {
     name: 'All',
-    filter: [
-      {org_type: ''},
-      { org: true }
-    ]
+    filter: {org: true}
   }, {
     name: 'Food Rescue',
-    filter: [{
-      org_type: 'food_rescue'
-    }]
+    filter: {org_type: 'food_rescue' }
   }, {
     name: 'Sub-Distribution',
-    filter: [{
-      org_type: 'sub_distribution'
-    }]
+    filter: {org_type: 'sub_distribution' }
   }, {
     name: 'Donor',
-    filter: [{
-      org_type: 'donor'
-    }]
+    filter: {org_type: 'donor' }
   } ];
 
   self.ind_types = [{
     name: '',
-    filter: [
-      {org: ''},
-      {donor: ''}
-    ]
+    filter:  {}
   }, {
     name: 'All',
-    filter: [
-      {org: false},
-      {donor: ''}
-    ]
+    filter: {org: false}
+    
   }, {
     name: 'Client',
-    filter: [
-      {org: false},
-      {donor: false}
-    ]
+    filter: {donor: false, org: false}
+    
   }, {
     name: 'Donor',
-    filter: [
-      {org: false},
-      {donor: true}
-    ]
+    filter: {donor: true, org: false}
+    
   }];
 
 
@@ -69,15 +49,8 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
     ContactsFactory.getContacts();
   });
 
-  self.changeFilter = function (filters) {
-    filters.forEach(function (filter) {
-      var key = Object.keys(filter)[0];
-      if(filter[key] === '') {
-        delete self.filter[key];
-      } else {
-        self.filter[key] = filter[key];
-      }
-    })
+  self.changeFilter = function (filter) {
+    self.filter
   }
   
   self.add = function () {

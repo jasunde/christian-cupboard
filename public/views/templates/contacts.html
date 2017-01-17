@@ -1,6 +1,7 @@
 <div class="container">
   <h2>Manage Contacts</h2>
 
+  {{cc.filter}}
   <!-- Filter Form -->
   <div class="row">
     <form>
@@ -9,8 +10,7 @@
         <select
            class="form-control"
            ng-options="type.filter as type.name for type in cc.org_types" 
-           ng-model="cc.org_type"
-           ng-change="cc.changeFilter(cc.org_type)">
+           ng-model="cc.filter">
         </select>
       </div>
 
@@ -19,8 +19,7 @@
         <select
            class="form-control"
            ng-options="type.filter as type.name for type in cc.ind_types" 
-           ng-model="cc.ind_type"
-           ng-change="cc.changeFilter(cc.ind_type)">
+           ng-model="cc.filter">
         </select>
       </div>
 
@@ -33,7 +32,12 @@
 
   <!-- Contact Cards -->
   <div class="row">
-    <div ng-repeat="contact in cc.contacts.list | filter: cc.filter | filter: cc.search | orderBy: ['org_name','first_name']">
+    <div 
+      ng-repeat="contact in cc.contacts.list 
+      | filter: {org_type: cc.filter.org_type} 
+      | filter: {org: cc.filter.org} 
+      | filter: {donor: cc.filter.donor} 
+      | filter: cc.search">
 
       <div class="clearfix" ng-if="$index % 3 == 0"></div>
       <div class="col-sm-4">
