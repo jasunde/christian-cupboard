@@ -10,6 +10,7 @@ var users = require('./routes/users')
 var categories = require('./routes/categories')
 var contacts = require('./routes/contacts')
 var donations = require('./routes/donations')
+var distributions = require('./routes/distributions')
 
 // custom middleware
 var userInfo = require('./modules/userInfo')
@@ -34,6 +35,7 @@ app.use('/users', users)
 app.use('/categories', categories)
 app.use('/contacts', contacts)
 app.use('/donations', donations)
+app.use('/distributions', distributions)
 
 app.listen(app.get('port'), function () {
   console.log('Listening on port', app.get('port'));
