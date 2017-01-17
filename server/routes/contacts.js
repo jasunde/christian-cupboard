@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var csv = require('express-csv');
 var contactService = require('../modules/contactService')
 
 var pg = require('pg');
@@ -47,7 +48,7 @@ router.get('/organizations/:org_type', function(req, res) {
 });
 
 router.get('/id/:id', function(req, res) {
-  
+
   contactService.getByID(req, res, req.params.id)
   .then(function (result) {
     if(result) {
@@ -103,5 +104,22 @@ router.get('/donors/individual', function(req, res) {
     res.status(500).send(err);
   });
 });
+
+router.get('/csvtest', function(req, res) {
+
+  pool.query(
+    'SELECT * FROM contacts'
+  )
+  .then(function(result) {
+    res.csv(
+      result.rows
+    );
+  })
+  .catch(function(err) {
+    console.log('GET all contacts err:', err);
+    res.status(500).send(err);
+  });
+});  
+
 
 module.exports = router;
