@@ -35,9 +35,40 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
     });
    }
 
+  function updateContact(contact) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        return $http({
+          method: 'PUT',
+          url: '/contacts',
+          data: contact,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+        .then(function (result) {
+          console.log('updated contact', result);
+          getContacts()
+          .then(function (result) {
+            resolve(result);
+          })
+          .catch(function (err) {
+            console.log('GET contacts error:', err);
+            reject(err);
+          })
+        })
+        .catch(function (err) {
+          console.log('PUT contact error:', err);
+          reject(err);
+        });
+      }
+    });
+  }
+
    return {
      getContacts: getContacts,
-     contacts: contacts
+     contacts: contacts,
+     updateContact: updateContact
    };
 
 }]);
