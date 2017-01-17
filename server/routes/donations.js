@@ -42,7 +42,12 @@ function buildQuery(query) {
     result.text += ' LIMIT ' + MAX_GET;
   }
 
+<<<<<<< HEAD
   return result;
+=======
+
+  return result
+>>>>>>> feature-donations-route
 }
 
 //Takes care of getBy ContactID, getBYDateRange, and getByOrgType
@@ -55,6 +60,7 @@ router.get('/', function (req, res) {
     .then(function (result) {
       var donations = result.rows;
 
+<<<<<<< HEAD
       donations.forEach(function (donation) {
         client.query(
           'SELECT * FROM donation_details '+
@@ -81,6 +87,40 @@ router.get('/', function (req, res) {
     });
   });
 });
+=======
+      if(donations.length) {
+        donations.forEach(function (donation) {
+          client.query(
+            'SELECT * FROM donation_details '+
+            'WHERE donation_id = $1',
+            [donation.donation_id]
+          )
+            .then(function (result) {
+              donation.categories = result.rows.reduce(function (total, current) {
+                total[current.category_id] = current.amount;
+                return total;
+              }, {})
+            })
+        })
+
+        client.on('drain', client.end.bind(client) )
+
+        client.on('end', function () {
+          res.send(donations)
+        })
+
+        client.on('error', function (err) {
+          res.status(500).send(err)
+        })
+      } else {
+        client.release()
+        res.send(donations)
+      }
+
+    })
+  })
+})
+>>>>>>> feature-donations-route
 
 // Get by ID
 router.get('/:id', function (req, res) {
@@ -153,15 +193,23 @@ router.delete('/:id', function (req, res) {
 router.use(contactService.find)
 router.use(function (req, res, next) {
   // Contacts managed by admin
-  if(req.body.org_type === 'food_rescue') {
-    next()
+  if(req.contact) {
+    if(req.contact.org_type === 'food_rescue') {
+      next()
+    } else {
 
-  // Contacts NOT managed by admin
+      // Contacts not managed by admin
+      contactService.upsert(req, res)
+        .then(function (response) {
+          req.body.contact_id = req.contact.id
+          next()
+        })
+    }
   } else {
     req.body.donor = true
-    if(req.body.org_name) { 
+    if(req.body.org_name) {
       req.body.org = true
-      req.body.org_type = 'donor'  
+      req.body.org_type = 'donor'
     } else {
       req.body.org = false
     }
@@ -183,7 +231,7 @@ router.post('/', function (req, res) {
       'VALUES ($1, $2, $3, $4) '+
       'RETURNING id',
       [
-        donation.contact_id,
+        req.contact.id,
         donation.timestamp,
         donation.timestamp,
         req.user.id
