@@ -5,21 +5,54 @@ var contacts = {}
 var pool = new pg.Pool(config.pg);
 
 function findOrganization(req, res, next) {
-  pool.query(
-    'SELECT * FROM contacts '+
-    'WHERE org_name = $1',
-    [req.body.org_name]
-  )
+  var params = 2;
+  var query = {
+    text: 'SELECT * FROM contacts WHERE '+
+    ' org_name = $1',
+    values: [req.body.org_name]
+  }
+
+  if(req.body.address || req.body.email || req.body.phone_number) {
+    query.text += ' AND ('
+  }
+
+  if(req.body.address) {
+    query.text += ' address = $' + params
+    query.values.push(req.body.address)
+    params++
+  }
+
+  if(req.body.email) {
+    if(params > 2) { query.text += ' OR'}
+    query.text += ' email = $' + params
+    query.values.push(req.body.email)
+    params++
+  }
+
+  if(req.body.phone_number) {
+    if(params > 2) { query.text += ' OR'}
+    query.text += ' phone_number = $' + params
+    query.values.push(req.body.phone_number)
+    params++
+  }
+
+  if(req.body.address || req.body.email || req.body.phone_number) {
+    query.text += ')'
+  }
+
+  pool.query(query)
   .then(function (result) {
-    if(result.rows.length) {
+    if(result.rows[0]) {
       req.contact = result.rows[0]
     }
+    console.log('req.contact: ', req.contact);
     next()
   })
   .catch(function (err) {
-    console.log('SELECT organization by org_name error:', err)
+    console.log('SELECT organization error:', err)
     res.status(500).send(err)
   })
+
 }
 
 function findIndividual(req, res, next) {
@@ -111,7 +144,7 @@ function upsert(req, res) {
   if(req.contact) {
     bodyKeys.forEach(function (property) {
       if(req.body[property]) {
-        return req.contact[property] = req.body[property]
+        req.contact[property] = req.body[property]
       }
     })
 
