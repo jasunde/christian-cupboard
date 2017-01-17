@@ -59,6 +59,8 @@ router.get('/organizations/:org_type', function(req, res) {
   });
 });
 
+
+
 router.get('/id/:id', function(req, res) {
 
   contactService.getByID(req, res, req.params.id)
@@ -79,12 +81,32 @@ router.post('/', function (req, res) {
 });
 
 router.put('/', function (req, res) {
+  console.log('We are doing a put');
   contactService.put(req, res)
   .then(function (response) {
     if(response) {
       res.sendStatus(204)
     }
   })
+});
+
+//toggle is_active
+router.put('/active/:id', function(req, res) {
+console.log('putting now');
+  pool.query(
+    'UPDATE contacts '+
+    'SET is_active = NOT is_active WHERE id = $1',
+    [
+      req.params.id
+    ]
+  )
+  .then(function(response) {
+    res.sendStatus(204)
+  })
+  .catch(function(err) {
+    console.log('PUT contact error: ', err);
+    res.status(500).send(err)
+  });
 });
 
 router.get('/donors/org', function(req, res) {
