@@ -1,7 +1,6 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
-
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope){
     var self = this;
-    var verbose = false;
+    var verbose = true;
 
     self.newDonation = {
       contact_id: undefined,
@@ -11,10 +10,9 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     self.thisDonation = {};
 
     self.driveCategories = CategoryFactory.categories;
-    self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
 
-    ContactsFactory.getContacts();
+    // ContactsFactory.getContacts();
     DonationsFactory.getDonations();
 
     $scope.$on('user:updated', function (event, data) {
@@ -23,8 +21,8 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     });
 
     self.submitDonation = function() {
-        if(verbose) {console.log("Submitting newDonation", self.newDonation);}
-        self.newDonation.contact_id = 3;
+        if(verbose) {console.log("Submitting newDonation", self.newDonation);
+      }
         DonationsFactory.submitDonations(self.newDonation);
         self.newDonation = {
           contact_id: undefined,
