@@ -37,7 +37,7 @@
           <input class="form-control" type="text" ng-model="fdc.newDonation.city">
         </td>
         <td>
-          <input class="form-control" type="text" ng-model="fdc.newDonation.state">
+          <input class="form-control" type="text" ng-model="fdc.newDonation.state" maxlength="2">
         </td>
         <td>
           <input class="form-control" type="number" ng-model="fdc.newDonation.postal_code">
@@ -61,7 +61,7 @@
         </td>
       </tr>
 
-      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp'">
+      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {org_type: '!food_rescue'}">
            <!-- Date of Donation -->
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
@@ -101,7 +101,7 @@
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.state}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="text" ng-model="donation.state">
+            <input class="form-control" type="text" ng-model="donation.state" maxlength="2">
           </span>
         </td>
         <!-- Zip -->

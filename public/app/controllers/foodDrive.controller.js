@@ -1,4 +1,4 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth){
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope){
     var self = this;
     var verbose = true;
 
@@ -10,10 +10,10 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     self.thisDonation = {};
 
     self.driveCategories = CategoryFactory.categories;
-    self.driveContacts = ContactsFactory.contacts;
+    // self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
 
-    ContactsFactory.getContacts();
+    // ContactsFactory.getContacts();
     DonationsFactory.getDonations();
 
     $scope.$on('user:updated', function (event, data) {
