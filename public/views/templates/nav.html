@@ -1,6 +1,7 @@
 <div ng-controller="NavController as nc" id="navStyle">
 
-<img src="/resources/CCEFS-Logo-ReverseWhite.png" id="logo">  
+<img src="/resources/CCEFS-Logo-ReverseWhite.png" id="logo">
+
 <div class="dropdown">
   <button class="dropbtn">Inbound</button>
   <div class="dropdown-content">
@@ -21,9 +22,10 @@
   <button class="dropbtn">Admin</button>
   <div class="dropdown-content">
     <a href="#">Reports</a>
-    <a href="#">Users</a>
+    <a href="#categories">Categories</a>
+    <a href="#users">Users</a>
   </div>
 </div>
 
-<button ng-click="nc.logOut()">Log Out</button>
+<button ng-click="nc.logOut()" id="logOutButton">Log Out</button>
 </div>
