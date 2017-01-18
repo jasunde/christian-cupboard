@@ -6229,8 +6229,5 @@ input[type=date]::-webkit-inner-spin-button {
   background-color: black;
   color: #f3f3f3; }
 
-.form-control {
-  min-width: auto; }
-
 span {
   white-space: nowrap; }
