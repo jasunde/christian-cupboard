@@ -152,6 +152,11 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }//END NO MOAR NUMBER SPINNERS
 
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}// remove arrows on date input
+
 // .accentImage {
 //   background-image: url("/resources/background.png");
 //   background-repeat: no-repeat;
