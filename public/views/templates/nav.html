@@ -41,7 +41,11 @@
           </li>
           <li ng-if="nc.displayName.name"><p class="navbar-text">{{nc.displayName.name}}</p>
           </li>
-          <li><button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills">Log Out</button></li>
+          <li>
+            <div class= "btn-group">
+            <button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills">Log Out</button>
+          </div>
+          </li>
         </ul>
 
       </div>
