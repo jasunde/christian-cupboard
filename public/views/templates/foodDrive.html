@@ -4,7 +4,7 @@
 <div class="container" ng-show="fdc.gotData">
 <h2>Food Drive</h2>
 
-<table class="driveTable">
+<table  wt-responsive-table class="table table-striped">
     <thead>
       <tr>
         <th>Date</th>
@@ -25,7 +25,7 @@
       <!-- Add User -->
       <tr>
           <td>
-          <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp">
+          <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
         </td>
         <td>
           <input class="form-control" type="text" ng-model="fdc.newDonation.first_name">
@@ -43,13 +43,13 @@
           <input class="form-control" type="text" ng-model="fdc.newDonation.state" maxlength="2">
         </td>
         <td>
-          <input class="form-control" type="number" ng-model="fdc.newDonation.postal_code">
+          <input class="form-control" type="text" ng-model="fdc.newDonation.postal_code">
         </td>
          <td>
-          <input class="form-control" type="email" ng-model="fdc.newDonation.email">
+          <input class="form-control" type="text" ng-model="fdc.newDonation.email">
         </td>
         <td>
-          <input class="form-control" type="number" ng-model="fdc.newDonation.telephone">
+          <input class="form-control" type="text" ng-model="fdc.newDonation.telephone">
         </td>
         <td>
           <input class="form-control" type="text" ng-model="fdc.newDonation.org_name">
@@ -67,9 +67,9 @@
       <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {org_type: '!food_rescue'}">
            <!-- Date of Donation -->
         <td>
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
+          <span class="form-control" disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="date" ng-model="donation.date">
+            <input class="form-control" type="date" ng-model="donation.timestamp" value="{{donation.timestamp | date: 'MM/dd/yyyy'}}" required>
           </span>
         </td>
         <!-- First Name -->
@@ -111,21 +111,21 @@
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.postal_code}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="number" ng-model="donation.postal_code">
+            <input class="form-control" type="text" ng-model="donation.postal_code">
           </span>
         </td>
         <!-- Email -->
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.email}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="email" ng-model="donation.email">
+            <input class="form-control" type="text" ng-model="donation.email">
           </span>
         </td>
         <!-- Telephone -->
         <td>
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.telephone}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="number" ng-model="donation.telephone">
+            <input class="form-control" type="text" ng-model="donation.telephone">
           </span>
         </td>
         <!-- Organization Name -->
@@ -139,7 +139,7 @@
         <td ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
           <span class="form-control" disabled ng-if="!donation.editable">{{donation.categories[category.id] | number:0}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="number" ng-model="donation.categories[category.id]">
+            <input class="form-control" type="text" ng-model="donation.categories[category.id]">
           </span>
         </td>
         <!-- Edit -->

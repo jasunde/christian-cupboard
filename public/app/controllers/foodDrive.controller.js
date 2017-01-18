@@ -63,22 +63,33 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     };
 
     self.editDonation = function(donation) {
-        if(verbose) {console.log("editing", donation);
-      }
-        DonationsFactory.editDonations(donation);
-    };
+        if(verbose) {console.log("editing", donation); }
 
-    self.toggleEditable = function (donation) {
-      if(donation.editable) {
-        donation.editable = false;
-      } else {
-        donation.editable = true;
-      }
+        donation.saving=true;
+        
+        DonationsFactory.editDonations(donation)
+        .then(function (result){
+          donation.saving=false;
+        });
     };
 
     self.deleteDonation = function(donation) {
         if(verbose) {console.log("deleting");
       }
-        DonationsFactory.deleteDonations(donation);
+
+      donation.saving=true;
+
+        DonationsFactory.deleteDonations(donation)
+        .then(function (result){
+          donation.saving=false;
+        });
+    };
+
+      self.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
     };
   }]);
