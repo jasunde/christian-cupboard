@@ -10,6 +10,7 @@ var users = require('./routes/users')
 var categories = require('./routes/categories')
 var contacts = require('./routes/contacts')
 var donations = require('./routes/donations')
+var distributions = require('./routes/distributions')
 
 // custom middleware
 var decoder = require('./modules/decoder')
@@ -38,6 +39,7 @@ app.use(userInfo)
 // general user routes
 app.use('/users/email', isUser)
 app.use('/donations', donations)
+app.use('/distributions', distributions)
 
 // limited user rights
 app.use('/categories', categories)

@@ -1,4 +1,4 @@
-app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, Auth, $rootScope) {
+app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($http, Auth, $rootScope, $q) {
   var verbose = false;
   var categories = {
     list: null,
@@ -11,9 +11,9 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
 
   $rootScope.$on('user:updated', function (event, data) {
     if(verbose) {console.log('user update categories');}
-
+  
     if(Auth.user.currentUser) {
-      if(verbose) {console.log('getting categories')}
+      if(verbose) {console.log('calling getting categories')}
       getCategories();
     }
   });
@@ -21,7 +21,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
   function getCategories() {
     if(Auth.user.idToken) {
       if(verbose) {console.log('getting categories');}
-      $http({
+      return $http({
         method: 'GET',
         url: '/categories',
         headers: {
@@ -34,7 +34,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
             catMap[category.id] = undefined;
             return catMap;
           }, {});
-          if(verbose) {console.log('map', categories.map);}
+          if(verbose) {console.log('map', categories.list);}
         })
         .catch(function (err) {
           console.log('GET categories error:', err);
@@ -46,8 +46,85 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', function ($http, 
     }
   }
 
+  function addCategory(category) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        return $http({
+          method: 'POST',
+          url: '/categories',
+          data: category,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+        .then(function (result) {
+          getCategories();
+          resolve(result);
+        })
+        .catch(function (err) {
+          console.log('POST category error:', err);
+          reject();
+        });
+      } else {
+        reject();
+      }
+    });
+  }
+
+  function updateCategory(category) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        return $http({
+          method: 'PUT',
+          url: '/categories',
+          data: category,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+          .then(function (result) {
+            getCategories();
+            resolve(result);
+          })
+          .catch(function (err) {
+            console.log('PUT category error:', err);
+            reject();
+          });
+      } else {
+        reject();
+      }
+    });
+  }
+
+  function deleteCategory(category) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        $http({
+          method: 'DELETE',
+          url: '/categories' + category.id,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+        .then(function (result) {
+          getCategories();
+          resolve();
+        })
+        .catch(function (err) {
+          console.log('DELETE category error:', err);
+          reject();
+        });
+      } else {
+        reject();
+      }
+    });
+  }
+
   return {
+    addCategory: addCategory,
+    categories: categories,
+    deleteCategory: deleteCategory,
     getCategories: getCategories,
-    categories: categories
+    updateCategory: updateCategory
   };
 }]);

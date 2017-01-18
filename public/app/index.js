@@ -1,4 +1,4 @@
-var app = angular.module("christianCupboard", ["ngRoute", "firebase"]);
+var app = angular.module("christianCupboard", ["ngRoute", "firebase", "wt.responsive"]);
 
 var redirect = {
   // controller will not be loaded until $requireSignIn resolves
@@ -17,7 +17,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
     if (error === "AUTH_REQUIRED") {
       $location.path("/login");
     }
-  }); 
+  });
 }]);
 
 app.config(["$routeProvider", function($routeProvider) {
@@ -47,6 +47,36 @@ app.config(["$routeProvider", function($routeProvider) {
     templateUrl: '/views/templates/foodDrive.html',
     controller: 'FoodDriveController',
     controllerAs: 'fdc',
+    resolve: redirect
+  })
+  .when('/dailyDistribution', {
+    templateUrl: '/views/templates/dailyDistribution.html',
+    controller: 'DailyDistributionController',
+    controllerAs: 'ddc',
+    resolve: redirect
+  })
+  .when('/subDistribution', {
+    templateUrl: '/views/templates/subDistribution.html',
+    controller: 'SubDistributionController',
+    controllerAs: 'sdc',
+    resolve: redirect
+  })
+  .when('/categories', {
+    templateUrl: '/views/templates/categories.html',
+    controller: 'CategoryController',
+    controllerAs: 'cc',
+    resolve: redirect
+  })
+  .when('/users', {
+    templateUrl: '/views/templates/users.html',
+    controller: 'UserController',
+    controllerAs: 'uc',
+    resolve: redirect
+  })
+  .when('/contacts', {
+    templateUrl: '/views/templates/contacts.html',
+    controller: 'ContactController',
+    controllerAs: 'cc',
     resolve: redirect
   })
   .otherwise({
