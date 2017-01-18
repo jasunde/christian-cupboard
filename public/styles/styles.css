@@ -6224,3 +6224,13 @@ input[type=date]::-webkit-inner-spin-button {
   top: 0px;
   left: -30px;
   height: 50px; }
+
+.driveHeader {
+  background-color: black;
+  color: #f3f3f3; }
+
+.form-control {
+  min-width: auto; }
+
+span {
+  white-space: nowrap; }
