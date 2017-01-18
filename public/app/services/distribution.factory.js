@@ -19,6 +19,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
      })
      .then(function (result) {
        distributions.list = result.data
+       distributions.list.forEach(function (distribution) {
+         distribution.timestamp = new Date(distribution.timestamp);
+       });
        if (verbose) {console.log('distributions', distributions.list);}
      })
      .catch(function (err) {
