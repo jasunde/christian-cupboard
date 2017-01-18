@@ -35,7 +35,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
   function submitDonations(donation) {
     if(Auth.user.idToken) {
       if(verbose){console.log("Posting Donation", donation);}
-      $http({
+      return $http({
         method: 'POST',
         url: '/donations',
         data: donation,
@@ -44,7 +44,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        getDonations();
+        return getDonations();
       });
     }
   }
@@ -52,7 +52,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
   function editDonations(donation) {
     if(Auth.user.idToken) {
       if(verbose){console.log("Editing Donation");}
-      $http({
+      return $http({
         method: 'PUT',
         url: '/donations',
         data: donation,
@@ -61,26 +61,30 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        getDonations();
+        return getDonations();
       });
     }
   }
 
   function deleteDonations(donation) {
-    if(Auth.user.idToken) {
-      if(verbose){console.log("Deleting Donation", donation.donation_id);}
-      $http({
-        method: 'DELETE',
-        url: '/donations/' + donation.donation_id,
-        data: donation,
-        headers: {
-          id_token: Auth.user.idToken
-        }
-      })
-      .then(function (result){
-        getDonations();
-      });
-    }
+    console.log('Deleting donation');
+      if(Auth.user.idToken) {
+        if(verbose){console.log("Deleting Donation", donation.donation_id);}
+        return $http({
+          method: 'DELETE',
+          url: '/donations/' + donation.donation_id,
+          data: donation,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+          .then(function (result){
+            return getDonations();
+          })
+        .catch(function (err) {
+          console.log('DELETE donation error:', err);
+        });
+      }
   }
 
   return {

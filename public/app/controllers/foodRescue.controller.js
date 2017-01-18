@@ -47,25 +47,42 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   });
 
   self.submitDonation = function() {
-      if(verbose) {console.log("Submitting newDonation", self.newDonation);
-    }
-      DonationsFactory.submitDonations(self.newDonation);
-      self.newDonation = {
-        contact_id: undefined,
-        timestamp: new Date(),
-      };
+    if(verbose) {console.log("Submitting newDonation", self.newDonation); }
+
+    self.newDonation.saving = true;
+
+    DonationsFactory.submitDonations(self.newDonation)
+      .then(function (result) {
+        self.newDonation.saving = false;
+
+        self.newDonation = {
+          contact_id: undefined,
+          timestamp: new Date(),
+        };
+      });
+
   };
 
   self.editDonation = function(donation) {
-      if(verbose) {console.log("editing", donation);
-    }
-      DonationsFactory.editDonations(donation);
+    if(verbose) {console.log("editing", donation); }
+
+    donation.saving = true;
+
+    DonationsFactory.editDonations(donation)
+      .then(function (result) {
+        donation.saving = false;
+      });
   };
 
   self.deleteDonation = function(donation) {
-      if(verbose) {console.log("deleting");
-    }
-      DonationsFactory.deleteDonations(donation);
+    if(verbose) {console.log("deleting"); }
+
+    donation.saving = true;
+
+    DonationsFactory.deleteDonations(donation)
+      .then(function (result) {
+        donation.saving = false;
+      });
   };
 
 //utility functions
