@@ -141,7 +141,7 @@ function upsert(req, res) {
     }
   })
 
-  console.log('req.body', req.body);
+  console.log('req.contact', req.contact);
 
   if(req.contact) {
     bodyKeys.forEach(function (property) {
