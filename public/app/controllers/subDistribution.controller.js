@@ -8,13 +8,16 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
 
   self.subDistributionCategories = CategoryFactory.categories;
   self.subDistributions = DistributionFactory.distributions;
+  self.contacts = ContactsFactory.contacts;
 
   if(Auth.user.idToken) {
     DistributionFactory.getDistributions();
+    ContactsFactory.getContacts();
   }
 
   $scope.$on('user:updated', function () {
     DistributionFactory.getDistributions();
+    ContactsFactory.getContacts();
   })
 
   console.log("More dists", self.subDistributions);
@@ -24,6 +27,9 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
     DistributionFactory.addDistribution(self.newSubDistribution)
     .then(function (result) {
       self.newSubDistribution = {};
+      self.newSubDistribution.saving = false;
+    })
+    .catch(function (err) {
       self.newSubDistribution.saving = false;
     });
   };
