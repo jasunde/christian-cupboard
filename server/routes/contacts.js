@@ -106,11 +106,12 @@ router.get('/donors/individual', function(req, res) {
 });
 
 router.get('/csvtest', function(req, res) {
-
   pool.query(
     'SELECT * FROM contacts'
   )
   .then(function(result) {
+    console.log('result: ', result.rows);
+    res.attachment('testing.csv');
     res.csv(
       result.rows
     );
@@ -119,7 +120,7 @@ router.get('/csvtest', function(req, res) {
     console.log('GET all contacts err:', err);
     res.status(500).send(err);
   });
-});  
+});
 
 
 module.exports = router;
