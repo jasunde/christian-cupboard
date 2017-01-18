@@ -1,13 +1,12 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory){
+app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q){
 
   var self = this;
-  var verbose = true;
+  var verbose = false;
 
   self.newDonation = {
     contact_id: undefined,
     timestamp: new Date(),
-    // categories: CategoryFactory.categories.map
-  }
+  };
 
   self.thisDonation = {};
 
@@ -15,34 +14,76 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
 
-  // CategoryFactory.gepublic/app/services/category.factory.jstCategories();
-  ContactsFactory.getContacts();
-  DonationsFactory.getDonations();
+  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
+    self.gotData = true;
+  } else {
+    self.gotData = false;
+  }
+
+  // start loader
+  if(Auth.user.idToken){
+    $q.all([
+      CategoryFactory.getCategories(),
+      DonationsFactory.getDonations(),
+      ContactsFactory.getContacts()
+    ])
+    .then(function (response) {
+      self.gotData = true;
+    });
+}
 
   $scope.$on('user:updated', function (event, data) {
-      // CategoryFactory.getCategories();
-      DonationsFactory.getDonations();
-      ContactsFactory.getContacts();
+
+    if(Auth.user.idToken){
+      $q.all([
+        CategoryFactory.getCategories(),
+        DonationsFactory.getDonations(),
+        ContactsFactory.getContacts()
+      ])
+      .then(function (response) {
+        self.gotData = true;
+      });
+    }
   });
 
   self.submitDonation = function() {
-      if(verbose) {console.log("Submitting newDonation", self.newDonation)};
-      DonationsFactory.submitDonations(self.newDonation)
-      self.newDonation = {
-        contact_id: undefined,
-        timestamp: new Date(),
-      }
-  }
+    if(verbose) {console.log("Submitting newDonation", self.newDonation); }
+
+    self.newDonation.saving = true;
+
+    DonationsFactory.submitDonations(self.newDonation)
+      .then(function (result) {
+        self.newDonation.saving = false;
+
+        self.newDonation = {
+          contact_id: undefined,
+          timestamp: new Date(),
+        };
+      });
+
+  };
 
   self.editDonation = function(donation) {
-      if(verbose) {console.log("editing", donation)};
-      DonationsFactory.editDonations(donation);
-  }
+    if(verbose) {console.log("editing", donation); }
+
+    donation.saving = true;
+
+    DonationsFactory.editDonations(donation)
+      .then(function (result) {
+        donation.saving = false;
+      });
+  };
 
   self.deleteDonation = function(donation) {
-      if(verbose) {console.log("deleting")};
-      DonationsFactory.deleteDonations(donation)
-  }
+    if(verbose) {console.log("deleting"); }
+
+    donation.saving = true;
+
+    DonationsFactory.deleteDonations(donation)
+      .then(function (result) {
+        donation.saving = false;
+      });
+  };
 
 //utility functions
 //adding current time to scope, possibly helpful for filtering results by today's date.
@@ -50,5 +91,13 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
     $scope.date = new Date(2015, 10, 10);
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
+
+    self.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
+    };
 
 }]);

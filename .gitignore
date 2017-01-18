@@ -3,3 +3,4 @@ firebase-service-account.json
 .env
 *.log
 .sass-cache
+styles.css

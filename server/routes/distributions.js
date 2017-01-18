@@ -52,11 +52,14 @@ function getDetails(distributions, client, res) {
     client.query(
       'SELECT * FROM distribution_details '+
       'WHERE distribution_id = $1',
-      [distribution.id]
+      [distribution.distribution_id]
     )
       .then(function(result) {
+        if(distribution.distribution_id === 14) {
+          console.log('result.rows', result.rows);
+        }
         distribution.categories = result.rows.reduce(function(total, current) {
-          total[current.category_id] = current.amount;
+          total[current.category_id] = parseFloat(current.amount);
           return total;
         }, {})
       });
@@ -78,7 +81,8 @@ router.get('/organizations', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT * FROM distributions JOIN contacts ON distributions.contact_id = contacts.id '+
+        'SELECT *, distributions.id as distribution_id FROM distributions '+ 
+        'JOIN contacts ON distributions.contact_id = contacts.id '+
         'WHERE contacts.org IS TRUE'
       )
         .then(function(result) {
@@ -96,7 +100,9 @@ router.get('/individuals', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT *, distributions.id AS distribution_id FROM distributions JOIN contacts ON distributions.contact_id = contacts.id WHERE contacts.org IS FALSE'
+        'SELECT *, distributions.id AS distribution_id FROM distributions '+ 
+        'JOIN contacts ON distributions.contact_id = contacts.id '+ 
+        'WHERE contacts.org IS FALSE'
       )
         .then(function(result) {
           getDetails(result.rows, client, res)
@@ -122,6 +128,7 @@ router.get('/', function (req, res) {
 });
 
 router.delete('/:id', function(req, res) {
+  console.log('req.params.id', req.params.id);
   pool.connect()
   .then(function(client) {
     client.query(
@@ -246,12 +253,13 @@ router.put('/', function(req, res) {
     .then(function(result) {
       var categories = Object.keys(distribution.categories);
       categories.forEach(function(category) {
+        console.log('category', category);
         client.query({
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
           'VALUES ($1, $2, $3) '+
           'ON CONFLICT (distribution_id, category_id) DO UPDATE '+
-          'SET amount = $3',
-          values: [distribution.distribution_id, category, distribution.categories[category]],
+          'SET amount = $4',
+          values: [distribution.distribution_id, category, distribution.categories[category], distribution.categories[category]],
           name: 'update-distribution-details'
         });
       });
