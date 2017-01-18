@@ -8,7 +8,7 @@
       <th>Last Name Initals</th>
       <th>Family Size</th>
       <!-- Switch to Angular Repeat from Category Factory -->
-      <th ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}">{{category.name}}</th>
+      <th ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">{{category.name}}</th>
       <!-- End Angular Category Repeat -->
       <th>Time Weighed</th>
       <th>Date Weighed</th>
@@ -27,7 +27,8 @@
         <td>
             <input class="form-control" type="text" ng-model="ddc.newDistribution.family_size">
         </td>
-        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}"><input class="form-control" type= "number" placeholder = "# of lbs." ng-model="ddc.newDistribution.categories[category.id]"></input>
+        <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
+          <input class="form-control" type= "number" placeholder = "# of lbs." ng-model="ddc.newDistribution.categories[category.id]"></input>
         </td>
         <td><input class="form-control" ng-model="ddc.newDistribution.time_weighted"></td>
         <td><input class="form-control" ng-model="ddc.newDistribution.date_weighted"></td>
@@ -36,7 +37,7 @@
             type="button"
             class="btn btn-success"
             ng-click="ddc.addDistribution()">
-            <add-glyph boolean="uc.newDistribution.saving"></add-glyph>
+            <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
           </button>
         </td>
       </tr>
@@ -64,7 +65,7 @@
           </span>
         </td>
         <!-- Categories -->
-        <td ng-repeat="category in ddc.dailyDistributionCategories.list  | filter: {daily_dist: true}">
+        <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.categories[category.id]}}</span>
           <span ng-if="distribution.editable">
             <input class="form-control" type="number" ng-model="distribution.categories[category.id]">
@@ -97,9 +98,9 @@
             <button
               type="button"
               class="btn btn-danger"
-              ng-click="uc.delete(user)">
+              ng-click="dcc.deleteDistribution(distribution)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
-              <delete-glyph boolean="user.saving"></delete-glyph>
+              <delete-glyph boolean="distribution.saving"></delete-glyph>
             </button>
           </span>
           <!-- Editable -->

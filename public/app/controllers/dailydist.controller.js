@@ -1,65 +1,63 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFactory', 'CategoryFactory', '$scope', function($scope, Auth, DistributionFactory, CategoryFactory, $scope){
   var self = this;
   var verbose = false;
   var distribution = {};
   self.newDistribution = {};
 
-  self.dailyDist = [
-    {first_name: "John",
-    last_name: "Monday",
-	  timestamp: "Tue Jan 10 2017 18:24:32",
-    family_size: 3,
-    editable: false,
-	  categories: {
-		  18: 26,
-		  19: 308,
-      24: 100
-	}
-}];
+  self.dailyDistributions = DistributionFactory.distributions;
+  self.categories = CategoryFactory.categories;
 
-DistributionFactory.getDistributions();
+  if(Auth.user.idToken) {
+    DistributionFactory.getDistributions();
+  }
 
-self.dailyDistributionCategories = CategoryFactory.categories;
-self.dailyDistributionContacts = ContactsFactory.contacts;
-self.dailyDistributionDonations = DonationsFactory.donations;
-self.dailyDistributions = DistributionFactory.distributions;
-
-
-if (verbose) {console.log("This be the distributions", self.dailyDistributions);}
-
-self.addDistribution = function () {
-  console.log(self.newDistribution);
-  self.newDistribution.saving = true;
-  DistributionFactory.addDistribution(self.newDistribution)
-  .then(function (result) {
-    self.newDistribution = {};
-    self.newDistribution.saving = false;
+  $scope.$on('user:updated', function () {
+    DistributionFactory.getDistributions();
   });
-};
 
-self.toggleEditable = function (distribution) {
-  if(distribution.editable) {
-    distribution.editable = false;
-  } else {
-    distribution.editable = true;
-  }
-};
+  if (verbose) {console.log("This be the distributions", self.dailyDistributions);}
 
-self.updateDistribution = function(donation) {
-    if(verbose) {console.log("editing", donation);
-  }
-    DistributionFactory.updateDistribution(distribution);
-};
+  self.toggleEditable = function (distribution) {
+    if(distribution.editable) {
+      distribution.editable = false;
+    } else {
+      distribution.editable = true;
+    }
+  };
 
-// self.updateDistribution = function () {
-//   console.log("clicking");
-//   distribution.saving = true;
-//   DistributionFactory.updateDistribution(distribution)
-//   .then(function (result) {
-//     distribution.saving = false;
-//     distribution = {};
-//   });
-// };
+  self.addDistribution = function () {
+    if(verbose) {console.log(self.newDistribution);}
+    console.log('adding');
+    self.newDistribution.saving = true;
+    DistributionFactory.addDistribution(self.newDistribution)
+      .then(function (result) {
+        self.newDistribution = {};
+        self.newDistribution.saving = false;
+      })
+      .catch(function (err) {
+        self.newDistribution.saving = false;
+      });
+  };
 
+  self.updateDistribution = function (distribution) {
+    console.log('distribution', distribution);
+    distribution.saving = true;
+
+    DistributionFactory.updateDistribution(distribution)
+      .then(function (result) {
+        distribution.saving = false;
+        distribution = {};
+      });
+  };
+
+  self.deleteDistribution = function (distribution) {
+    console.log('deleting');
+    distribution.saving = true;
+
+    DistributionFactory.deleteDistribution(distribution)
+      .then(function (result) {
+        distribution.saving = false;
+      });
+  };
 
 }]);

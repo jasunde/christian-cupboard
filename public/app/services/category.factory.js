@@ -5,18 +5,18 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
     map: undefined
   };
 
-  // if(Auth.user.idToken) {
-  //   getCategories();
-  // }
+  if(Auth.user.idToken) {
+    getCategories();
+  }
 
-  // $rootScope.$on('user:updated', function (event, data) {
-  //   if(verbose) {console.log('user update categories');}
-  //
-  //   if(Auth.user.currentUser) {
-  //     if(verbose) {console.log('calling getting categories')}
-  //     getCategories();
-  //   }
-  // });
+  $rootScope.$on('user:updated', function (event, data) {
+    if(verbose) {console.log('user update categories');}
+  
+    if(Auth.user.currentUser) {
+      if(verbose) {console.log('calling getting categories')}
+      getCategories();
+    }
+  });
 
   function getCategories() {
     if(Auth.user.idToken) {

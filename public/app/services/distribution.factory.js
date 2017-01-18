@@ -1,5 +1,5 @@
 app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
- var verbose = false;
+ var verbose = true;
  var self = this;
  var distributions = {};
 
@@ -43,12 +43,18 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           }
         })
         .then(function (result) {
-          getDistributions();
-          resolve(result);
+          getDistributions()
+          .then(function (result) {
+            resolve();
+          })
+          .catch(function (err) {
+            console.log('GET distributions error:', err);
+            reject(err)
+          });
         })
         .catch(function (err) {
-          console.log('POST category error:', err);
-          reject();
+          console.log('POST distribution error:', err);
+          reject(err);
         });
       } else {
         reject();
@@ -58,10 +64,11 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
 
   function updateDistribution(distribution) {
     return $q(function (resolve, reject) {
-      if(Auth.user.is_admin) {
+      if(Auth.user.idToken) {
+        console.log('distribution', distribution);
         return $http({
           method: 'PUT',
-          url: '/users',
+          url: '/distributions',
           data: distribution,
           headers: {
             id_token: Auth.user.idToken
@@ -87,11 +94,41 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
     });
   }
 
+  function deleteDistribution(distribution) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        console.log('distribution', distribution);
+        $http({
+          method: 'DELETE',
+          url: '/distributions/' + distribution.distribution_id,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+          .then(function (result) {
+            getDistributions()
+              .then(function (result) {
+                resolve(result);
+              })
+              .catch(function (err) {
+                console.log('GET distributions error:', err);
+                reject(err);
+              });
+          })
+          .catch(function (err) {
+            console.log('DELETE distribution error:', err);
+            reject(err);
+          });
+      }
+    });
+  }
+
   return {
     getDistributions: getDistributions,
     addDistribution: addDistribution,
     updateDistribution: updateDistribution,
-    distributions: distributions
+    distributions: distributions,
+    deleteDistribution: deleteDistribution
   };
 
 }]);
