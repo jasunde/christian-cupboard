@@ -1,6 +1,6 @@
 app.factory("ContactsFactory", ["$http", "Auth", function($http, Auth){
 
-  var verbose = false;
+  var verbose = true;
   var contacts = {};
 
   function getContacts(){

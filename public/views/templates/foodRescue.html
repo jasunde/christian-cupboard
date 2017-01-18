@@ -51,10 +51,10 @@
         <!-- Last Name -->
         <td>
           <span class="form-control"
-                disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
+                disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
             <input class="form-control"
-                   type="text"
+                   type="date"
                    ng-model="donation.date">
           </span>
         </td>

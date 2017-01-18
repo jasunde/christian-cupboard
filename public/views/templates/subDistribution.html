@@ -20,8 +20,10 @@
       <!-- Add Distribution -->
       <tr>
         <td>
-          <input class="form-control" type="text" ng-model="sdc.newSubDistribution.reciever">
-        </td>
+        <select ng-model="sdc.newSubDistribution.org_name" class="form-control">
+          <option ng-repeat="contact in sdc.subDistributions.list | filter: {org_type: sub_distribution}" value="{{contact.org_name}}">{{contact.org_name}}</option>
+        </select>
+      </td>
         <td>
             <input class="form-control" type="text" ng-model="sdc.newSubDistribution.date">
         </td>
@@ -40,7 +42,7 @@
       <tr ng-repeat="subDistribution in sdc.subDistributions.list">
         <!-- First Name -->
         <td>
-          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.reciever}}</span>
+          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.org_name}}</span>
           <span ng-if="subDistribution.editable">
             <input class="form-control" type="text" ng-model="subDistribution.reciever">
           </span>
