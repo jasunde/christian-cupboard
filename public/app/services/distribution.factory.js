@@ -1,5 +1,5 @@
 app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
- var verbose = true;
+ var verbose = false;
  var self = this;
  var distributions = {};
 

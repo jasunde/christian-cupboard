@@ -4,7 +4,8 @@
 <div class="container" ng-show="frc.gotData">
 <h2>Food Rescue Form</h2>
 
-<table  wt-responsive-table class="table">
+<table wt-responsive-table class="table">
+  <div class="tableForms">
   <thead class="rescueForm">
     <tr>
       <th>Donor</th>
@@ -14,7 +15,6 @@
     </tr>
   </thead>
     <tbody>
-      <!-- Add Distribution -->
       <tr>
         <td>
         <select ng-model="frc.newDonation.contact_id" class="form-control">
@@ -27,7 +27,7 @@
       <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
         <input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]" class="form-control">
       </td>
-        <!-- Donation Date -->
+    </div>
         <td>
           <button
             type="button"

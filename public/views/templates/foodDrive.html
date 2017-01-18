@@ -67,7 +67,8 @@
       <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {org_type: '!food_rescue'}">
            <!-- Date of Donation -->
         <td>
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
+          <span class="form-control"
+          disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
             <input class="form-control" type="date" ng-model="donation.timestamp" value="{{donation.timestamp | date: 'MM/dd/yyyy'}}" required>
           </span>

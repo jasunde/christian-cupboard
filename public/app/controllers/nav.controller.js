@@ -1,11 +1,16 @@
 app.controller('NavController', ['$location', 'Auth', function ($location, Auth) {
   var self = this;
-  self.currentUser = Auth.user.currentUser;
+  self.currentUser = {};
+  self.displayName = {};
+  self.message = "Hello World";
+
+  self.displayName = Auth.displayName;
 
 // This code runs when the user logs out
   self.logOut = function(){
     Auth.logOut().then(function(){
       $location.path("/login");
+
     });
   };
 }]);
