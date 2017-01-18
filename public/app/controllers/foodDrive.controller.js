@@ -1,15 +1,52 @@
-app.controller("FoodDriveController", ["$firebaseAuth", "$http", "FoodDriveFactory", function( $firebaseAuth, $http, FoodDriveFactory){
-//   var self = this;
-//   self.driveCategories = {};
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope){
+    var self = this;
+    var verbose = true;
 
-// //get the categories
-//   FoodDriveFactory.getCategories();
-//   self.driveCategories = FoodDriveFactory.categories();
-//   console.log("Categories for table", self.driveCategories);
+    self.newDonation = {
+      contact_id: undefined,
+      timestamp: new Date(),
+    };
 
-// // get organizations
-//   // FoodDriveFactory.getOrganizations();
-//   // self.driveCategories = FoodDriveFactory.organizations();
-//   // console.log("Organizations for table", self.driveOrganizations);
+    self.thisDonation = {};
 
-}]);
+    self.driveCategories = CategoryFactory.categories;
+    self.driveDonations = DonationsFactory.donations;
+
+    // ContactsFactory.getContacts();
+    DonationsFactory.getDonations();
+
+    $scope.$on('user:updated', function (event, data) {
+        CategoryFactory.getCategories();
+        DonationsFactory.getDonations();
+    });
+
+    self.submitDonation = function() {
+        if(verbose) {console.log("Submitting newDonation", self.newDonation);
+      }
+        DonationsFactory.submitDonations(self.newDonation);
+        self.newDonation = {
+          contact_id: undefined,
+          timestamp: new Date(),
+        };
+    };
+
+    self.editDonation = function(donation) {
+        if(verbose) {console.log("editing", donation);
+      }
+        DonationsFactory.editDonations(donation);
+    };
+
+    self.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
+    };
+
+    self.deleteDonation = function(donation) {
+        if(verbose) {console.log("deleting");
+      }
+        DonationsFactory.deleteDonations(donation);
+    };
+  }]);

@@ -30,4 +30,4 @@ app.controller('UserController', ['UserFactory', function (UserFactory) {
       });
   };
 
-}])
+}]);

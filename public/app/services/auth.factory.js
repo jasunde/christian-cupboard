@@ -22,7 +22,6 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
           is_user = true;
           return firebaseUser.user.getToken()
           .then(function (token) {
-
             console.log('token', token);
 
             return $http({
