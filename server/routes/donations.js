@@ -64,7 +64,7 @@ router.get('/', function (req, res) {
           )
             .then(function (result) {
               donation.categories = result.rows.reduce(function (total, current) {
-                total[current.category_id] = current.amount;
+                total[current.category_id] = parseFloat(current.amount);
                 return total;
               }, {});
             });
@@ -109,7 +109,7 @@ router.get('/:id', function (req, res) {
       .then(function (result) {
         client.release();
         donation.categories = result.rows.reduce(function (total, current) {
-          total[current.category_id] = current.amount;
+          total[current.category_id] = parseFloat(current.amount);
           return total;
         }, {});
         res.send(donation);
