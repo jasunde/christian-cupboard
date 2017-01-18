@@ -18,7 +18,7 @@
       <tr>
         <td>
         <select ng-model="frc.newDonation.contact_id" class="form-control">
-          <option ng-repeat="contact in frc.rescueContacts.list" value="{{contact.id}}">{{contact.org_name}}</option>
+          <option ng-repeat="contact in frc.rescueContacts.list | filter: 'food_rescue'" value="{{contact.id}}">{{contact.org_name}}</option>
         </select>
       </td>
       <td>
@@ -82,7 +82,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              ng-click="frc.delete(donation)">
+              ng-click="frc.deleteDonation(donation)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
               <delete-glyph boolean="donation.saving"></delete-glyph>
             </button>
