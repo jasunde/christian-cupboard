@@ -57,13 +57,6 @@
             <input class="form-control" type="text" ng-model="distribution.last_name">
           </span>
         </td>
-        <!-- Family Size -->
-        <td>
-          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.family_size}}</span>
-          <span ng-if="distribution.editable">
-            <input class="form-control" type="number" ng-model="distribution.family_size">
-          </span>
-        </td>
         <!-- Categories -->
         <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.categories[category.id]}}</span>

@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFactory', 'CategoryFactory', '$scope', function($scope, Auth, DistributionFactory, CategoryFactory, $scope){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DistributionFactory, CategoryFactory, $scope, $q){
 
   var self = this;
   var verbose = false;
@@ -6,7 +6,7 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
   self.newDistribution = {};
 
   self.dailyDistributions = DistributionFactory.distributions;
-  self.dailyDistributionCategories = CategoryFactory.categories;
+  self.categories = CategoryFactory.categories;
 
 if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
   self.gotData = true;
@@ -17,7 +17,7 @@ if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
 // start loader
 if(Auth.user.idToken){
   $q.all([
-    ContactsFactory.getContacts(),
+    CategoryFactory.getCategories(),
     DistributionFactory.getDistributions()
   ])
   .then(function (response) {
@@ -29,7 +29,7 @@ $scope.$on('user:updated', function (event, data) {
 
   if(Auth.user.idToken){
     $q.all([
-      ContactsFactory.getContacts(),
+      CategoryFactory.getCategories(),
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {

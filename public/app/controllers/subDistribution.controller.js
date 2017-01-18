@@ -95,12 +95,12 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
 
   self.delete = function (item) {
     item.saving = true;
-
     DistributionFactory.deleteDistribution(item)
     .then(function (result) {
       DistributionFactory.distributions.list = DistributionFactory.distributions.list.filter(function (dist) {
         return dist.distribution_id != item.distribution_id;
       });
+        item.saving = false;
     })
   }
 
