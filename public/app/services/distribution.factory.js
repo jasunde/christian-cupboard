@@ -1,5 +1,5 @@
 app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
- var verbose = true;
+ var verbose = false;
  var self = this;
  var distributions = {};
 
@@ -43,9 +43,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           }
         })
         .then(function (result) {
+            resolve(result);
           getDistributions()
           .then(function (result) {
-            resolve();
           })
           .catch(function (err) {
             console.log('GET distributions error:', err);
@@ -75,14 +75,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           }
         })
         .then(function (result) {
-          getDistributions()
-          .then(function (result) {
-            resolve(result);
-          })
-          .catch(function (err) {
-            console.log('GET users error:', err);
-            reject();
-          });
+          resolve(result);
+          getDistributions();
         })
         .catch(function (err) {
           console.log('PUT user error:', err);
@@ -106,14 +100,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           }
         })
           .then(function (result) {
-            getDistributions()
-              .then(function (result) {
-                resolve(result);
-              })
-              .catch(function (err) {
-                console.log('GET distributions error:', err);
-                reject(err);
-              });
+            resolve(result);
+            getDistributions();
           })
           .catch(function (err) {
             console.log('DELETE distribution error:', err);

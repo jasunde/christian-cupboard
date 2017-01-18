@@ -6,7 +6,6 @@
     <tr>
       <th>First Name</th>
       <th>Last Name Initals</th>
-      <th>Family Size</th>
       <!-- Switch to Angular Repeat from Category Factory -->
       <th ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">{{category.name}}</th>
       <!-- End Angular Category Repeat -->
@@ -24,11 +23,8 @@
         <td>
             <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name">
         </td>
-        <td>
-            <input class="form-control" type="text" ng-model="ddc.newDistribution.family_size">
-        </td>
         <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
-          <input class="form-control" type= "number" placeholder = "# of lbs." ng-model="ddc.newDistribution.categories[category.id]"></input>
+          <input class="form-control" type= "number" ng-model="ddc.newDistribution.categories[category.id]"></input>
         </td>
         <td><input class="form-control" ng-model="ddc.newDistribution.time_weighted"></td>
         <td><input class="form-control" ng-model="ddc.newDistribution.date_weighted"></td>
@@ -42,7 +38,7 @@
         </td>
       </tr>
 
-      <tr ng-repeat="distribution in ddc.dailyDistributions.list">
+      <tr ng-repeat="distribution in ddc.dailyDistributions.list | orderBy: '-distribution_id'">
         <!-- First Name -->
         <td>
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.first_name}}</span>
@@ -55,13 +51,6 @@
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.last_name}}</span>
           <span ng-if="distribution.editable">
             <input class="form-control" type="text" ng-model="distribution.last_name">
-          </span>
-        </td>
-        <!-- Family Size -->
-        <td>
-          <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.family_size}}</span>
-          <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.family_size">
           </span>
         </td>
         <!-- Categories -->
@@ -98,7 +87,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              ng-click="dcc.deleteDistribution(distribution)">
+              ng-click="ddc.deleteDistribution(distribution)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
               <delete-glyph boolean="distribution.saving"></delete-glyph>
             </button>

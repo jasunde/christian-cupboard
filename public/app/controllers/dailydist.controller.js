@@ -31,6 +31,7 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
     self.newDistribution.saving = true;
     DistributionFactory.addDistribution(self.newDistribution)
       .then(function (result) {
+        DistributionFactory.distributions.list.push(self.newDistribution);
         self.newDistribution = {};
         self.newDistribution.saving = false;
       })
@@ -46,7 +47,7 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
     DistributionFactory.updateDistribution(distribution)
       .then(function (result) {
         distribution.saving = false;
-        distribution = {};
+        distribution.editable = false;
       });
   };
 
@@ -56,6 +57,9 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
 
     DistributionFactory.deleteDistribution(distribution)
       .then(function (result) {
+        DistributionFactory.distributions.list = DistributionFactory.distributions.list.filter(function (dist) {
+          return dist.distribution_id != distribution.distribution_id;
+        })
         distribution.saving = false;
       });
   };
