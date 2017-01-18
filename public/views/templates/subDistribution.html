@@ -16,10 +16,12 @@
       <!-- Add Distribution -->
       <tr>
         <td>
-          <input class="form-control" type="text" ng-model="sdc.newSubDistribution.reciever">
+        <select ng-model="sdc.newSubDistribution.contact_id" class="form-control">
+          <option ng-repeat="contact in sdc.contacts.list | filter: {org_type: 'sub_distribution'}" value="{{contact.id}}">{{contact.org_name}}</option>
+        </select>
         </td>
         <td>
-            <input class="form-control" type="text" ng-model="sdc.newSubDistribution.date">
+            <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp">
         </td>
         <td ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}"><input class="form-control" type= "number" placeholder = "# of lbs." ng-model="sdc.newSubDistribution.categories[category.id]"></input>
         </td>
@@ -36,16 +38,16 @@
       <tr ng-repeat="subDistribution in sdc.subDistributions.list">
         <!-- First Name -->
         <td>
-          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.reciever}}</span>
+          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.org_name}}</span>
           <span ng-if="subDistribution.editable">
-            <input class="form-control" type="text" ng-model="subDistribution.reciever">
+            <input class="form-control" type="text" ng-model="subDistribution.org_name">
           </span>
         </td>
         <!-- Last Name -->
         <td>
           <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.date | date: 'MM/dd/yyyy'}}</span>
-          <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="subDistribution.date">
+          <span ng-if="subDistribution.editable">
+            <input class="form-control" type="date" ng-model="subDistribution.timestamp">
           </span>
         </td>
         <!-- Categories -->
@@ -68,9 +70,9 @@
             <button
               type="button"
               class="btn btn-danger"
-              ng-click="uc.delete(user)">
+              ng-click="sdc.delete(subDistribution)">
               <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
-              <delete-glyph boolean="user.saving"></delete-glyph>
+              <delete-glyph boolean="subDistribution.saving"></delete-glyph>
             </button>
           </span>
           <!-- Editable -->
@@ -78,7 +80,7 @@
             <button
                 type="button"
                 class="btn btn-primary"
-                ng-click="ddc.updateSubDistribution(subDistribution)">
+                ng-click="sdc.updateSubDistribution(subDistribution)">
               <save-glyph boolean="subDistribution.saving"></save-glyph>
             </button>
             <button

@@ -45,7 +45,7 @@ function findOrganization(req, res, next) {
     if(result.rows[0]) {
       req.contact = result.rows[0]
     }
-    console.log('req.contact: ', req.contact);
+    // console.log('req.contact: ', req.contact);
     next()
   })
   .catch(function (err) {
@@ -100,7 +100,7 @@ function findIndividual(req, res, next) {
     if(result.rows[0]) {
       req.contact = result.rows[0]
     }
-    console.log('req.contact: ', req.contact);
+    // console.log('req.contact: ', req.contact);
     next()
   })
   .catch(function (err) {
@@ -111,12 +111,12 @@ function findIndividual(req, res, next) {
 }
 
 function find(req, res, next) {
-  console.log('req.body', req.body);
+  // console.log('req.body', req.body);
   if(req.body.contact_id) {
     getByID(req, res, req.body.contact_id)
     .then(function (result) {
       if(result) {
-        console.log(result);
+        // console.log(result);
         req.contact = result.rows[0]
       }
       next()
@@ -140,6 +140,8 @@ function upsert(req, res) {
       }
     }
   })
+
+  console.log('req.body', req.body);
 
   if(req.contact) {
     bodyKeys.forEach(function (property) {

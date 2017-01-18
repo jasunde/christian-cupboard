@@ -19,6 +19,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
      })
      .then(function (result) {
        distributions.list = result.data
+       distributions.list.forEach(function (distribution) {
+         distribution.timestamp = new Date(distribution.timestamp);
+       });
        if (verbose) {console.log('distributions', distributions.list);}
      })
      .catch(function (err) {
@@ -43,12 +46,18 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           }
         })
         .then(function (result) {
-          getDistributions();
-          resolve(result);
+            resolve(result);
+          getDistributions()
+          .then(function (result) {
+          })
+          .catch(function (err) {
+            console.log('GET distributions error:', err);
+            reject(err)
+          });
         })
         .catch(function (err) {
-          console.log('POST category error:', err);
-          reject();
+          console.log('POST distribution error:', err);
+          reject(err);
         });
       } else {
         reject();
@@ -58,24 +67,19 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
 
   function updateDistribution(distribution) {
     return $q(function (resolve, reject) {
-      if(Auth.user.is_admin) {
+      if(Auth.user.idToken) {
+        console.log('distribution', distribution);
         return $http({
           method: 'PUT',
-          url: '/users',
+          url: '/distributions',
           data: distribution,
           headers: {
             id_token: Auth.user.idToken
           }
         })
         .then(function (result) {
-          getDistributions()
-          .then(function (result) {
-            resolve(result);
-          })
-          .catch(function (err) {
-            console.log('GET users error:', err);
-            reject();
-          });
+          resolve(result);
+          getDistributions();
         })
         .catch(function (err) {
           console.log('PUT user error:', err);
@@ -87,11 +91,35 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
     });
   }
 
+  function deleteDistribution(distribution) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        console.log('distribution', distribution);
+        $http({
+          method: 'DELETE',
+          url: '/distributions/' + distribution.distribution_id,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+          .then(function (result) {
+            resolve(result);
+            getDistributions();
+          })
+          .catch(function (err) {
+            console.log('DELETE distribution error:', err);
+            reject(err);
+          });
+      }
+    });
+  }
+
   return {
     getDistributions: getDistributions,
     addDistribution: addDistribution,
     updateDistribution: updateDistribution,
-    distributions: distributions
+    distributions: distributions,
+    deleteDistribution: deleteDistribution
   };
 
 }]);
