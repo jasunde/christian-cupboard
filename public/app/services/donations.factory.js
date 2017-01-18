@@ -87,11 +87,38 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
       }
   }
 
+  function getCsv(){
+    $http({
+      method: 'GET',
+      url: '/donations/csvtest',
+      dataType: "text/csv",
+      headers: {id_token: Auth.user.idToken}
+    })
+    .then(function(result) {
+      console.log(result);
+      // var headers = result.headers()
+      var blob = new Blob([result.data], { type: result.config.dataType })
+      var windowUrl = (window.URL || window.webkitURL)
+      var downloadUrl = windowUrl.createObjectURL(blob)
+      var anchor = document.createElement("a")
+      anchor.href = downloadUrl
+      // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+      // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
+      anchor.download = "donations.csv"
+      document.body.appendChild(anchor)
+      anchor.click()
+      windowUrl.revokeObjectURL(blob)
+
+    })
+  }
+
   return {
     getDonations: getDonations,
     donations: donations,
     submitDonations: submitDonations,
     editDonations: editDonations,
-    deleteDonations: deleteDonations
+    deleteDonations: deleteDonations,
+    getCsv: getCsv
   };
+
 }]);

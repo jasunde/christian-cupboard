@@ -64,4 +64,8 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
       });
   };
 
+  self.getCsv = function() {
+    DistributionFactory.getCsv()
+  }
+
 }]);

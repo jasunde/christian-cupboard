@@ -33,15 +33,15 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
   }, {
     name: 'All',
     filter: {org: false}
-    
+
   }, {
     name: 'Client',
     filter: {donor: false, org: false}
-    
+
   }, {
     name: 'Donor',
     filter: {donor: true, org: false}
-    
+
   }];
 
 
@@ -52,7 +52,7 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
   self.changeFilter = function (filter) {
     self.filter
   }
-  
+
   self.add = function () {
     self.newContact.saving = true;
 
@@ -79,4 +79,9 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
         item.saving = false;
       });
   };
+
+  self.getCsv = function(){
+    ContactsFactory.getCsv()
+  }
+
 }]);

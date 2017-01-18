@@ -70,4 +70,8 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
     })
   }
 
+  self.getCsv = function() {
+    DistributionFactory.getCsv()
+  }
+
 }]);

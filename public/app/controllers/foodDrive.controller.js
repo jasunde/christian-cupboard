@@ -34,7 +34,7 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
         if(verbose) {console.log("editing", donation); }
 
         donation.saving=true;
-        
+
         DonationsFactory.editDonations(donation)
         .then(function (result){
           donation.saving=false;
@@ -60,4 +60,9 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
         donation.editable = true;
       }
     };
+
+    self.getCsv = function(){
+      DonationsFactory.getCsv()
+    }
+
   }]);

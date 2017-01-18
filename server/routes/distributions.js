@@ -81,7 +81,7 @@ router.get('/organizations', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT *, distributions.id as distribution_id FROM distributions '+ 
+        'SELECT *, distributions.id as distribution_id FROM distributions '+
         'JOIN contacts ON distributions.contact_id = contacts.id '+
         'WHERE contacts.org IS TRUE'
       )
@@ -100,8 +100,8 @@ router.get('/individuals', function(req, res) {
   pool.connect()
     .then(function (client) {
       client.query(
-        'SELECT *, distributions.id AS distribution_id FROM distributions '+ 
-        'JOIN contacts ON distributions.contact_id = contacts.id '+ 
+        'SELECT *, distributions.id AS distribution_id FROM distributions '+
+        'JOIN contacts ON distributions.contact_id = contacts.id '+
         'WHERE contacts.org IS FALSE'
       )
         .then(function(result) {
@@ -279,6 +279,23 @@ router.put('/', function(req, res) {
       console.log('POST distribution error: ', err);
       res.status(500).send(err)
     });
+  });
+});
+
+router.get('/csvtest', function(req, res) {
+  pool.query(
+    'SELECT * FROM distributions'
+  )
+  .then(function(result) {
+    console.log('result: ', result.rows);
+    res.attachment('testing.csv');
+    res.csv(
+      result.rows
+    );
+  })
+  .catch(function(err) {
+    console.log('GET all distributions err:', err);
+    res.status(500).send(err);
   });
 });
 
