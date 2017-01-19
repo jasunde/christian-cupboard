@@ -18,7 +18,7 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
     ContactsFactory.getContacts();
   })
 
-  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list && DistributionFactory.distributions.list) {
+  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DistributionFactory.distributions.list) {
     self.gotData = true;
   } else {
     self.gotData = false;
@@ -31,8 +31,8 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {
-      DonationsFactory.getDonations(),
       self.gotData = true;
+      DonationsFactory.getDonations();
     });
 }
 
@@ -44,8 +44,8 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
         DistributionFactory.getDistributions()
       ])
       .then(function (response) {
-        DonationsFactory.getDonations(),
         self.gotData = true;
+        DonationsFactory.getDonations();
       });
     }
   });
