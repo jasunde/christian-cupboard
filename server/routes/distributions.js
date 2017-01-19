@@ -48,24 +48,30 @@ function buildQuery(query) {
 }
 
 function getDetails(distributions, client, res) {
-  distributions.forEach(function(distribution) {
-    client.query(
-      'SELECT * FROM distribution_details '+
-      'WHERE distribution_id = $1',
-      [distribution.distribution_id]
-    )
-      .then(function(result) {
-        if(distribution.distribution_id === 14) {
-          console.log('result.rows', result.rows);
-        }
-        distribution.categories = result.rows.reduce(function(total, current) {
-          total[current.category_id] = parseFloat(current.amount);
-          return total;
-        }, {})
-      });
-  });
+  if(distributions.length) {
+    distributions.forEach(function(distribution, index) {
+      client.query(
+        'SELECT * FROM distribution_details '+
+        'WHERE distribution_id = $1',
+        [distribution.distribution_id]
+      )
+        .then(function(result) {
+          distribution.categories = result.rows.reduce(function(total, current) {
+            total[current.category_id] = parseFloat(current.amount);
+            return total;
+          }, {})
+          if(distributions.length === index + 1) {
+            client.release();
+          }
+        });
 
-  client.on('drain', client.end.bind(client) )
+    });
+  } else {
+    client.release();
+    res.send(distributions);
+  }
+
+  // client.on('drain', client.end.bind(client) )
 
   client.on('end', function() {
     res.send(distributions)
@@ -74,6 +80,8 @@ function getDetails(distributions, client, res) {
   client.on('error', function(err) {
     res.status(500).send(err)
   });
+
+
 }
 
 //get all organizations
@@ -117,14 +125,14 @@ router.get('/individuals', function(req, res) {
 //get by date range
 router.get('/', function (req, res) {
   pool.connect()
-  .then(function(client) {
-    var query = buildQuery(req.query)
+    .then(function(client) {
+      var query = buildQuery(req.query)
 
-    client.query(query)
-    .then(function(result) {
-      getDetails(result.rows, client, res)
+      client.query(query)
+        .then(function(result) {
+          getDetails(result.rows, client, res)
+        });
     });
-  });
 });
 
 router.delete('/:id', function(req, res) {
