@@ -8,14 +8,12 @@
 <!-- Filter Form -->
 <div class="row">
   <form>
-    org_name
-    {{frc.org_name}}
     <div class="form-group col-sm-2">
       <label>Donors:</label>
       <select
          class="form-control"
-         ng-options="org.org_name as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
-         ng-model="frc.org_name">
+         ng-options="org.id as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
+         ng-model="frc.org_id">
          <option value="" ng-value="">All</option>
       </select>
     </div>
@@ -73,7 +71,7 @@
 
     <tr ng-repeat="donation in frc.rescueDonations.list
     | orderBy: '-timestamp'
-    | filter: {org_name: frc.org_name||undefined}
+    | filter: {id: frc.org_id||undefined}:true
     | filter: frc.search">
         <!-- Donor -->
         <td>
