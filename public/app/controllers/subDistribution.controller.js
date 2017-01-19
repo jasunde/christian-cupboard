@@ -27,12 +27,12 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      ContactsFactory.getContacts(),
-      DistributionFactory.getDistributions()
+      DistributionFactory.getDistributions(),
+      ContactsFactory.getContacts()
     ])
     .then(function (response) {
-      self.gotData = true;
       DonationsFactory.getDonations();
+      self.gotData = true;
     });
 }
 

@@ -17,7 +17,6 @@ if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
 // start loader
 if(Auth.user.idToken){
   $q.all([
-    CategoryFactory.getCategories(),
     DistributionFactory.getDistributions()
   ])
   .then(function (response) {
@@ -30,7 +29,6 @@ $scope.$on('user:updated', function (event, data) {
 
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {
