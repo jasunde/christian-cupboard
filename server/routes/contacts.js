@@ -1,13 +1,36 @@
 var express = require('express');
 var router = express.Router();
+var contactService = require('../modules/contactService')
+
 var pg = require('pg');
 var config = require('../config')
 
 var pool = new pg.Pool(config.pg);
 
-router.get('/', function(req, res) {
+// middleware to facilitate contact upsert
+router.use(function (req, res, next) {
+  if(req.body) {
+    req.contact = req.body
+  }
+  next()
+})
+
+router.get('/all', function(req, res) {
   pool.query(
     'SELECT * FROM contacts'
+  )
+  .then(function(result) {
+    res.send(result.rows);
+  })
+  .catch(function(err) {
+    console.log('GET all contacts err:', err);
+    res.status(500).send(err);
+  });
+});
+
+router.get('/', function(req, res) {
+  pool.query(
+    'SELECT * FROM contacts WHERE is_active IS TRUE'
   )
   .then(function(result) {
     res.send(result.rows);
@@ -36,82 +59,53 @@ router.get('/organizations/:org_type', function(req, res) {
   });
 });
 
+
+
 router.get('/id/:id', function(req, res) {
 
+  contactService.getByID(req, res, req.params.id)
+  .then(function (result) {
+    if(result) {
+      res.send(result.rows)
+    }
+  })
+});
+
+router.post('/', function (req, res) {
+  contactService.post(req,res)
+  .then(function (response) {
+    if(response) {
+      res.sendStatus(204)
+    }
+  })
+});
+
+router.put('/', function (req, res) {
+  console.log('We are doing a put');
+  contactService.put(req, res)
+  .then(function (response) {
+    if(response) {
+      res.sendStatus(204)
+    }
+  })
+});
+
+//toggle is_active
+router.put('/active/:id', function(req, res) {
+console.log('putting now');
   pool.query(
-    'SELECT * FROM contacts WHERE id = $1',
+    'UPDATE contacts '+
+    'SET is_active = NOT is_active WHERE id = $1',
     [
       req.params.id
     ]
   )
-  .then(function(result) {
-    res.send(result.rows);
-  })
-  .catch(function(err) {
-    console.log('GET by ID error:', err);
-    res.status(500).send(err);
-  });
-});
-
-router.post('/', function(req, res) {
-  var contact = req.body;
-  pool.query(
-    'INSERT INTO contacts (donor, org, org_type, org_id, org_name, first_name, last_name, address, city, state, postal_code, email, phone_number)'+
-    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
-    [
-      contact.donor,
-      contact.org,
-      contact.org_type,
-      contact.org_id,
-      contact.org_name,
-      contact.first_name,
-      contact.last_name,
-      contact.address,
-      contact.city,
-      contact.state,
-      contact.postal_code,
-      contact.email,
-      contact.phone_number
-    ]
-  )
   .then(function(response) {
     res.sendStatus(204)
   })
   .catch(function(err) {
-    console.log('POST contact error:', err);
-    res.status(500).send(err);
-  });
-});
-
-router.put('/', function(req, res) {
-  var contact = req.body;
-  pool.query(
-    'UPDATE contacts '+
-    'SET donor = $1, org = $2, org_type = $3, org_id = $4, org_name = $5, first_name = $6, last_name = $7, address = $8, city = $9, state = $10, postal_code = $11, email = $12, phone_number = $13 '+
-    'WHERE id = $14',
-    [
-      contact.donor,
-      contact.org,
-      contact.org_type,
-      contact.org_id,
-      contact.org_name,
-      contact.first_name,
-      contact.last_name,
-      contact.address,
-      contact.city,
-      contact.state,
-      contact.postal_code,
-      contact.email,
-      contact.phone_number,
-      contact.id
-    ]
-  )
-  .then(function(response) {
-    res.sendStatus(204)
-  })
-  .catch(function(err) {
-    console.log('PUT category error:', err);
-    res.status(500).send(err);
+    console.log('PUT contact error: ', err);
+    res.status(500).send(err)
   });
 });
 

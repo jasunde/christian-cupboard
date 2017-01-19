@@ -1,0 +1,112 @@
+<div class="container">
+  <h2>Manage Contacts</h2>
+
+  <!-- Filter Form -->
+  <div class="row">
+    <form>
+      <div class="form-group col-sm-2">
+        <label>Organizations:</label>
+        <select
+           class="form-control"
+           ng-options="type.filter as type.name for type in cc.org_types" 
+           ng-model="cc.filter">
+        </select>
+      </div>
+
+      <div class="form-group col-sm-2">
+        <label>Individuals:</label>
+        <select
+           class="form-control"
+           ng-options="type.filter as type.name for type in cc.ind_types" 
+           ng-model="cc.filter">
+        </select>
+      </div>
+
+      <div class="form-group col-sm-4">
+        <label>Search:</label>
+        <input class="form-control" type="search" ng-model="cc.search">
+      </div>
+    </form>
+  </div>
+
+  <!-- Contact Cards -->
+  <div class="row">
+    <div 
+      ng-repeat="contact in cc.contacts.list 
+      | filter: {org_type: cc.filter.org_type} 
+      | filter: {org: cc.filter.org} 
+      | filter: {donor: cc.filter.donor} 
+      | filter: cc.search">
+
+      <div class="clearfix" ng-if="$index % 3 == 0"></div>
+      <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <div ng-if="!contact.editable">
+              <span ng-if="!contact.org">{{contact.first_name}} {{contact.last_name}}</span>
+              <span ng-if="contact.org">{{contact.org_name}}</span>
+            </div>
+            <div ng-if="contact.editable">
+              <input class="form-control" type="text" ng-model="contact.first_name" placeholder="First Name">
+              <input class="form-control" type="text" ng-model="contact.last_name" placeholder="Last Name">
+              <input class="form-control" type="text" ng-model="contact.org_name" placeholder="Organization Name">
+
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div ng-if="!contact.editable">
+            {{contact.address}}
+            <span ng-if="contact.address"><br /></span>
+            {{contact.city}}<span ng-if="contact.state">,</span>
+            {{contact.state}}
+            {{contact.postal_code}}
+            <span ng-if="contact.city || contact.state || contact.postal_code"><br /></span>
+            {{contact.email}}
+            <span ng-if="contact.email"><br /></span>
+            {{contact.phone_number}}
+          </div>
+
+          <div ng-if="contact.editable">
+            <input class="form-control" type="text" ng-model="contact.address" placeholder="Address">
+            <input class="form-control" type="text" ng-model="contact.city" placeholder="City">
+            <input class="form-control" type="text" ng-model="contact.state" placeholder="State">
+            <input class="form-control" type="text" ng-model="contact.postal_code" placeholder="Zip Code">
+            <input class="form-control" type="email" ng-model="contact.email" placeholder="Email">
+            <input class="form-control" type="tel" ng-model="contact.phone_number" placeholder="Phone Number">
+          </div>
+
+          <!-- Not editable -->
+          <span ng-if="!contact.editable">
+            <button 
+                type="button" 
+                class="btn btn-primary" 
+                ng-click="cc.toggleEditable(contact)">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+          </span>
+          <!-- Editable -->
+          <span ng-if="contact.editable">
+            <button 
+                type="button" 
+                class="btn btn-primary" 
+                ng-click="cc.update(contact)">
+              <save-glyph boolean="contact.saving"></save-glyph>
+            </button>
+            <button 
+                    type="button" 
+                    class="btn btn-default" 
+                    ng-click="cc.toggleEditable(contact)">
+              <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+          </span>
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+

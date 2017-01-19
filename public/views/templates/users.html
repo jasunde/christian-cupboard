@@ -1,0 +1,112 @@
+<div class="container">
+<h2>Manage Users</h2>
+
+<table class="table admin">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th class="text-center">Admin</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Add User -->
+      <tr>
+        <td>
+          <input class="form-control" type="text" ng-model="uc.newUser.first_name">
+        </td>
+        <td>
+            <input class="form-control" type="text" ng-model="uc.newUser.last_name">
+        </td>
+        <td>
+            <input class="form-control" type="email" ng-model="uc.newUser.email">
+        </td>
+        <td class="text-center">
+          <div class="checkbox">
+            <input type="checkbox" ng-model="uc.newUser.is_admin">
+          </div>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-success"
+            ng-click="uc.add()">
+            <add-glyph boolean="uc.newUser.saving"></add-glyph>
+          </button>
+        </td>
+      </tr>
+
+      <tr ng-repeat="user in uc.users.list | orderBy:'name'">
+        <!-- First Name -->
+        <td>
+          <span class="form-control" disabled ng-if="!user.editable">{{user.first_name}}</span>
+          <span ng-if="user.editable">
+            <input class="form-control" type="text" ng-model="user.first_name">
+          </span>
+        </td>
+        <!-- Last Name -->
+        <td>
+          <span class="form-control" disabled ng-if="!user.editable">{{user.last_name}}</span>
+          <span ng-if="user.editable">
+            <input class="form-control" type="text" ng-model="user.last_name">
+          </span>
+        </td>
+        <!-- Email -->
+        <td>
+          <span class="form-control" disabled ng-if="!user.editable">{{user.email}}</span>
+          <span ng-if="user.editable">
+            <input class="form-control" type="email" ng-model="user.email">
+          </span>
+        </td>
+        <!-- Is Admin -->
+        <td class="text-center">
+          <span class="checkbox" ng-if="!user.editable">
+            <glyph-checkbox boolean="user.is_admin"></glyph-checkbox>
+          </span>
+          <span ng-if="user.editable">
+            <div class="checkbox">
+              <input type="checkbox" ng-model="user.is_admin">
+            </div>
+          </span>
+        </td>
+        <!-- Edit -->
+        <td>
+          <!-- Not editable -->
+          <span ng-if="!user.editable">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="uc.toggleEditable(user)">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              ng-click="uc.delete(user)">
+              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
+              <delete-glyph boolean="user.saving"></delete-glyph>
+            </button>
+          </span>
+          <!-- Editable -->
+          <span ng-if="user.editable">
+            <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="uc.update(user)">
+              <save-glyph boolean="user.saving"></save-glyph>
+            </button>
+            <button
+                    type="button"
+                    class="btn btn-default"
+                    ng-click="uc.toggleEditable(user)">
+              <span class="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
