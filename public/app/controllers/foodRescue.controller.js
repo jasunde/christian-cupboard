@@ -1,7 +1,7 @@
 app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q){
 
   var self = this;
-  var verbose = false;
+  var verbose = true;
 
   self.newDonation = {
     contact_id: undefined,
@@ -13,6 +13,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueCategories = CategoryFactory.categories;
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
+  console.log(self.rescueContacts);
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
@@ -99,5 +100,35 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
         donation.editable = true;
       }
     };
+
+
+//custom Food Rescue Admin Filters
+
+  self.search = '';
+  self.donor_type = '';
+  self.ind_type = '';
+  self.filter = {
+  }
+
+  self.ind_types = [{
+    name: '',
+    filter:  {}
+  }, {
+    name: 'All',
+    filter: {org: false}
+
+  }, {
+    name: 'Client',
+    filter: {donor: false, org: false}
+
+  }, {
+    name: 'Donor',
+    filter: {donor: true, org: false}
+
+  }];
+
+  self.changeFilter = function (filter) {
+    self.filter
+  }
 
 }]);

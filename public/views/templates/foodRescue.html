@@ -4,6 +4,39 @@
 <div class="container" ng-show="frc.gotData">
 <h2>Food Rescue Form</h2>
 
+{{cc.filter}}
+<!-- Filter Form -->
+<div class="row">
+  <form>
+    org_name
+    {{frc.org_name}}
+    <div class="form-group col-sm-2">
+      <label>Donors:</label>
+      <select
+         class="form-control"
+         ng-options="org.org_name as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
+         ng-model="frc.org_name">
+         <option value="" ng-value="">All</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-2">
+      <label>Individuals:</label>
+      <select
+         class="form-control"
+         ng-options="type.filter as type.name for type in frc.ind_types"
+         ng-model="frc.filter">
+      </select>
+    </div>
+
+    <div class="form-group col-sm-4">
+      <label>Search:</label>
+      <input class="form-control" type="search" ng-model="frc.search">
+    </div>
+  </form>
+</div>
+
+
 <table wt-responsive-table class="table">
   <div class="tableForms">
   <thead class="rescueForm">
@@ -38,7 +71,10 @@
         </td>
       </tr>
 
-    <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
+    <tr ng-repeat="donation in frc.rescueDonations.list
+    | orderBy: '-timestamp'
+    | filter: {org_name: frc.org_name||undefined}
+    | filter: frc.search">
         <!-- Donor -->
         <td>
           <span class="form-control"
