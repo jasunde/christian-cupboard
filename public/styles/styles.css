@@ -6225,9 +6225,25 @@ input[type=date]::-webkit-inner-spin-button {
   left: -30px;
   height: 50px; }
 
+<<<<<<< HEAD
 .driveHeader {
   background-color: black;
   color: #f3f3f3; }
 
 span {
   white-space: nowrap; }
+=======
+.table {
+  color: black; }
+
+.tableForms {
+  background-color: magenta; }
+
+.testtesttest {
+  background-color: magenta; }
+  .testtesttest td {
+    padding: none;
+    margin: none; }
+  .testtesttest tr {
+    border: none; }
+>>>>>>> feature-loader

@@ -1,4 +1,8 @@
-<div class="container">
+<div ng-hide="sdc.gotData" class="ng-hide">
+<div id="loader"></div>
+</div>
+
+<div class="container" ng-show="sdc.gotData">
 <h2>Sub Distribution</h2>
 
 <table class="table admin">
@@ -16,10 +20,10 @@
       <!-- Add Distribution -->
       <tr>
         <td>
-        <select ng-model="sdc.newSubDistribution.contact_id" class="form-control">
-          <option ng-repeat="contact in sdc.contacts.list | filter: {org_type: 'sub_distribution'}" value="{{contact.id}}">{{contact.org_name}}</option>
+        <select ng-model="sdc.newSubDistribution.org_name" class="form-control">
+          <option ng-repeat="contact in sdc.subDistributions.list | filter: {org_type: sub_distribution}" value="{{contact.org_name}}">{{contact.org_name}}</option>
         </select>
-        </td>
+      </td>
         <td>
             <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp">
         </td>

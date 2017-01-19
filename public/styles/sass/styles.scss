@@ -172,12 +172,28 @@ input[type=date]::-webkit-inner-spin-button {
     height: 50px;
 }
 
-.driveHeader{
-  background-color: black;
-  color: #f3f3f3;
+span{
+  white-space: nowrap;
+
+.table {
+  color: black;
 
 }
 
-span{
-  white-space: nowrap;
+.tableForms {
+  background-color: magenta
+}
+
+.testtesttest {
+  background-color: magenta;
+  td {
+    padding: none;
+    margin: none;
+  }
+  tr {
+    border: none;
+  }
+.driveHeader{
+  background-color: black;
+  color: #f3f3f3;
 }

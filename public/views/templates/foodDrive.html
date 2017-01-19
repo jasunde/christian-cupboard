@@ -1,4 +1,7 @@
-<div class="container">
+<div ng-hide="fdc.gotData" class="ng-hide">
+<div id="loader"></div>
+</div>
+<div class="container" ng-show="fdc.gotData">
 <h2>Food Drive</h2>
 
 <table  wt-responsive-table class="table table-striped driveTable">
@@ -65,7 +68,8 @@
       <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {org_type: '!food_rescue'}">
            <!-- Date of Donation -->
         <td>
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
+          <span class="form-control"
+          disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
             <input class="form-control" type="date" ng-model="donation.timestamp" value="{{donation.timestamp | date: 'MM/dd/yyyy'}}" required>
           </span>
