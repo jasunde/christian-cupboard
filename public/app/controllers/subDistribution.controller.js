@@ -27,12 +27,11 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
-      DonationsFactory.getDonations(),
       ContactsFactory.getContacts(),
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {
+      DonationsFactory.getDonations(),
       self.gotData = true;
     });
 }
@@ -41,12 +40,11 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
-        DonationsFactory.getDonations(),
         ContactsFactory.getContacts(),
         DistributionFactory.getDistributions()
       ])
       .then(function (response) {
+        DonationsFactory.getDonations(),
         self.gotData = true;
       });
     }

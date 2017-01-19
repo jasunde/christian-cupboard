@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q){
+app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q){
 
   var self = this;
   var verbose = false;
@@ -27,6 +27,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
       ContactsFactory.getContacts()
     ])
     .then(function (response) {
+      DistributionFactory.getDistributions();
       self.gotData = true;
     });
 }
@@ -39,6 +40,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
+        DistributionFactory.getDistributions();
         self.gotData = true;
       });
     }

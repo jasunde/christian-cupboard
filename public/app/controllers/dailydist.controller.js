@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DistributionFactory, CategoryFactory, $scope, $q){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q){
 
   var self = this;
   var verbose = false;
@@ -21,6 +21,7 @@ if(Auth.user.idToken){
     DistributionFactory.getDistributions()
   ])
   .then(function (response) {
+    DonationsFactory.getDonations();
     self.gotData = true;
   });
 }
@@ -33,6 +34,7 @@ $scope.$on('user:updated', function (event, data) {
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {
+      DonationsFactory.getDonations();
       self.gotData = true;
     });
   }
