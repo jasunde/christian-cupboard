@@ -6225,11 +6225,6 @@ input[type=date]::-webkit-inner-spin-button {
   left: -30px;
   height: 50px; }
 
-
-.driveHeader {
-  background-color: black;
-  color: #f3f3f3; }
-
 span {
   white-space: nowrap; }
 
@@ -6245,7 +6240,24 @@ span {
   border-top: none;
   border-bottom: none;
   background-color: #255AA8; }
-  .testtesttest th, .testtesttest td, .testtesttest tr {
-    border: none !important;
-    text-align: center; }
 
+th, td, tr {
+  border: none !important;
+  text-align: center; }
+
+.driveHeader {
+  color: #FFC600;
+  border-top: none;
+  border-bottom: none;
+  background-color: #255AA8; }
+
+th, td, tr {
+  border: none !important;
+  text-align: center; }
+
+.overflowTableDiv {
+  overflow-x: scroll; }
+
+th, td, tr {
+  min-width: auto;
+  margin: none; }
