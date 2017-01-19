@@ -1,6 +1,7 @@
 app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q){
     var self = this;
     var verbose = true;
+    var callInProgress = false;
 
     self.newDonation = {
       contact_id: undefined,
@@ -20,27 +21,35 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     }
 
     if(Auth.user.idToken){
-      $q.all([
-        DonationsFactory.getDonations(),
-        ContactsFactory.getContacts()
-      ])
-      .then(function (response) {
-        DistributionFactory.getDistributions();
-        self.gotData = true;
-      });
+      if(!callInProgress) {
+        callInProgress = true;
+        $q.all([
+          DonationsFactory.getDonations(),
+          ContactsFactory.getContacts()
+        ])
+          .then(function (response) {
+            DistributionFactory.getDistributions();
+            callInProgress = false;
+            self.gotData = true;
+          });
+      }
   }
 
   $scope.$on('user:updated', function (event, data) {
 
     if(Auth.user.idToken){
+      if(!callInProgress) {
+        callInProgress = true;
       $q.all([
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
         DistributionFactory.getDistributions();
+        callInProgress = false;
         self.gotData = true;
       });
+      }
     }
   });
 

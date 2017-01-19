@@ -8,6 +8,8 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
     timestamp: new Date(),
   };
 
+  var callInProgress = false;
+
   self.thisDonation = {};
 
   self.rescueCategories = CategoryFactory.categories;
@@ -22,19 +24,9 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
 
   // start loader
   if(Auth.user.idToken){
-    $q.all([
-      DonationsFactory.getDonations(),
-      ContactsFactory.getContacts()
-    ])
-    .then(function (response) {
-      DistributionFactory.getDistributions();
-      self.gotData = true;
-    });
-}
-
-  $scope.$on('user:updated', function (event, data) {
-
-    if(Auth.user.idToken){
+    
+    if(!callInProgress) {
+      callInProgress = true;
       $q.all([
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
@@ -42,7 +34,26 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
       .then(function (response) {
         DistributionFactory.getDistributions();
         self.gotData = true;
+        callInProgress = false;
       });
+    }
+  }
+
+  $scope.$on('user:updated', function (event, data) {
+
+    if(Auth.user.idToken){
+      if(!callInProgress) {
+        callInProgress = true;
+        $q.all([
+          DonationsFactory.getDonations(),
+          ContactsFactory.getContacts()
+        ])
+        .then(function (response) {
+          DistributionFactory.getDistributions();
+          self.gotData = true;
+          callInProgress = false;
+        });
+      }
     }
   });
 

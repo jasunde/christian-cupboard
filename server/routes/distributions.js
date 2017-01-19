@@ -43,7 +43,6 @@ function buildQuery(query) {
     result.text += ' LIMIT ' + MAX_GET
   }
 
-  console.log('result', result);
   return result
 }
 

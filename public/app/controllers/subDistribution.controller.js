@@ -1,6 +1,7 @@
 app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q){
   var self = this;
   var verbose = true;
+  var callInProgress = false;
 
   self.newSubDistribution = {};
 
@@ -13,12 +14,7 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
     ContactsFactory.getContacts();
   }
 
-  $scope.$on('user:updated', function () {
-    DistributionFactory.getDistributions();
-    ContactsFactory.getContacts();
-  })
-
-  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list && DistributionFactory.distributions.list) {
+  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DistributionFactory.distributions.list) {
     self.gotData = true;
   } else {
     self.gotData = false;
@@ -26,27 +22,35 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
 
   // start loader
   if(Auth.user.idToken){
+    if(!callInProgress) {
+      callInProgress = true;
     $q.all([
       ContactsFactory.getContacts(),
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {
-      DonationsFactory.getDonations(),
+      DonationsFactory.getDonations();
+      callInProgress = false;
       self.gotData = true;
     });
+    }
 }
 
   $scope.$on('user:updated', function (event, data) {
 
     if(Auth.user.idToken){
+      if(!callInProgress) {
+        callInProgress = true;
       $q.all([
         ContactsFactory.getContacts(),
         DistributionFactory.getDistributions()
       ])
       .then(function (response) {
-        DonationsFactory.getDonations(),
+        DonationsFactory.getDonations();
+        callInProgress = false;
         self.gotData = true;
       });
+      }
     }
   });
 

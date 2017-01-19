@@ -2,6 +2,7 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DonationsFacto
 
   var self = this;
   var verbose = false;
+  var callInProgress = false;
   var distribution = {};
   self.newDistribution = {};
 
@@ -16,27 +17,29 @@ if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
 
 // start loader
 if(Auth.user.idToken){
-  $q.all([
-    CategoryFactory.getCategories(),
-    DistributionFactory.getDistributions()
-  ])
+  if(!callInProgress) {
+    callInProgress = true;
+  DistributionFactory.getDistributions()
   .then(function (response) {
     DonationsFactory.getDonations();
+    callInProgress = false;
     self.gotData = true;
   });
+  }
 }
 
 $scope.$on('user:updated', function (event, data) {
 
   if(Auth.user.idToken){
-    $q.all([
-      CategoryFactory.getCategories(),
+    if(!callInProgress) {
+      callInProgress = true;
       DistributionFactory.getDistributions()
-    ])
-    .then(function (response) {
-      DonationsFactory.getDonations();
-      self.gotData = true;
-    });
+      .then(function (response) {
+        DonationsFactory.getDonations();
+        callInProgress = false;
+        self.gotData = true;
+      });
+    }
   }
 });
 
