@@ -1,4 +1,5 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFactory', 'CategoryFactory', '$scope', function($scope, Auth, DistributionFactory, CategoryFactory, $scope){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q){
+
   var self = this;
   var verbose = false;
   var distribution = {};
@@ -7,15 +8,37 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
   self.dailyDistributions = DistributionFactory.distributions;
   self.categories = CategoryFactory.categories;
 
-  if(Auth.user.idToken) {
-    DistributionFactory.getDistributions();
-  }
+if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
+  self.gotData = true;
+} else {
+  self.gotData = false;
+}
 
-  $scope.$on('user:updated', function () {
-    DistributionFactory.getDistributions();
+// start loader
+if(Auth.user.idToken){
+  $q.all([
+    CategoryFactory.getCategories(),
+    DistributionFactory.getDistributions()
+  ])
+  .then(function (response) {
+    DonationsFactory.getDonations();
+    self.gotData = true;
   });
+}
 
-  if (verbose) {console.log("This be the distributions", self.dailyDistributions);}
+$scope.$on('user:updated', function (event, data) {
+
+  if(Auth.user.idToken){
+    $q.all([
+      CategoryFactory.getCategories(),
+      DistributionFactory.getDistributions()
+    ])
+    .then(function (response) {
+      DonationsFactory.getDonations();
+      self.gotData = true;
+    });
+  }
+});
 
   self.toggleEditable = function (distribution) {
     if(distribution.editable) {
@@ -43,7 +66,6 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFa
   self.updateDistribution = function (distribution) {
     console.log('distribution', distribution);
     distribution.saving = true;
-
     DistributionFactory.updateDistribution(distribution)
       .then(function (result) {
         distribution.saving = false;

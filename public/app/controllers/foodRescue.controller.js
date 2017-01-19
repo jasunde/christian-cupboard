@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q){
+app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q){
 
   var self = this;
   var verbose = false;
@@ -23,11 +23,11 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
       DonationsFactory.getDonations(),
       ContactsFactory.getContacts()
     ])
     .then(function (response) {
+      DistributionFactory.getDistributions();
       self.gotData = true;
     });
 }
@@ -36,11 +36,11 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
+        DistributionFactory.getDistributions();
         self.gotData = true;
       });
     }
