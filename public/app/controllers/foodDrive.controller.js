@@ -21,7 +21,6 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
@@ -34,7 +33,6 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
@@ -43,14 +41,6 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
       });
     }
   });
-
-    // // ContactsFactory.getContacts();
-    // DonationsFactory.getDonations();
-    //
-    // $scope.$on('user:updated', function (event, data) {
-    //     CategoryFactory.getCategories();
-    //     DonationsFactory.getDonations();
-    // });
 
     self.submitDonation = function() {
         if(verbose) {console.log("Submitting newDonation", self.newDonation);
