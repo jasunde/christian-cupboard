@@ -18,7 +18,7 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
           }
         })
           .then(function (result) {
-            contacts.list = result.data
+            contacts.list = result.data;
             if (verbose) {console.log('contacts', contacts.list);}
             resolve(result);
           })
@@ -55,7 +55,7 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
           .catch(function (err) {
             console.log('GET contacts error:', err);
             reject(err);
-          })
+          });
         })
         .catch(function (err) {
           console.log('PUT contact error:', err);

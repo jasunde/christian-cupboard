@@ -11,9 +11,9 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
 
   $rootScope.$on('user:updated', function (event, data) {
     if(verbose) {console.log('user update categories');}
-
+  
     if(Auth.user.currentUser) {
-      if(verbose) {console.log('getting categories')}
+      if(verbose) {console.log('calling getting categories')}
       getCategories();
     }
   });
@@ -21,7 +21,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
   function getCategories() {
     if(Auth.user.idToken) {
       if(verbose) {console.log('getting categories');}
-      $http({
+      return $http({
         method: 'GET',
         url: '/categories',
         headers: {
@@ -30,11 +30,11 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
       })
         .then(function (result) {
           categories.list = result.data;
-          // categories.map = categories.list.reduce(function (catMap, category) {
-          //   catMap[category.id] = undefined;
-          //   return catMap;
-          // }, {});
-          if(verbose) {console.log('map', categories.map);}
+          categories.map = categories.list.reduce(function (catMap, category) {
+            catMap[category.id] = undefined;
+            return catMap;
+          }, {});
+          if(verbose) {console.log('map', categories.list);}
         })
         .catch(function (err) {
           console.log('GET categories error:', err);
@@ -92,14 +92,14 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           });
       } else {
         reject();
-      }    
+      }
     });
   }
 
   function deleteCategory(category) {
     return $q(function (resolve, reject) {
       if(Auth.user.idToken) {
-        return $http({
+        $http({
           method: 'DELETE',
           url: '/categories' + category.id,
           headers: {
