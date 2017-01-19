@@ -71,7 +71,7 @@
           <span class="form-control"
           disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="date" ng-model="donation.timestamp" value="{{donation.timestamp | date: 'MM/dd/yyyy'}}" required>
+            <input class="form-control" type="date" ng-model="donation.timestamp" required>
           </span>
         </td>
         <!-- First Name -->

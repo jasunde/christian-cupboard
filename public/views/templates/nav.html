@@ -1,4 +1,5 @@
 <div ng-controller="NavController as nc">
+
 <div class = "navbar navbar-inverse navbar-static-top">
   <div class="container">
     <div class="accentImage">
@@ -16,7 +17,6 @@
       <div class= "collapse navbar-collapse navHeaderCollapse">
 
         <ul class= "nav navbar-nav navbar-right">
-          <li><a href="#">Home</a></li>
           <li class = "dropdown">
           <a class = "dropdown-toggle" data-toggle = "dropdown">Inbound <b class= "caret"></b></a>
             <ul class = "dropdown-menu">
@@ -37,6 +37,7 @@
                 <li><a href="#">Reports</a></li>
                 <li><a href="#categories">Categories</a></li>
                 <li><a href="#users">Users</a></li>
+                <li><a href="#contacts">Contacts</a></li>
               </ul>
           </li>
           <li ng-if="nc.displayName.name"><p class="navbar-text">{{nc.displayName.name}}</p>

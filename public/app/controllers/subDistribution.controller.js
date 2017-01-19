@@ -18,7 +18,7 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
     ContactsFactory.getContacts();
   })
 
-  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list && DistributionFactory.distributions.list) {
+  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DistributionFactory.distributions.list) {
     self.gotData = true;
   } else {
     self.gotData = false;
@@ -27,12 +27,11 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
-      DonationsFactory.getDonations(),
-      ContactsFactory.getContacts(),
-      DistributionFactory.getDistributions()
+      DistributionFactory.getDistributions(),
+      ContactsFactory.getContacts()
     ])
     .then(function (response) {
+      DonationsFactory.getDonations();
       self.gotData = true;
     });
 }
@@ -41,13 +40,12 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
-        DonationsFactory.getDonations(),
         ContactsFactory.getContacts(),
         DistributionFactory.getDistributions()
       ])
       .then(function (response) {
         self.gotData = true;
+        DonationsFactory.getDonations();
       });
     }
   });

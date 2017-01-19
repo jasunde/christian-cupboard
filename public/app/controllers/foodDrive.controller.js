@@ -1,4 +1,4 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', '$q', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth, $q){
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q){
     var self = this;
     var verbose = true;
 
@@ -10,7 +10,7 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     self.thisDonation = {};
 
     self.driveCategories = CategoryFactory.categories;
-    self.driveContacts = DonationsFactory.contacts;
+    self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
 
     if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
@@ -21,11 +21,11 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
+        DistributionFactory.getDistributions();
         self.gotData = true;
       });
   }
@@ -34,23 +34,15 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
+        DistributionFactory.getDistributions();
         self.gotData = true;
       });
     }
   });
-
-    // // ContactsFactory.getContacts();
-    // DonationsFactory.getDonations();
-    //
-    // $scope.$on('user:updated', function (event, data) {
-    //     CategoryFactory.getCategories();
-    //     DonationsFactory.getDonations();
-    // });
 
     self.submitDonation = function() {
         if(verbose) {console.log("Submitting newDonation", self.newDonation);

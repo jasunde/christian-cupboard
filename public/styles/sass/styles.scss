@@ -155,7 +155,7 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     display: none;
-}// remove arrows on date input
+} // remove arrows on date input
 
 // .accentImage {
 //   background-image: url("/resources/background.png");
@@ -177,7 +177,7 @@ span{
 
 .table {
   color: black;
-
+  border-collapse: collapse;
 }
 
 .tableForms {
@@ -185,15 +185,19 @@ span{
 }
 
 .testtesttest {
-  background-color: magenta;
-  td {
-    padding: none;
-    margin: none;
-  }
-  tr {
-    border: none;
+  color: $ccYellow;
+  border-top: none;
+  border-bottom: none;
+  background-color: $ccBlue;
+  th, td, tr {
+    border: none !important;
+    text-align: center;
   }
 .driveHeader{
-  background-color: black;
-  color: #f3f3f3;
-}
+  color: $ccYellow;
+  border-top: none;
+  border-bottom: none;
+  background-color: $ccBlue;
+  th, td, tr {
+    border: none !important;
+    text-align: center; }
