@@ -1,10 +1,8 @@
-app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory){
+app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q){
   var self = this;
   var verbose = true;
 
-  self.newSubDistribution = {
-    timestamp: new Date()
-  };
+  self.newSubDistribution = {};
 
   self.subDistributionCategories = CategoryFactory.categories;
   self.subDistributions = DistributionFactory.distributions;
@@ -19,6 +17,40 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
     DistributionFactory.getDistributions();
     ContactsFactory.getContacts();
   })
+
+  if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list && DistributionFactory.distributions.list) {
+    self.gotData = true;
+  } else {
+    self.gotData = false;
+  }
+
+  // start loader
+  if(Auth.user.idToken){
+    $q.all([
+      ContactsFactory.getContacts(),
+      DistributionFactory.getDistributions()
+    ])
+    .then(function (response) {
+      DonationsFactory.getDonations(),
+      self.gotData = true;
+    });
+}
+
+  $scope.$on('user:updated', function (event, data) {
+
+    if(Auth.user.idToken){
+      $q.all([
+        ContactsFactory.getContacts(),
+        DistributionFactory.getDistributions()
+      ])
+      .then(function (response) {
+        DonationsFactory.getDonations(),
+        self.gotData = true;
+      });
+    }
+  });
+
+
 
   console.log("More dists", self.subDistributions);
 
@@ -61,12 +93,12 @@ app.controller("SubDistributionController", ['$scope', 'Auth', 'CategoryFactory'
 
   self.delete = function (item) {
     item.saving = true;
-
     DistributionFactory.deleteDistribution(item)
     .then(function (result) {
       DistributionFactory.distributions.list = DistributionFactory.distributions.list.filter(function (dist) {
         return dist.distribution_id != item.distribution_id;
       });
+        item.saving = false;
     })
   }
 

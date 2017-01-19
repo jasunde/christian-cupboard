@@ -1,4 +1,4 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope){
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q){
     var self = this;
     var verbose = true;
 
@@ -10,15 +10,39 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     self.thisDonation = {};
 
     self.driveCategories = CategoryFactory.categories;
+    self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
 
-    // ContactsFactory.getContacts();
-    DonationsFactory.getDonations();
+    if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
+      self.gotData = true;
+    } else {
+      self.gotData = false;
+    }
 
-    $scope.$on('user:updated', function (event, data) {
-        CategoryFactory.getCategories();
-        DonationsFactory.getDonations();
-    });
+    if(Auth.user.idToken){
+      $q.all([
+        DonationsFactory.getDonations(),
+        ContactsFactory.getContacts()
+      ])
+      .then(function (response) {
+        DistributionFactory.getDistributions();
+        self.gotData = true;
+      });
+  }
+
+  $scope.$on('user:updated', function (event, data) {
+
+    if(Auth.user.idToken){
+      $q.all([
+        DonationsFactory.getDonations(),
+        ContactsFactory.getContacts()
+      ])
+      .then(function (response) {
+        DistributionFactory.getDistributions();
+        self.gotData = true;
+      });
+    }
+  });
 
     self.submitDonation = function() {
         if(verbose) {console.log("Submitting newDonation", self.newDonation);

@@ -1,8 +1,9 @@
 app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootScope', function AuthFactory($firebaseAuth, $http, firebase, $location, $rootScope) {
-  var verbose = true;
+  var verbose = false;
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt: 'select_account'});
   var auth = $firebaseAuth();
+  var displayName = {};
 
   var is_user = false;
   var user = {
@@ -22,7 +23,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
           is_user = true;
           return firebaseUser.user.getToken()
           .then(function (token) {
-            console.log('token', token);
+            console.log("User", displayName);
 
             return $http({
               method: 'GET',
@@ -65,6 +66,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
    */
   auth.$onAuthStateChanged(function(firebaseUser){
     if(firebaseUser) {
+      displayName.name = firebaseUser.displayName;
       if(!is_user) {
         firebaseUser.getToken()
           .then(function (token) {
@@ -119,6 +121,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
    * @param  {Function} callback Callback function
    */
   function logOut(){
+    displayName.name = undefined;
     return auth.$signOut()
     .then(function () {
       if(verbose) { console.log('logged out');}
@@ -133,6 +136,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
   return {
     logIn: logIn,
     logOut: logOut,
-    user: user
+    user: user,
+    displayName: displayName
   };
 }]);
