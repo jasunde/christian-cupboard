@@ -122,8 +122,13 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
       headers: {id_token: Auth.user.idToken}
     })
     .then(function(result) {
+
       console.log(result);
-      // var headers = result.headers()
+      var headers = result.headers
+      var headersArray = []
+      for(i = 0; i < headers.length; i++){
+        headersArray.push(result.headers);
+      }
       var blob = new Blob([result.data], { type: result.config.dataType })
       var windowUrl = (window.URL || window.webkitURL)
       var downloadUrl = windowUrl.createObjectURL(blob)

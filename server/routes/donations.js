@@ -280,9 +280,15 @@ router.put('/', function (req, res) {
 
 router.get('/csvtest', function(req, res) {
   pool.query(
-    'SELECT * FROM donations'
+    'SELECT * FROM categories'
   )
   .then(function(result) {
+//     'SELECT contacts.id, contacts.org_name, contacts.first_name, contacts.last_name, contacts.org_type, contacts.org, donation_id, produce, dairy, date ' +
+// 'FROM crosstab(SELECT donation_id, name, amount FROM donation_details ' +
+// 'JOIN categories ON categories.id = donation_details.category_id ORDER BY 1,2) ' +
+// 'AS ct(donation_id INTEGER, Produce NUMERIC, Dairy NUMERIC) ' +
+// 'JOIN donations ON ct.donation_id = donations.id ' +
+// 'JOIN contacts ON donations.contact_id = contacts.id'
     console.log('result: ', result.rows);
     res.attachment('testing.csv');
     res.csv(
