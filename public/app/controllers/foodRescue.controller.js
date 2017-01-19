@@ -23,7 +23,6 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
       DonationsFactory.getDonations(),
       ContactsFactory.getContacts()
     ])
@@ -36,7 +35,6 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
