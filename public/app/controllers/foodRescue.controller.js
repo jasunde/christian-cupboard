@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q){
+app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', 'dateRangeFilter', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q, dateRangeFilter){
 
   var self = this;
   var verbose = true;
@@ -13,7 +13,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueCategories = CategoryFactory.categories;
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
-  console.log(self.rescueContacts);
+  console.log(self.rescueDonations);
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
@@ -86,12 +86,33 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
       });
   };
 
+
 //utility functions
-//adding current time to scope, possibly helpful for filtering results by today's date.
+//adding current time to scope, possibly helpful for filtering results by date.
+
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+
+if(dd<10) {
+    dd='0'+dd
+}
+
+if(mm<10) {
+    mm='0'+mm
+}
+
+console.log(today);
+
+today = mm+'/'+dd+'/'+yyyy;
   var now = new Date().getTime();
     $scope.date = new Date(2015, 10, 10);
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
+    $scope.startDate = today;
+    $scope.endDate = today;
+    // $scope.dateRange = dateRangeFilter(date, $scope.startDate, $scope.endDate)
 
     self.toggleEditable = function (donation) {
       if(donation.editable) {
@@ -100,35 +121,5 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
         donation.editable = true;
       }
     };
-
-
-//custom Food Rescue Admin Filters
-
-  self.search = '';
-  self.donor_type = '';
-  self.ind_type = '';
-  self.filter = {
-  }
-
-  self.ind_types = [{
-    name: '',
-    filter:  {}
-  }, {
-    name: 'All',
-    filter: {org: false}
-
-  }, {
-    name: 'Client',
-    filter: {donor: false, org: false}
-
-  }, {
-    name: 'Donor',
-    filter: {donor: true, org: false}
-
-  }];
-
-  self.changeFilter = function (filter) {
-    self.filter
-  }
 
 }]);
