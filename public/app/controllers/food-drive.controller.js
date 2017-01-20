@@ -102,10 +102,13 @@ app.controller("FoodDriveController",
     today = mm+'/'+dd+'/'+yyyy;
 
 
-      var now = new Date().getTime();
-        $scope.date = new Date(2015, 10, 10);
-        $scope.ago = now < $scope.date.getTime();
-        $scope.before = now > $scope.date.getTime();
-        $scope.startDate = new Date(today);
-        $scope.endDate = new Date(today);
+    var now = new Date().getTime();
+    $scope.date = new Date(2015, 10, 10);
+    $scope.ago = now < $scope.date.getTime();
+    $scope.before = now > $scope.date.getTime();
+
+    $scope.daterange = {
+      start: new Date(today),
+      end: new Date(today)
+    };
   }]);
