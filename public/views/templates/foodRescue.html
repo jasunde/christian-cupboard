@@ -4,6 +4,8 @@
 <div class="container" ng-show="frc.gotData">
 <h2>Food Rescue Form</h2>
 
+
+{{totals = (filtered | mergeCategories)}}
 <table wt-responsive-table class="table">
   <div class="tableForms">
   <thead class="rescueForm">
@@ -38,7 +40,7 @@
         </td>
       </tr>
 
-    <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
+      <tr ng-repeat="donation in (filtered = (frc.rescueDonations.list | filter: {org_type : 'food_rescue'}))">
         <!-- Donor -->
         <td>
           <span class="form-control"
@@ -104,6 +106,16 @@
           </span>
         </td>
       </tr>
+      <!-- Totals -->
+      <tr>
+        <!-- Categories -->
+        <td></td>
+        <td>Totals:</td>
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
+          <span>{{totals[category.id]}}</span>
+        </td>
+      </tr>
+
     </tbody>
   </table>
 </div>
