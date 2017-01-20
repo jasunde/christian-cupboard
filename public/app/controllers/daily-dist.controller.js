@@ -4,9 +4,12 @@ app.controller("DailyDistributionController", ['$scope', 'Auth', 'DonationsFacto
   var verbose = false;
   var distribution = {};
   self.newDistribution = {};
+  self.newDistribution.timestamp = new Date();
 
   self.dailyDistributions = DistributionFactory.distributions;
   self.categories = CategoryFactory.categories;
+  self.user = Auth.user;
+  console.log(self.categories);
 
 if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
   self.gotData = true;
@@ -84,4 +87,26 @@ $scope.$on('user:updated', function (event, data) {
       });
   };
 
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  if(dd<10) {
+      dd='0'+dd
+  }
+  if(mm<10) {
+      mm='0'+mm
+  }
+  today = mm+'/'+dd+'/'+yyyy;
+
+
+  var now = new Date().getTime();
+  $scope.date = new Date(2015, 10, 10);
+  $scope.ago = now < $scope.date.getTime();
+  $scope.before = now > $scope.date.getTime();
+
+  $scope.daterange = {
+    start: new Date(today),
+    end: new Date(today)
+  };
 }]);
