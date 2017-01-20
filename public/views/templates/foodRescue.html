@@ -69,6 +69,7 @@
 
     <tr ng-repeat="donation in frc.rescueDonations.list
     | orderBy: '-timestamp'
+    | filter: {org_type: 'food_rescue'}
     | filter: {id: frc.org_id||undefined}:true
     | filter: frc.search
     | dateRange:startDate:endDate">

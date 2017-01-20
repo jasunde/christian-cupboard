@@ -94,24 +94,21 @@ var today = new Date();
 var dd = today.getDate();
 var mm = today.getMonth()+1; //January is 0!
 var yyyy = today.getFullYear();
-
 if(dd<10) {
     dd='0'+dd
 }
-
 if(mm<10) {
     mm='0'+mm
 }
-
-console.log(today);
-
 today = mm+'/'+dd+'/'+yyyy;
+
+
   var now = new Date().getTime();
     $scope.date = new Date(2015, 10, 10);
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
-    $scope.startDate = today;
-    $scope.endDate = today;
+    $scope.startDate = new Date(today);
+    $scope.endDate = new Date(today);
     // $scope.dateRange = dateRangeFilter(date, $scope.startDate, $scope.endDate)
 
     self.toggleEditable = function (donation) {

@@ -1,4 +1,4 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', '$q', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth, $q){
+app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', function(DonationsFactory, CategoryFactory, ContactsFactory, $scope, Auth, $q, dateRangeFilter){
     var self = this;
     var verbose = true;
 
@@ -10,8 +10,9 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     self.thisDonation = {};
 
     self.driveCategories = CategoryFactory.categories;
-    self.driveContacts = DonationsFactory.contacts;
+    self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
+    console.log(self.driveContacts);
 
     if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
       self.gotData = true;
@@ -66,7 +67,7 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
         if(verbose) {console.log("editing", donation); }
 
         donation.saving=true;
-        
+
         DonationsFactory.editDonations(donation)
         .then(function (result){
           donation.saving=false;
