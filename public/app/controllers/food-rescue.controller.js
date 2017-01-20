@@ -1,4 +1,6 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', 'dateRangeFilter', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q, dateRangeFilter){
+app.controller("FoodRescueController", 
+  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter',
+  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter){
 
   var self = this;
   var verbose = true;
@@ -15,6 +17,7 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueDonations = DonationsFactory.donations;
   console.log(self.rescueDonations);
 
+
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
   } else {
@@ -24,11 +27,11 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
       DonationsFactory.getDonations(),
       ContactsFactory.getContacts()
     ])
     .then(function (response) {
+      DistributionFactory.getDistributions();
       self.gotData = true;
     });
 }
@@ -37,11 +40,11 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
+        DistributionFactory.getDistributions();
         self.gotData = true;
       });
     }
