@@ -35,7 +35,7 @@
 </div>
 
 <table wt-responsive-table class="table admin">
-  <thead class="rescueForm">
+  <thead class="add-form rescueForm">
     <tr>
       <th>Reciever</th>
       <th>Date</th>
@@ -44,13 +44,14 @@
         | filter: {sub_dist: true}">
         {{category.name}}
       </th>
+      <th></th>
       <!-- End Angular Category Repeat -->
     </tr>
   </thead>
     <tbody>
 
       <!-- Add Distribution -->
-      <tr>
+      <tr class="add-form">
         <td>
         <select class="form-control"
         ng-options="org.id as org.org_name for org in sdc.contacts.list 

@@ -6232,11 +6232,11 @@ input[type=date]::-webkit-inner-spin-button {
 .tableForms {
   background-color: magenta; }
 
-.testtesttest {
+.add-form {
   color: #FFC600;
   border-top: none;
   border-bottom: none;
   background-color: #255AA8; }
-  .testtesttest th, .testtesttest td, .testtesttest tr {
+  .add-form th, .add-form td, .add-form tr {
     border: none !important;
     text-align: center; }

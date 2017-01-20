@@ -35,9 +35,9 @@
 
 
 
-<table  wt-responsive-table class="table table-striped">
+<table  wt-responsive-table class="table">
     <thead>
-      <tr>
+      <tr class="add-form">
         <th>Date</th>
         <th>First Name</th>
         <th>Last Name</th>
@@ -52,12 +52,13 @@
           ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
           {{category.name}}
         </th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
 
       <!-- Add User -->
-      <tr>
+      <tr class="add-form">
           <td>
           <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
         </td>
