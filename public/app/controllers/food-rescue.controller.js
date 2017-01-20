@@ -1,4 +1,6 @@
-app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', '$q', 'dateRangeFilter', function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, $q, dateRangeFilter){
+app.controller("FoodRescueController", 
+  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter',
+  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter){
 
   var self = this;
   var verbose = true;
@@ -13,7 +15,8 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   self.rescueCategories = CategoryFactory.categories;
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
-  console.log(self.rescueDonations);
+  self.user = Auth.user;
+
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
@@ -24,11 +27,11 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
   // start loader
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
       DonationsFactory.getDonations(),
       ContactsFactory.getContacts()
     ])
     .then(function (response) {
+      DistributionFactory.getDistributions();
       self.gotData = true;
     });
 }
@@ -37,11 +40,11 @@ app.controller("FoodRescueController", ['$scope', 'Auth', 'CategoryFactory', 'Co
 
     if(Auth.user.idToken){
       $q.all([
-        CategoryFactory.getCategories(),
         DonationsFactory.getDonations(),
         ContactsFactory.getContacts()
       ])
       .then(function (response) {
+        DistributionFactory.getDistributions();
         self.gotData = true;
       });
     }
@@ -107,8 +110,10 @@ today = mm+'/'+dd+'/'+yyyy;
     $scope.date = new Date(2015, 10, 10);
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
-    $scope.startDate = new Date(today);
-    $scope.endDate = new Date(today);
+$scope.daterange = {
+  start: new Date(today),
+  end: new Date(today)
+};
     // $scope.dateRange = dateRangeFilter(date, $scope.startDate, $scope.endDate)
 
     self.toggleEditable = function (donation) {

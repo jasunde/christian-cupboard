@@ -1,12 +1,15 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DistributionFactory, CategoryFactory, $scope, $q){
+app.controller("DailyDistributionController", ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q){
 
   var self = this;
   var verbose = false;
   var distribution = {};
   self.newDistribution = {};
+  self.newDistribution.timestamp = new Date();
 
   self.dailyDistributions = DistributionFactory.distributions;
   self.categories = CategoryFactory.categories;
+  self.user = Auth.user;
+  console.log(self.categories);
 
 if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
   self.gotData = true;
@@ -17,10 +20,10 @@ if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
 // start loader
 if(Auth.user.idToken){
   $q.all([
-    CategoryFactory.getCategories(),
     DistributionFactory.getDistributions()
   ])
   .then(function (response) {
+    DonationsFactory.getDonations();
     self.gotData = true;
   });
 }
@@ -29,10 +32,10 @@ $scope.$on('user:updated', function (event, data) {
 
   if(Auth.user.idToken){
     $q.all([
-      CategoryFactory.getCategories(),
       DistributionFactory.getDistributions()
     ])
     .then(function (response) {
+      DonationsFactory.getDonations();
       self.gotData = true;
     });
   }
@@ -97,11 +100,13 @@ $scope.$on('user:updated', function (event, data) {
   today = mm+'/'+dd+'/'+yyyy;
 
 
-    var now = new Date().getTime();
-      $scope.date = new Date(2015, 10, 10);
-      $scope.ago = now < $scope.date.getTime();
-      $scope.before = now > $scope.date.getTime();
-      $scope.startDate = new Date(today);
-      $scope.endDate = new Date(today);
+  var now = new Date().getTime();
+  $scope.date = new Date(2015, 10, 10);
+  $scope.ago = now < $scope.date.getTime();
+  $scope.before = now > $scope.date.getTime();
 
+  $scope.daterange = {
+    start: new Date(today),
+    end: new Date(today)
+  };
 }]);

@@ -5,13 +5,14 @@
 <div class="container" ng-show="sdc.gotData">
 <h2>Sub Distribution</h2>
 
-<div class="row">
+<div class="row" ng-if="sdc.user.is_admin">
   <form>
     <div class="form-group col-sm-3">
       <label>Reciever:</label>
       <select
          class="form-control"
-         ng-options="org.id as org.org_name for org in sdc.contacts.list | filter: {org_type: 'sub_distribution'}"
+         ng-options="org.id as org.org_name for org in sdc.contacts.list 
+         | filter: {org_type: 'sub_distribution'}"
          ng-model="sdc.org_id">
          <option value="" ng-value="">All</option>
       </select>
@@ -19,11 +20,11 @@
 
     <div class="form-group col-sm-3">
       <label>Start Date:</label>
-      <input class = "form-control" type="date" ng-model="startDate"></input>
+      <input class = "form-control" type="date" ng-model="daterange.start"></input>
     </div>
     <div class="form-group col-sm-3">
       <label>End Date:</label>
-      <input class = "form-control" type="date" ng-model="endDate"></input>
+      <input class = "form-control" type="date" ng-model="daterange.end"></input>
     </div>
 
     <div class="form-group col-sm-3">
@@ -39,7 +40,10 @@
       <th>Reciever</th>
       <th>Date</th>
       <!-- Switch to Angular Repeat from Category Factory -->
-      <th ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}">{{category.name}}</th>
+      <th ng-repeat="category in sdc.subDistributionCategories.list 
+        | filter: {sub_dist: true}">
+        {{category.name}}
+      </th>
       <!-- End Angular Category Repeat -->
     </tr>
   </thead>
@@ -49,14 +53,22 @@
       <tr>
         <td>
         <select class="form-control"
-        ng-options="org.id as org.org_name for org in sdc.contacts.list | filter: {org_type: 'sub_distribution'}"
+        ng-options="org.id as org.org_name for org in sdc.contacts.list 
+        | filter: {org_type: 'sub_distribution'}"
         ng-model="sdc.newSubDistribution.contact_id">
         </select>
       </td>
         <td>
             <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp">
         </td>
-        <td ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}"><input class="form-control" type= "number" placeholder = "# of lbs." ng-model="sdc.newSubDistribution.categories[category.id]"></input>
+        <td ng-repeat="category in sdc.subDistributionCategories.list 
+          | filter: {sub_dist: true}">
+          <input 
+            class="form-control" 
+            type="number" 
+            placeholder="# of lbs." 
+            ng-model="sdc.newSubDistribution.categories[category.id]">
+          </input>
         </td>
         <td>
           <button
@@ -68,32 +80,56 @@
         </td>
       </tr>
 
-      <tr ng-repeat="subDistribution in sdc.subDistributions.list
+      <!-- List Distributions -->
+      <tr ng-repeat="subDistribution in (filtered = (sdc.subDistributions.list
       | orderBy: '-timestamp'
       | filter: {id: sdc.org_id||undefined}:true
       | filter: sdc.search
-      | dateRange:startDate:endDate">
+      | dateRange:daterange.start:daterange.end))">
         <!-- First Name -->
         <td>
-          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.org_name}}</span>
+          <span 
+            class="form-control" 
+            disabled 
+            ng-if="!subDistribution.editable">
+            {{subDistribution.org_name}}
+          </span>
           <span ng-if="subDistribution.editable">
             <input class="form-control" type="text" ng-model="subDistribution.org_name">
           </span>
         </td>
+
         <!-- Last Name -->
         <td>
-          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.date | date: 'MM/dd/yyyy'}}</span>
+          <span 
+            class="form-control" 
+            disabled 
+            ng-if="!subDistribution.editable">
+            {{subDistribution.timestamp | date: 'MM/dd/yyyy'}}
+          </span>
           <span ng-if="subDistribution.editable">
             <input class="form-control" type="date" ng-model="subDistribution.timestamp">
           </span>
         </td>
+
         <!-- Categories -->
-        <td ng-repeat="category in sdc.subDistributionCategories.list  | filter: {sub_dist: true}">
-          <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.categories[category.id]}}</span>
+        <td 
+          ng-repeat="category in sdc.subDistributionCategories.list 
+          | filter: {sub_dist: true}">
+          <span 
+            class="form-control" 
+            disabled 
+            ng-if="!subDistribution.editable">
+            {{subDistribution.categories[category.id]}}
+          </span>
           <span ng-if="subDistribution.editable">
-            <input class="form-control" type="number" ng-model="subDistribution.categories[category.id]">
+            <input 
+              class="form-control" 
+              type="number" 
+              ng-model="subDistribution.categories[category.id]">
           </span>
         </td>
+
         <!-- Edit -->
         <td>
           <!-- Not editable -->
@@ -129,6 +165,18 @@
           </span>
         </td>
       </tr>
+
+      <!-- Totals -->
+      <tr ng-if="sdc.user.is_admin">
+        <td></td>
+        <td>Totals:</td>
+        <td 
+          ng-repeat="category in sdc.subDistributionCategories.list 
+          | filter: {sub_dist: true}">
+          <span>{{(filtered | mergeCategories)[category.id]}}</span>
+        </td>
+      </tr>
+
     </tbody>
   </table>
 </div>
