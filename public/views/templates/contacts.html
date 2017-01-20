@@ -1,15 +1,10 @@
 <div class="container">
   <h2>Manage Contacts</h2>
 
-  <button type="button"
-  class="btn btn-primary"
-  ng-click="cc.getCsv()">Download as CSV</button>
-
-  {{cc.filter}}
   <!-- Filter Form -->
   <div class="row">
     <form>
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-3">
         <label>Organizations:</label>
         <select
            class="form-control"
@@ -18,7 +13,7 @@
         </select>
       </div>
 
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-3">
         <label>Individuals:</label>
         <select
            class="form-control"
@@ -32,6 +27,16 @@
         <input class="form-control" type="search" ng-model="cc.search">
       </div>
     </form>
+
+    <div class="form-group col-sm-2">
+      <button 
+         type="button"
+         class="btn btn-primary form-control csv-button"
+         ng-click="cc.getCsv()">
+        Download as CSV
+      </button>
+    </div>
+
   </div>
 
   <!-- Contact Cards -->

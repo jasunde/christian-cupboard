@@ -19,7 +19,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
        for (var i = 0; i < donations.list.length; i++) {
          donations.list[i].timestamp = new Date(donations.list[i].timestamp);
        }
-       console.log("data type: ", typeof donations.list[0].timestamp);
+       if (verbose) {console.log("data type: ", typeof donations.list[0].timestamp);}
        if (verbose) {console.log('donations', donations.list);}
      })
      .catch(function (err) {
