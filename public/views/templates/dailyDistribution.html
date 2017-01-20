@@ -5,6 +5,21 @@
 <div class="container" ng-show="ddc.gotData">
 <h2>Daily Distribution</h2>
 
+<div class="form-group col-sm-4">
+  <label>Start Date:</label>
+  <input class = "form-control" type="date" ng-model="startDate"></input>
+</div>
+<div class="form-group col-sm-4">
+  <label>End Date:</label>
+  <input class = "form-control" type="date" ng-model="endDate"></input>
+</div>
+
+<div class="form-group col-sm-4">
+  <label>Search:</label>
+  <input class="form-control" type="search" ng-model="ddc.search">
+</div>
+</form>
+
 <table wt-responsive-table class="table">
   <div>
   <thead class="testtesttest">
@@ -33,7 +48,7 @@
           <input class="form-control" type= "number" ng-model="ddc.newDistribution.categories[category.id]"></input>
         </td>
         <td><input class="form-control" ng-model="ddc.newDistribution.time_weighted"></td>
-        <td><input class="form-control" ng-model="ddc.newDistribution.date_weighted"></td>
+        <td><input class="form-control" type="date" ng-model="ddc.newDistribution.date_weighted"></td>
         <td>
           <button
             type="button"
@@ -44,7 +59,9 @@
         </td>
       </tr>
 
-      <tr ng-repeat="distribution in ddc.dailyDistributions.list | orderBy: '-distribution_id'">
+      <tr ng-repeat="distribution in ddc.dailyDistributions.list
+      | filter: ddc.search
+      | dateRange:startDate:endDate">
         <!-- First Name -->
         <td>
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.first_name}}</span>
@@ -70,17 +87,17 @@
         <td>
           <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.time_weighed}}</span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.time_weighed">
+            <input class="form-control" type="date" ng-model="distribution.time_weighed">
           </span>
         </td>
         <!-- Date Weighed -->
         <td>
           <span class="form-control"
-          disabled ng-if="!distribution.editable">{{distribution.date_weighed}}</span>
+          disabled ng-if="!distribution.editable">{{distribution.date_added}}</span>
           <span ng-if="distribution.editable">
             <input class="form-control"
-            type="text"
-            ng-model="distribution.date_weighed">
+            type="date" value="{{distribution.timestamp | date 'MM/dd/yyyy'}}"
+            ng-model="distribution.date_added" required>
           </span>
         </td>
         <!-- Edit -->
@@ -121,24 +138,5 @@
     </tbody>
   </table>
 </div>
-
-    <!-- INPUTS TO DISPLAY DATA AND EDIT -->
-  <!-- <table class="rescueTable">
-    <thead class="rescueForm">
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Family Size</th>
-        <th>Food Weight</th>
-        <th>Produce Weight</th>
-        <th>Hygeine Product Weight</th>
-        <th>Time Weighed</th>
-        <th>Date Weighed</th>
-      </tr>
-    </thead>
-  <tbody>
-    <tr>
-      <td ng-repeat="name in ddc.dailyDist.first_name">{{name.first_name}}</td>
-    </tr>
-  </tbody>
-  </table> -->
+</div>
+</div>

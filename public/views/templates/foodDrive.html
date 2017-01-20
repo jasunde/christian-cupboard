@@ -97,6 +97,7 @@
       <tr ng-repeat="donation in fdc.driveDonations.list
       | orderBy:'-timestamp'
       | filter: {org_type: '!food_rescue'}
+      | filter: {donor: true}
       | filter: {id: fdc.org_id||undefined}:true
       | filter: fdc.search
       | dateRange:startDate:endDate">

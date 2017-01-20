@@ -5,6 +5,34 @@
 <div class="container" ng-show="sdc.gotData">
 <h2>Sub Distribution</h2>
 
+<div class="row">
+  <form>
+    <div class="form-group col-sm-3">
+      <label>Reciever:</label>
+      <select
+         class="form-control"
+         ng-options="org.id as org.org_name for org in sdc.contacts.list | filter: {org_type: 'sub_distribution'}"
+         ng-model="sdc.org_id">
+         <option value="" ng-value="">All</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-3">
+      <label>Start Date:</label>
+      <input class = "form-control" type="date" ng-model="startDate"></input>
+    </div>
+    <div class="form-group col-sm-3">
+      <label>End Date:</label>
+      <input class = "form-control" type="date" ng-model="endDate"></input>
+    </div>
+
+    <div class="form-group col-sm-3">
+      <label>Search:</label>
+      <input class="form-control" type="search" ng-model="sdc.search">
+    </div>
+  </form>
+</div>
+
 <table wt-responsive-table class="table admin">
   <thead class="rescueForm">
     <tr>
@@ -20,8 +48,9 @@
       <!-- Add Distribution -->
       <tr>
         <td>
-        <select ng-model="sdc.newSubDistribution.org_name" class="form-control">
-          <option ng-repeat="contact in sdc.subDistributions.list | filter: {org_type: sub_distribution}" value="{{contact.org_name}}">{{contact.org_name}}</option>
+        <select class="form-control"
+        ng-options="org.id as org.org_name for org in sdc.contacts.list | filter: {org_type: 'sub_distribution'}"
+        ng-model="sdc.newSubDistribution.contact_id">
         </select>
       </td>
         <td>
@@ -39,7 +68,11 @@
         </td>
       </tr>
 
-      <tr ng-repeat="subDistribution in sdc.subDistributions.list">
+      <tr ng-repeat="subDistribution in sdc.subDistributions.list
+      | orderBy: '-timestamp'
+      | filter: {id: sdc.org_id||undefined}:true
+      | filter: sdc.search
+      | dateRange:startDate:endDate">
         <!-- First Name -->
         <td>
           <span class="form-control" disabled ng-if="!subDistribution.editable">{{subDistribution.org_name}}</span>
