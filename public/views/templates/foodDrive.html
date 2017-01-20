@@ -1,10 +1,10 @@
 <div ng-hide="fdc.gotData" class="ng-hide">
-<div id="loader"></div>
+  <div id="loader"></div>
 </div>
 
 <div class="container-fluid" ng-show="fdc.gotData">
-<h2>Food Drive</h2>
-
+  <h2>Food Drive</h2>
+</div>
 <form ng-if="fdc.user.is_admin">
   <div class="form-group col-sm-3">
     <label>Organizations:</label>
@@ -20,22 +20,21 @@
 
   <div class="form-group col-sm-3">
     <label>Start Date:</label>
-    <input class = "form-control" type="date" ng-model="daterange.start"></input>
+    <input class="form-control" type="date" ng-model="daterange.start"/>
   </div>
   <div class="form-group col-sm-3">
     <label>End Date:</label>
-    <input class = "form-control" type="date" ng-model="daterange.end"></input>
+    <input class="form-control" type="date" ng-model="daterange.end"/>
   </div>
 
   <div class="form-group col-sm-3">
     <label>Search:</label>
-    <input class="form-control" type="search" ng-model="fdc.search">
+    <input class="form-control" type="search" ng-model="fdc.search"/>
   </div>
 </form>
 
-
 <div class="overflowTable">
-  <table  wt-responsive-table class="table">
+<table wt-responsive-table class="table">
     <thead>
       <tr class="add-form">
         <th>Date</th>
@@ -56,10 +55,9 @@
       </tr>
     </thead>
     <tbody>
-
       <!-- Add User -->
       <tr class="add-form">
-          <td>
+        <td>
           <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
         </td>
         <td>
@@ -211,9 +209,9 @@
               <save-glyph boolean="donation.saving"></save-glyph>
             </button>
             <button
-                    type="button"
-                    class="btn btn-default"
-                    ng-click="fdc.toggleEditable(donation)">
+                type="button"
+                class="btn btn-default"
+                ng-click="fdc.toggleEditable(donation)">
               <span class="glyphicon glyphicon-remove"></span> Cancel
             </button>
           </span>
@@ -230,5 +228,4 @@
       </tr>
     </tbody>
   </table>
-  </div>
 </div>
