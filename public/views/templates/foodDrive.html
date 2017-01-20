@@ -2,11 +2,11 @@
 <div id="loader"></div>
 </div>
 
-<div class="container-fluid" ng-show="fdc.gotData">
+<div class="container" ng-show="fdc.gotData">
 <h2>Food Drive</h2>
 
 <form ng-if="fdc.user.is_admin">
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <label>Organizations:</label>
     <select
        class="form-control"
@@ -18,26 +18,28 @@
     </select>
   </div>
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <label>Start Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.start"></input>
   </div>
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <label>End Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.end"></input>
   </div>
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-4">
     <label>Search:</label>
     <input class="form-control" type="search" ng-model="fdc.search">
   </div>
 
-  <button 
-    type="button" 
-    class="btn btn-primary" 
-    ng-click="fdc.getCsv()">
-    Download as CSV
-  </button>
+  <div class="form-group col-sm-2">
+    <button 
+       type="button" 
+       class="btn btn-primary form-control csv-button" 
+       ng-click="fdc.getCsv()">
+      Download as CSV
+    </button>
+  </div>
 </form>
 
 <table  wt-responsive-table class="table table-striped">

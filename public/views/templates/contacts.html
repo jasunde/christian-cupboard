@@ -4,7 +4,7 @@
   <!-- Filter Form -->
   <div class="row">
     <form>
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-3">
         <label>Organizations:</label>
         <select
            class="form-control"
@@ -13,7 +13,7 @@
         </select>
       </div>
 
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-3">
         <label>Individuals:</label>
         <select
            class="form-control"
@@ -28,12 +28,14 @@
       </div>
     </form>
 
-    <button 
-      type="button"
-      class="btn btn-primary"
-      ng-click="cc.getCsv()">
-      Download as CSV
-    </button>
+    <div class="form-group col-sm-2">
+      <button 
+         type="button"
+         class="btn btn-primary form-control csv-button"
+         ng-click="cc.getCsv()">
+        Download as CSV
+      </button>
+    </div>
 
   </div>
 
