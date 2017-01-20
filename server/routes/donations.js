@@ -57,7 +57,7 @@ router.get('/', function (req, res) {
       var donations = result.rows
 
       if(donations.length) {
-        donations.forEach(function (donation) {
+        donations.forEach(function (donation, index) {
           client.query(
             'SELECT * FROM donation_details '+
             'WHERE donation_id = $1',
@@ -67,11 +67,12 @@ router.get('/', function (req, res) {
               donation.categories = result.rows.reduce(function (total, current) {
                 total[current.category_id] = current.amount;
                 return total;
-              }, {})
-            })
-        })
-
-        client.on('drain', client.end.bind(client) )
+              }, {});
+              if(donations.length === index + 1) {
+                client.release();
+              }
+            });
+        });
 
         client.on('end', function () {
           res.send(donations)

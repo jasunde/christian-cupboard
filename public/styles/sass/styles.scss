@@ -171,3 +171,23 @@ input[type=date]::-webkit-inner-spin-button {
     left: -30px;
     height: 50px;
 }
+
+.table {
+  color: black;
+  border-collapse: collapse;
+}
+
+.tableForms {
+  background-color: magenta
+}
+
+.testtesttest {
+  color: $ccYellow;
+  border-top: none;
+  border-bottom: none;
+  background-color: $ccBlue;
+  th, td, tr {
+    border: none !important;
+    text-align: center;
+  }
+}

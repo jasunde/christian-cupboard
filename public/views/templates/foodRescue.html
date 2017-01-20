@@ -4,7 +4,38 @@
 <div class="container" ng-show="frc.gotData">
 <h2>Food Rescue Form</h2>
 
-<table  wt-responsive-table class="table table-striped">
+<!-- Filter Form -->
+<div class="row" ng-if="frc.user.is_admin">
+  <form>
+    <div class="form-group col-sm-3">
+      <label>Donors:</label>
+      <select
+         class="form-control"
+         ng-options="org.id as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
+         ng-model="frc.org_id">
+         <option value="" ng-value="">All</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-3">
+      <label>Start Date:</label>
+      <input class="form-control" type="date" ng-model="daterange.start"></input>
+    </div>
+    <div class="form-group col-sm-3">
+      <label>End Date:</label>
+      <input class="form-control" type="date" ng-model="daterange.end"></input>
+    </div>
+
+    <div class="form-group col-sm-3">
+      <label>Search:</label>
+      <input class="form-control" type="search" ng-model="frc.search">
+    </div>
+  </form>
+</div>
+
+
+<!-- New Donation -->
+<table wt-responsive-table class="table">
   <thead class="rescueForm">
     <tr>
       <th>Donor</th>
@@ -14,20 +45,30 @@
     </tr>
   </thead>
     <tbody>
-      <!-- Add Distribution -->
       <tr>
+
+        <!-- Select Org -->         
         <td>
         <select ng-model="frc.newDonation.contact_id" class="form-control">
-          <option ng-repeat="contact in frc.rescueContacts.list | filter: 'food_rescue'" value="{{contact.id}}">{{contact.org_name}}</option>
+          <option 
+            ng-repeat="contact in frc.rescueContacts.list | filter: 'food_rescue'" 
+            value="{{contact.id}}">
+            {{contact.org_name}}
+          </option>
         </select>
       </td>
+
+      <!-- Select Date -->
       <td>
         <input type="date" ng-model="frc.newDonation.timestamp" class="form-control" required>
       </td>
+
+      <!-- Input Weights -->
       <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
         <input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]" class="form-control">
       </td>
-        <!-- Donation Date -->
+
+      <!-- Add Button -->
         <td>
           <button
             type="button"
@@ -38,7 +79,14 @@
         </td>
       </tr>
 
-    <tr ng-repeat="donation in frc.rescueDonations.list | orderBy: '-timestamp'">
+    <!-- List Donations -->
+    <tr ng-repeat="donation in (filtered = (frc.rescueDonations.list
+    | orderBy: '-timestamp'
+    | filter: {org_type: 'food_rescue'}
+    | filter: {id: frc.org_id||undefined}:true
+    | filter: frc.search
+    | dateRange:daterange.start:daterange.end))">
+
         <!-- Donor -->
         <td>
           <span class="form-control"
@@ -49,14 +97,15 @@
                    ng-model="donation.org_name">
           </span>
         </td>
-        <!-- Last Name -->
+
+        <!-- Timestamp -->
         <td>
           <span class="form-control"
-                disabled ng-if="!donation.editable">{{donation.date | date: 'MM/dd/yyyy'}}</span>
+                disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
             <input class="form-control"
-                   type="text"
-                   ng-model="donation.date" required>
+                   type="date"
+                   ng-model="donation.timestamp" required>
           </span>
         </td>
         <!-- Categories -->
@@ -69,8 +118,10 @@
                    ng-model="donation.categories[category.id]">
           </span>
         </td>
+
         <!-- Edit -->
         <td>
+
           <!-- Not editable -->
           <span ng-if="!donation.editable">
             <button
@@ -87,6 +138,7 @@
               <delete-glyph boolean="donation.saving"></delete-glyph>
             </button>
           </span>
+
           <!-- Editable -->
           <span ng-if="donation.editable">
             <button
@@ -104,8 +156,16 @@
           </span>
         </td>
       </tr>
+
+      <!-- Totals -->
+      <tr ng-if="frc.user.is_admin">
+        <td></td>
+        <td>Totals:</td>
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
+          <span>{{(filtered | mergeCategories)[category.id]}}</span>
+        </td>
+      </tr>
+
     </tbody>
   </table>
 </div>
-<!-- </div>
-  </div> -->

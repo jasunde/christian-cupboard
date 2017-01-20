@@ -7,6 +7,7 @@ var decoder = require('./modules/decoder');
 var csv = require('express-csv');
 
 // source routes
+var isUser = require('./routes/isUser')
 var users = require('./routes/users')
 var categories = require('./routes/categories')
 var contacts = require('./routes/contacts')
@@ -14,7 +15,9 @@ var donations = require('./routes/donations')
 var distributions = require('./routes/distributions')
 
 // custom middleware
+var decoder = require('./modules/decoder')
 var userInfo = require('./modules/userInfo')
+var isAdmin = require('./modules/isAdmin')
 
 app.set('port', process.env.PORT || '3000');
 
@@ -28,15 +31,26 @@ app.get('/', function (req, res) {
 app.use(express.static('public'));
 
 app.use(bodyParser.json())
-// app.use(decoder)
-// app.use(userInfo)
 
-// route the routes
-app.use('/users', users)
-app.use('/categories', categories)
-app.use('/contacts', contacts)
+// Authenticate
+app.use(decoder)
+
+// Get Authorization info
+app.use(userInfo)
+
+// general user routes
+app.use('/users/email', isUser)
 app.use('/donations', donations)
 app.use('/distributions', distributions)
+
+// limited user rights
+app.use('/categories', categories)
+app.use('/contacts', contacts)
+
+// exclusive admin user routes
+app.use(isAdmin)
+
+app.use('/users', users)
 
 app.listen(app.get('port'), function () {
   console.log('Listening on port', app.get('port'));
