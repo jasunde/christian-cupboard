@@ -37,7 +37,7 @@
 <!-- New Donation -->
 <table wt-responsive-table class="table">
   <thead class="rescueForm">
-    <tr>
+    <tr class="add-form">
       <th>Donor</th>
       <th>Date</th>
       <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
@@ -45,7 +45,7 @@
     </tr>
   </thead>
     <tbody>
-      <tr>
+      <tr class="add-form">
 
         <!-- Select Org -->         
         <td>
