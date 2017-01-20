@@ -1,4 +1,6 @@
-app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q){
+app.controller("FoodDriveController", 
+  ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', 
+  function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q, dateRangeFilter){
     var self = this;
     var verbose = true;
 
@@ -12,6 +14,8 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
     self.driveCategories = CategoryFactory.categories;
     self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
+    self.user = Auth.user
+    console.log(self.driveContacts);
 
     if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
       self.gotData = true;
@@ -58,7 +62,7 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
         if(verbose) {console.log("editing", donation); }
 
         donation.saving=true;
-        
+
         DonationsFactory.editDonations(donation)
         .then(function (result){
           donation.saving=false;
@@ -83,5 +87,28 @@ app.controller("FoodDriveController", ['DonationsFactory', 'CategoryFactory', 'C
       } else {
         donation.editable = true;
       }
+    };
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10) {
+        dd='0'+dd
+    }
+    if(mm<10) {
+        mm='0'+mm
+    }
+    today = mm+'/'+dd+'/'+yyyy;
+
+
+    var now = new Date().getTime();
+    $scope.date = new Date(2015, 10, 10);
+    $scope.ago = now < $scope.date.getTime();
+    $scope.before = now > $scope.date.getTime();
+
+    $scope.daterange = {
+      start: new Date(today),
+      end: new Date(today)
     };
   }]);
