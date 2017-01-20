@@ -14,6 +14,7 @@ app.controller("FoodDriveController",
     self.driveCategories = CategoryFactory.categories;
     self.driveContacts = ContactsFactory.contacts;
     self.driveDonations = DonationsFactory.donations;
+    self.user = Auth.user
     console.log(self.driveContacts);
 
     if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
