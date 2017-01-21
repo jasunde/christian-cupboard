@@ -35,7 +35,7 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
 
 
   $scope.$on('user:updated', function () {
-    ContactsFactory.getContacts();
+    ContactsFactory.getNonClients();
   });
 
   self.changeFilter = function (filter) {
