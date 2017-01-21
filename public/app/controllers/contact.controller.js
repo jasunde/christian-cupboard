@@ -10,38 +10,27 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
   }
 
 
-  self.org_types = [ {
-    name: '',
+  self.contact_filter = [ {
+    name: 'All Contacts',
     filter: {}
   }, {
-    name: 'All',
-    filter: {org: true}
+    name: 'All Organizations',
+    filter: { org: true }
   }, {
-    name: 'Food Rescue',
-    filter: {org_type: 'food_rescue' }
+    name: 'Food Rescue Orgs',
+    filter: { org_type: 'food_rescue' }
   }, {
-    name: 'Sub-Distribution',
-    filter: {org_type: 'sub_distribution' }
+    name: 'Sub-Distribution Orgs',
+    filter: { org_type: 'sub_distribution' }
   }, {
-    name: 'Donor',
-    filter: {org_type: 'donor' }
-  } ];
-
-  self.ind_types = [{
-    name: '',
-    filter:  {}
+    name: 'All Donors',
+    filter: { donor: true }
   }, {
-    name: 'All',
-    filter: {org: false}
-    
+    name: 'Donor Orgs',
+    filter: { org_type: 'donor' }
   }, {
-    name: 'Client',
-    filter: {donor: false, org: false}
-    
-  }, {
-    name: 'Donor',
-    filter: {donor: true, org: false}
-    
+    name: 'Individual Donors',
+    filter: { donor: true, org: false }
   }];
 
 

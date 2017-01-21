@@ -5,19 +5,10 @@
   <div class="row">
     <form>
       <div class="form-group col-sm-2">
-        <label>Organizations:</label>
+        <label>Filter Contacts:</label>
         <select
            class="form-control"
-           ng-options="type.filter as type.name for type in cc.org_types" 
-           ng-model="cc.filter">
-        </select>
-      </div>
-
-      <div class="form-group col-sm-2">
-        <label>Individuals:</label>
-        <select
-           class="form-control"
-           ng-options="type.filter as type.name for type in cc.ind_types" 
+           ng-options="type.filter as type.name for type in cc.contact_filter" 
            ng-model="cc.filter">
         </select>
       </div>
