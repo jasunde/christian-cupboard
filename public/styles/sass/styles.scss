@@ -191,3 +191,18 @@ input[type=date]::-webkit-inner-spin-button {
     text-align: center;
   }
 }
+
+.form-card {
+  background-color: $ccYellow;
+  padding: 15px;
+  color: $ccBlue;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+  input {
+    -webkit-appearance:none
+  }
+  th, td, tr {
+    border: none !important;
+    text-align: center;
+  }
+}

@@ -2,9 +2,11 @@
 <div id="loader"></div>
 </div>
 
-<div class="container-fluid" ng-show="fdc.gotData">
+<div class="container" ng-show="fdc.gotData">
 <h2>Food Drive</h2>
 
+<!-- FILTERS -->
+<div class = "row">
 <form ng-if="fdc.user.is_admin">
   <div class="form-group col-sm-3">
     <label>Organizations:</label>
@@ -22,6 +24,7 @@
     <label>Start Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.start"></input>
   </div>
+
   <div class="form-group col-sm-3">
     <label>End Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.end"></input>
@@ -32,11 +35,85 @@
     <input class="form-control" type="search" ng-model="fdc.search">
   </div>
 </form>
+</div>
 
+<!-- NEW LAYOUT SHITS, ENTER FORM -->
+<div class = "form-card">
+  <div class = "row">
+    <div class = "col-sm-4">
+      <label>Date:</label>
+        <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
+    </div>
+
+    <div class = "col-sm-4">
+      <label>First Name:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.first_name">
+    </div>
+
+    <div class = "col-sm-4">
+      <label>Last Name:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.last_name">
+    </div>
+
+    <div class = "col-sm-4">
+      <label>Address:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.address">
+    </div>
+
+    <div class = "col-sm-2">
+      <label>City:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.city">
+    </div>
+
+    <div class = "col-sm-1">
+      <label>State:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.state" maxlength="2">
+    </div>
+
+    <div class = "col-sm-1">
+      <label>Zip:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.postal_code">
+    </div>
+
+    <div class = "col-sm-2">
+      <label>Email:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.email">
+    </div>
+
+    <div class = "col-sm-2">
+      <label>Telephone:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.telephone">
+    </div>
+
+    <div class = "col-sm-2">
+      <label>Organization:</label>
+        <input class="form-control" type="text" ng-model="fdc.newDonation.org_name">
+    </div>
+
+    <div class = "col-sm-2" ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
+      <label>
+        {{category.name}}
+      </label>
+      <input class="form-control" type="number" ng-model="fdc.newDonation.categories[category.id]">
+    </div>
+
+    <div class = "col-sm-2">
+      <button type="button" class="btn btn-success" ng-click="fdc.submitDonation()">
+        <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
+      </button>
+    </div>
+
+
+
+</div>
+</div>
+<!-- ENTER FORM DONE -->
+<!-- START TABLE DISPLAY BUT NOT REALLY A TABLE DONT JUDGE ME -->
+<!-- OLD TABLE SHITS -->
 
 
 <table  wt-responsive-table class="table">
-    <thead>
+    <!-- <thead>
       <tr class="add-form">
         <th>Date</th>
         <th>First Name</th>
@@ -48,17 +125,17 @@
         <th>Email</th>
         <th>Telephone</th>
         <th>Organization</th>
-        <th 
+        <th
           ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
           {{category.name}}
         </th>
         <th></th>
       </tr>
-    </thead>
+    </thead> -->
     <tbody>
 
       <!-- Add User -->
-      <tr class="add-form">
+      <!-- <tr class="add-form">
           <td>
           <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
         </td>
@@ -97,7 +174,7 @@
             <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
           </button>
         </td>
-      </tr>
+      </tr> -->
 
       <tr ng-repeat="donation in (filtered = (fdc.driveDonations.list
       | orderBy:'-timestamp'

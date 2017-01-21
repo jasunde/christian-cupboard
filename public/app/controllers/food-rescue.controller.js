@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", 
+app.controller("FoodRescueController",
   ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter',
   function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter){
 
@@ -16,6 +16,8 @@ app.controller("FoodRescueController",
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
   self.user = Auth.user;
+
+  console.log(self.rescueDonations);
 
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
