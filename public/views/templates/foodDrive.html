@@ -1,8 +1,7 @@
 <div ng-hide="fdc.gotData" class="ng-hide">
   <div id="loader"></div>
 </div>
-
-<div class="container-fluid" ng-show="fdc.gotData">
+<div class="container" ng-show="fdc.gotData">
   <h2>Food Drive</h2>
 </div>
 <form ng-if="fdc.user.is_admin">
@@ -33,9 +32,8 @@
   </div>
 </form>
 
-<div class="overflowTable">
-<table wt-responsive-table class="table">
-    <thead>
+<table wt-responsive-table class="table col-sm-12">
+    <thead class="rescueForm">
       <tr class="add-form">
         <th>Date</th>
         <th>First Name</th>

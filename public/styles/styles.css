@@ -6254,10 +6254,3 @@ th, td, tr {
 th, td, tr {
   border: none !important;
   text-align: center; }
-
-.overflowTable {
-  overflow-x: scroll; }
-
-th, td, tr {
-  min-width: auto;
-  margin: none; }
