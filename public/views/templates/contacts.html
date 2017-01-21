@@ -13,12 +13,21 @@
         </select>
       </div>
 
+      <div class="form-group col-sm-2">
+        <label>Start Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.start"></input>
+      </div>
+      <div class="form-group col-sm-2">
+        <label>End Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.end"></input>
+      </div>
+
       <div class="form-group col-sm-4">
         <label>Search:</label>
         <input class="form-control" type="search" ng-model="cc.search">
       </div>
 
-      <button class="btn btn-success" ng-click="cc.openModal('md', cc.newContact, 'Add')">
+      <button class="btn btn-success col-sm-2" ng-click="cc.openModal('md', cc.newContact, 'Add')">
         <add-glyph></add-glyph> Contact
       </button>
     </form>
@@ -32,7 +41,8 @@
       | filter: {org: cc.filter.org} 
       | filter: {donor: cc.filter.donor} 
       | filter: cc.search
-      | orderBy: 'sort_name'">
+      | orderBy: 'sort_name'
+      | dateRange:'date_entered':daterange.start:daterange.end">
 
       <div class="clearfix" ng-if="$index % 3 == 0"></div>
       <div class="col-sm-4">
