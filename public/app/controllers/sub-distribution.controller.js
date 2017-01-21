@@ -84,10 +84,6 @@ app.controller("SubDistributionController",
     subDistribution.saving = true;
     DistributionFactory.updateDistribution(subDistribution)
     .then(function (result) {
-      var index = DistributionFactory.distributions.list.findIndex(function (dist) {
-        return dist.distribution_id == subDistribution.distribution_id;
-      })
-      DistributionFactory.distributions.list[index] = subDistribution;
       subDistribution.saving = false;
       subDistribution.editable = false;
       subDistribution = {
@@ -100,9 +96,6 @@ app.controller("SubDistributionController",
     item.saving = true;
     DistributionFactory.deleteDistribution(item)
     .then(function (result) {
-      DistributionFactory.distributions.list = DistributionFactory.distributions.list.filter(function (dist) {
-        return dist.distribution_id != item.distribution_id;
-      });
         item.saving = false;
     })
   }
