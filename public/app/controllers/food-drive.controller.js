@@ -51,11 +51,15 @@ app.controller("FoodDriveController",
     self.submitDonation = function() {
         if(verbose) {console.log("Submitting newDonation", self.newDonation);
       }
-        DonationsFactory.submitDonations(self.newDonation);
-        self.newDonation = {
-          contact_id: undefined,
-          timestamp: new Date(),
-        };
+        self.newDonation.saving=true;
+        DonationsFactory.submitDonations(self.newDonation)
+        .then(function (result) {
+          self.newDonation.saving=false;
+          self.newDonation = {
+            contact_id: undefined,
+            timestamp: new Date(),
+          };
+        });
     };
 
     self.editDonation = function(donation) {

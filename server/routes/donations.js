@@ -174,6 +174,14 @@ router.use(function (req, res, next) {
         })
     }
   } else {
+    req.body.donor = true;
+    if(req.body.org_name) {
+      req.body.org = true;
+      req.body.org_type = donor;
+    } else {
+      req.body.org = false;
+    }
+
     contactService.upsert(req, res)
       .then(function (response) {
         req.body.contact_id = req.contact.id
