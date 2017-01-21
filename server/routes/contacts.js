@@ -24,9 +24,23 @@ router.get('/all', function(req, res) {
     res.send(result.rows);
   })
   .catch(function(err) {
-    console.log('GET all contacts err:', err);
+    console.log('GET all contacts error:', err);
     res.status(500).send(err);
   });
+});
+
+router.get('/non-clients', function (req, res) {
+  pool.query(
+    'SELECT * FROM contacts '+
+    'WHERE NOT (donor = FALSE AND org = FALSE)'
+  )
+  .then(function (result) {
+    res.send(result.rows)
+  })
+  .catch(function (err) {
+    console.log('GET non-client contacts error:', err)
+    res.status(500).send(err);
+  })
 });
 
 router.get('/', function(req, res) {

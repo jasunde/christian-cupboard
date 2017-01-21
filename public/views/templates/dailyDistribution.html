@@ -84,7 +84,7 @@
       <tr ng-repeat="distribution in (filtered = (ddc.dailyDistributions.list
       | filter: ddc.search
       | orderBy: '-timestamp'
-      | dateRange:daterange.start:daterange.end))">
+      | dateRange:'timestamp':daterange.start:daterange.end))">
 
         <!-- Date Weighed -->
         <td>

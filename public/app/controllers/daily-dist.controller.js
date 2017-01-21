@@ -55,7 +55,6 @@ $scope.$on('user:updated', function (event, data) {
     self.newDistribution.saving = true;
     DistributionFactory.addDistribution(self.newDistribution)
       .then(function (result) {
-        DistributionFactory.distributions.list.push(self.newDistribution);
         self.newDistribution = {};
         self.newDistribution.saving = false;
       })
@@ -71,6 +70,10 @@ $scope.$on('user:updated', function (event, data) {
       .then(function (result) {
         distribution.saving = false;
         distribution.editable = false;
+      })
+      .catch(function (err) {
+        distribution.saving = false;
+        distribution.editable = false;
       });
   };
 
@@ -80,9 +83,6 @@ $scope.$on('user:updated', function (event, data) {
 
     DistributionFactory.deleteDistribution(distribution)
       .then(function (result) {
-        DistributionFactory.distributions.list = DistributionFactory.distributions.list.filter(function (dist) {
-          return dist.distribution_id != distribution.distribution_id;
-        })
         distribution.saving = false;
       });
   };
