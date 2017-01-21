@@ -6,6 +6,7 @@ app.controller('ContactController',
   self.contacts = ContactsFactory.contacts;
   self.newContact = {};
 
+    console.log('contacts', self.contacts);
   self.search = '';
   self.org_type = '';
   self.ind_type = '';
@@ -36,20 +37,40 @@ app.controller('ContactController',
     filter: { donor: true, org: false }
   }];
 
+  function sortName(contact) {
+    var name = '';
+    if(contact.org_name) {
+      name = contact.org_name.toLowerCase();
+    } else {
+      name = contact.first_name.toLowerCase();
+    }
+    return name;
+  }
+
+  function getSortNames() {
+    self.contacts.list.forEach(function (contact) {
+      contact.sort_name = sortName(contact);
+    });
+  }
+
+  if(Auth.user.is_admin) {
+    ContactsFactory.getNonClients()
+    .then(getSortNames);
+  }
 
   $scope.$on('user:updated', function () {
-    ContactsFactory.getNonClients();
+    if(Auth.user.is_admin) {
+      ContactsFactory.getNonClients()
+      .then(getSortNames);
+    }
   });
 
-  self.changeFilter = function (filter) {
-    self.filter
-  }
-  
   self.add = function () {
     self.newContact.saving = true;
 
     ContactsFactory.addContact(self.newContact)
     .then(function (result) {
+      getSortNames();
       self.newContact = {};
       self.newContact.saving = false;
     });
@@ -68,17 +89,18 @@ app.controller('ContactController',
 
     ContactsFactory.updateContact(item)
       .then(function (result) {
+        getSortNames();
         item.saving = false;
       });
   };
 
-  self.animationsEnabled = true;
+  self.animationsEnabled = false;
 
-  self.openModal = function (size, contact) {
+  self.openModal = function (size, contact, action) {
     // var parentElem = parentSelector ? 
     //   angular.element($document[0].querySelector(parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
-      // animation: self.animationsEnabled,
+      animation: self.animationsEnabled,
       ariaLabelledBy: 'modal-title',
       ariaDescribedBy: 'modal-body',
       templateUrl: '/views/modals/contactModal.html',
@@ -89,14 +111,31 @@ app.controller('ContactController',
       resolve: {
         contact: function () {
           return contact;
+        },
+        action: function () {
+          return action;
         }
       }
     });
 
-    modalInstance.result.then(function (contact) {
-      self.newContact = contact;
-      console.log('new contact', self.newContact);
-      // self.add();
+    modalInstance.result.then(function (result) {
+      console.log('action', result.action);
+      if(result.action === 'Add') {
+        self.newContact = result.contact;
+        if(self.newContact.org_name) {
+          self.newContact.org = true;
+          if(self.newContact.org_type === 'food_rescue') {
+            self.newContact.donor = true;
+          } else {
+            self.newContact.donor = false;
+          }
+        }
+        self.add();
+        console.log('new contact', self.newContact);
+      } else if (result.action === 'Edit') {
+        console.log('edit contact', result.contact);
+        self.update(result.contact);
+      }
     }, function () {
       // $log.info('Modal dismissed at: ' + new Date());
     });
@@ -104,12 +143,16 @@ app.controller('ContactController',
 
 }]);
 
-app.controller('ContactCtrl', function ($uibModalInstance, contact) {
+app.controller('ContactCtrl', function ($uibModalInstance, contact, action) {
   var $ctrl = this;
   $ctrl.contact = contact;
+  $ctrl.action = action;
 
-  $ctrl.add = function () {
-    $uibModalInstance.close($ctrl.contact);
+  $ctrl.accept = function () {
+    $uibModalInstance.close({
+      contact: $ctrl.contact,
+      action: action
+    });
   };
 
   $ctrl.cancel = function () {

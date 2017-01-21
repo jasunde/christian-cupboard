@@ -1,7 +1,6 @@
 <div class="container">
   <h2>Manage Contacts</h2>
 
-  <button class="btn btn-default" ng-click="cc.openModal('md', cc.newContact)">Modal</button>
   <!-- Filter Form -->
   <div class="row">
     <form>
@@ -18,6 +17,10 @@
         <label>Search:</label>
         <input class="form-control" type="search" ng-model="cc.search">
       </div>
+
+      <button class="btn btn-success" ng-click="cc.openModal('md', cc.newContact, 'Add')">
+        <add-glyph></add-glyph> Contact
+      </button>
     </form>
   </div>
 
@@ -28,7 +31,8 @@
       | filter: {org_type: cc.filter.org_type} 
       | filter: {org: cc.filter.org} 
       | filter: {donor: cc.filter.donor} 
-      | filter: cc.search">
+      | filter: cc.search
+      | orderBy: 'sort_name'">
 
       <div class="clearfix" ng-if="$index % 3 == 0"></div>
       <div class="col-sm-4">
@@ -74,7 +78,7 @@
             <button 
                 type="button" 
                 class="btn btn-primary" 
-                ng-click="cc.toggleEditable(contact)">
+                ng-click="cc.openModal('md', contact, 'Edit')">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
           </span>

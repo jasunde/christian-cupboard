@@ -65,6 +65,36 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
     });
    }
 
+  function addContact(contact) {
+    return $q(function (resolve, reject) {
+      if(Auth.user.idToken) {
+        return $http({
+          method: 'POST',
+          url: '/contacts',
+          data: contact,
+          headers: {
+            id_token: Auth.user.idToken
+          }
+        })
+        .then(function (result) {
+          console.log('Added contact', result);
+          getNonClients()
+          .then(function (result) {
+            resolve(result);
+          })
+          .catch(function (err) {
+            console.log('GET contacts error:', err);
+            reject(err);
+          });
+        })
+        .catch(function (err) {
+          console.log('POST contact error:', err);
+          reject(err);
+        });
+      }
+    });
+  }
+
   function updateContact(contact) {
     return $q(function (resolve, reject) {
       if(Auth.user.idToken) {
@@ -78,7 +108,7 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
         })
         .then(function (result) {
           console.log('updated contact', result);
-          getContacts()
+          getNonClients()
           .then(function (result) {
             resolve(result);
           })
@@ -96,10 +126,11 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
   }
 
    return {
+     addContact: addContact,
      getContacts: getContacts,
+     getNonClients: getNonClients,
      contacts: contacts,
      updateContact: updateContact,
-     getNonClients: getNonClients
    };
 
 }]);
