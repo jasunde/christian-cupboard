@@ -2059,7 +2059,7 @@ th {
 .table-condensed > tbody > tr > td,
 .table-condensed > tfoot > tr > th,
 .table-condensed > tfoot > tr > td {
-  padding: 5px; }
+  padding: 0px; }
 
 .table-bordered {
   border: 1px solid #ddd; }
@@ -6224,3 +6224,19 @@ input[type=date]::-webkit-inner-spin-button {
   top: 0px;
   left: -30px;
   height: 50px; }
+
+.table {
+  color: black;
+  border-collapse: collapse; }
+
+.tableForms {
+  background-color: magenta; }
+
+.add-form {
+  color: #FFC600;
+  border-top: none;
+  border-bottom: none;
+  background-color: #255AA8; }
+  .add-form th, .add-form td, .add-form tr {
+    border: none !important;
+    text-align: center; }

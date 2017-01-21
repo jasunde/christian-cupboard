@@ -1,9 +1,43 @@
-<div class="container">
+<div ng-hide="fdc.gotData" class="ng-hide">
+<div id="loader"></div>
+</div>
+
+<div class="container-fluid" ng-show="fdc.gotData">
 <h2>Food Drive</h2>
 
-<table  wt-responsive-table class="table table-striped">
+<form ng-if="fdc.user.is_admin">
+  <div class="form-group col-sm-3">
+    <label>Organizations:</label>
+    <select
+       class="form-control"
+       ng-options="org.id as org.org_name for org in fdc.driveContacts.list
+       | filter: {org_type: '!food_rescue'}
+       | filter: {org: true}"
+       ng-model="fdc.org_id">
+      <option value="" ng-value="">All</option>
+    </select>
+  </div>
+
+  <div class="form-group col-sm-3">
+    <label>Start Date:</label>
+    <input class = "form-control" type="date" ng-model="daterange.start"></input>
+  </div>
+  <div class="form-group col-sm-3">
+    <label>End Date:</label>
+    <input class = "form-control" type="date" ng-model="daterange.end"></input>
+  </div>
+
+  <div class="form-group col-sm-3">
+    <label>Search:</label>
+    <input class="form-control" type="search" ng-model="fdc.search">
+  </div>
+</form>
+
+
+
+<table  wt-responsive-table class="table">
     <thead>
-      <tr>
+      <tr class="add-form">
         <th>Date</th>
         <th>First Name</th>
         <th>Last Name</th>
@@ -14,13 +48,17 @@
         <th>Email</th>
         <th>Telephone</th>
         <th>Organization</th>
-        <th ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">{{category.name}}</th>
+        <th 
+          ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
+          {{category.name}}
+        </th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
 
       <!-- Add User -->
-      <tr>
+      <tr class="add-form">
           <td>
           <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
         </td>
@@ -61,12 +99,19 @@
         </td>
       </tr>
 
-      <tr ng-repeat="donation in fdc.driveDonations.list | orderBy:'-timestamp' | filter: {org_type: '!food_rescue'}">
+      <tr ng-repeat="donation in (filtered = (fdc.driveDonations.list
+      | orderBy:'-timestamp'
+      | filter: {org_type: '!food_rescue'}
+      | filter: {donor: true}
+      | filter: {id: fdc.org_id||undefined}:true
+      | filter: fdc.search
+      | dateRange:daterange.start:daterange.end))">
            <!-- Date of Donation -->
         <td>
-          <span class="form-control" disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
+          <span class="form-control"
+          disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="date" ng-model="donation.timestamp" value="{{donation.timestamp | date: 'MM/dd/yyyy'}}" required>
+            <input class="form-control" type="date" ng-model="donation.timestamp" required>
           </span>
         </td>
         <!-- First Name -->
@@ -174,6 +219,16 @@
           </span>
         </td>
       </tr>
+
+      <!-- Totals -->
+      <tr ng-if="fdc.user.is_admin">
+        <td colspan="9"></td>
+        <td>Totals:</td>
+        <td ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
+          <span>{{(filtered | mergeCategories)[category.id]}}</span>
+        </td>
+      </tr>
+
     </tbody>
   </table>
 </div>
