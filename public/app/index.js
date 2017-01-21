@@ -1,4 +1,4 @@
-var app = angular.module("christianCupboard", ["ngRoute", "firebase", "wt.responsive"]);
+var app = angular.module("christianCupboard", ["ngRoute", "firebase", "wt.responsive", 'ui.bootstrap']);
 
 var redirect = {
   // controller will not be loaded until $requireSignIn resolves

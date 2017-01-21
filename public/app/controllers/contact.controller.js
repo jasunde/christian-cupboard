@@ -1,7 +1,10 @@
-app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', function (Auth, ContactsFactory, $scope) {
+app.controller('ContactController', 
+  ['Auth', 'ContactsFactory', '$scope', '$uibModal', '$document',
+  function (Auth, ContactsFactory, $scope, $uibModal, $document) {
   var self = this;
 
   self.contacts = ContactsFactory.contacts;
+  self.newContact = {};
 
   self.search = '';
   self.org_type = '';
@@ -68,4 +71,48 @@ app.controller('ContactController', ['Auth', 'ContactsFactory', '$scope', functi
         item.saving = false;
       });
   };
+
+  self.animationsEnabled = true;
+
+  self.openModal = function (size, contact) {
+    // var parentElem = parentSelector ? 
+    //   angular.element($document[0].querySelector(parentSelector)) : undefined;
+    var modalInstance = $uibModal.open({
+      // animation: self.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: '/views/modals/contactModal.html',
+      controller: 'ContactCtrl',
+      controllerAs: '$ctrl',
+      size: size,
+      // appendTo: parentElem,
+      resolve: {
+        contact: function () {
+          return contact;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (contact) {
+      self.newContact = contact;
+      console.log('new contact', self.newContact);
+      // self.add();
+    }, function () {
+      // $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
 }]);
+
+app.controller('ContactCtrl', function ($uibModalInstance, contact) {
+  var $ctrl = this;
+  $ctrl.contact = contact;
+
+  $ctrl.add = function () {
+    $uibModalInstance.close($ctrl.contact);
+  };
+
+  $ctrl.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+});
