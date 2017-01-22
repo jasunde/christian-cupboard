@@ -7,7 +7,7 @@
 <!-- Filter Form -->
 <div class="row form-card" ng-if="frc.user.is_admin">
   <form>
-    <div class="col-sm-3">
+    <div class="form-group col-sm-2">
       <label>Donors:</label>
       <select
          class="form-control"
@@ -17,20 +17,30 @@
       </select>
     </div>
 
-    <div class="col-sm-3">
+    <div class="form-group col-sm-2">
       <label>Start Date:</label>
       <input class="form-control" type="date" ng-model="daterange.start"></input>
     </div>
-    <div class="col-sm-3">
+    <div class="form-group col-sm-2">
       <label>End Date:</label>
       <input class="form-control" type="date" ng-model="daterange.end"></input>
     </div>
 
-    <div class="col-sm-3">
+    <div class="form-group col-sm-4">
       <label>Search:</label>
       <input class="form-control" type="search" ng-model="frc.search">
     </div>
   </form>
+
+  <div class="form-group col-sm-2">
+    <button 
+       type="button" 
+       class="btn btn-primary form-control form-button" 
+       ng-click="fdc.getCsv()">
+      Download as CSV
+    </button>
+  </div>
+
 </div>
 
   <!-- NEW LAYOUT SHITS, ENTER FORM -->
@@ -89,7 +99,7 @@
     | filter: {org_type: 'food_rescue'}
     | filter: {id: frc.contact_id||undefined}:true
     | filter: frc.search
-    | dateRange:daterange.start:daterange.end))">
+    | dateRange:'timestamp':daterange.start:daterange.end))">
 
         <!-- Donor -->
         <td>

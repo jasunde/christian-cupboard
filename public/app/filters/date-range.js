@@ -1,11 +1,12 @@
 app.filter('dateRange', function() {
 
-  return function(date, startDate, endDate){
+  return function(entries, dateProp, startDate, endDate){
     var filteredDates = [];
-    angular.forEach(date, function(date){
-      if(moment(date.timestamp).isBetween(startDate, endDate, 'day', '[]'))
+    angular.forEach(entries, function(entry){
+      if(moment(entry[dateProp]).isBetween(startDate, endDate, 'day', '[]'))
+
       {
-        filteredDates.push(date)
+        filteredDates.push(entry)
       }
     })
     //return a boolean that says whether or not this is between the startDate and endDate

@@ -11,14 +11,23 @@
     <label>Start Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.start"></input>
   </div>
-  <div class="form-group col-sm-4">
+  <div class="form-group col-sm-3">
     <label>End Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.end"></input>
   </div>
 
-  <div class="form-group col-sm-4">
+  <div class="form-group col-sm-3">
     <label>Search:</label>
     <input class="form-control" type="search" ng-model="ddc.search">
+  </div>
+
+  <div class="form-group col-sm-3">
+    <button 
+       type="button" 
+       class="btn btn-primary form-control form-button" 
+       ng-click="ddc.getCsv()">
+      Download as CSV
+    </button>
   </div>
 </form>
 </div>
@@ -81,7 +90,7 @@
       <tr ng-repeat="distribution in (filtered = (ddc.dailyDistributions.list
       | filter: ddc.search
       | orderBy: '-timestamp'
-      | dateRange:daterange.start:daterange.end))">
+      | dateRange:'timestamp':daterange.start:daterange.end))">
 
         <!-- Date Weighed -->
         <td>
