@@ -50,7 +50,8 @@
   </div>
 
   <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" class= "col-sm-2">
-  <label>{{category.name}}:</label><input type="number"
+  <label>{{category.name}}:</label>
+  <input type="number"
   placeholder="# of lbs"
   ng-model="frc.newDonation.categories[category.id]"
   class="form-control">
@@ -71,14 +72,14 @@
 <!-- New Donation -->
 <div class = "container">
 <div class = "row">
-<table wt-responsive-table>
-  <thead class="rescueForm">
+  <div class = "col-sm-12">
+<table wt-responsive-table class = "table-control table table-bordered">
+  <thead class="table-header">
     <tr class="add-form">
       <th>Donor</th>
       <th>Date</th>
       <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       <th></th>
-      <th><th>
     </tr>
   </thead>
     <tbody>
@@ -168,9 +169,11 @@
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
+        <td></td>
       </tr>
     </tbody>
   </table>
+</div>
 </div>
 </div>
 </div>

@@ -6237,8 +6237,8 @@ input[type=date]::-webkit-inner-spin-button {
     text-align: center; }
 
 .form-card {
-  box-shadow: 0px 10px 43px -6px rgba(0, 0, 0, 0.75);
-  border: 2px solid #FFC600;
+  box-shadow: 0px 4px 31px -4px rgba(0, 0, 0, 0.39);
+  border: 1px solid #FFC600;
   padding: 15px;
   color: #255AA8;
   border-top-left-radius: 11px;
@@ -6246,19 +6246,28 @@ input[type=date]::-webkit-inner-spin-button {
   border-bottom-left-radius: 11px;
   border-bottom-right-radius: 11px;
   margin: 20px; }
+  .form-card label {
+    margin: 3px; }
   .form-card input {
     margin: 5px; }
 
-.rescueForm {
+.table-header {
   background-color: #255AA8;
   color: white;
+  padding: 10px;
+  margin: 10px; }
+
+.table-control {
+  border: 1px solid #FFC600;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0px 4px 31px -4px rgba(0, 0, 0, 0.39);
   border-top-left-radius: 11px;
-  border-top-right-radius: 11px; }
-
-table input {
-  -webkit-appearance: none !important; }
-
-table th, table td, table tr {
-  border: none !important;
-  text-align: center;
-  border-bottom: solid 10px yellow; }
+  border-top-right-radius: 11px;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px; }
+  .table-control input {
+    text-align: center; }
+  .table-control th, .table-control td, .table-control tr {
+    border: none !important;
+    text-align: center; }
