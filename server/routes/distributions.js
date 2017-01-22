@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var pgEscape = require('pg-escape')
 var contactService = require('../modules/contactService')
 var pg = require('pg');
 
@@ -9,11 +10,25 @@ var pool = new pg.Pool(config.pg)
 
 var MAX_GET = 1000;
 
-function buildQuery(query) {
+function buildQuery(query, categories) {
   var param = 1;
+  console.log('categories', categories);
+  var categoryList = ''
+  categories.forEach(function (category, index) {
+    categoryList += ' "' + pgEscape(category.name) + '" NUMERIC'
+    if(index < categories.length - 1) {
+      categoryList += ', '
+    } 
+  })
   var result = {
-    text: 'SELECT distributions.id as distribution_id, contacts.id as contact_id, * FROM distributions '+
-    'JOIN contacts ON distributions.contact_id = contacts.id',
+    text: `SELECT * FROM 
+          crosstab('SELECT distributions.id AS distribution_id, distributions.contact_id AS contact_id, distributions.timestamp AS timestamp, name, amount FROM distributions 
+          JOIN distribution_details ON distribution_id = distribution_details.distribution_id 
+          JOIN categories ON categories.id = distribution_details.category_id 
+          ORDER BY 1,2', 
+          'SELECT name FROM categories') 
+          AS ct(distribution_id INTEGER, contact_id INTEGER, timestamp TIMESTAMP, ${categoryList}) 
+        JOIN contacts ON contacts.id = contact_id`,
     values: []
   }
 
@@ -126,11 +141,25 @@ router.get('/individuals', function(req, res) {
 router.get('/', function (req, res) {
   pool.connect()
     .then(function(client) {
-      var query = buildQuery(req.query)
-
-      client.query(query)
+      client.query(
+        'SELECT * FROM categories'
+      )
         .then(function(result) {
-          getDetails(result.rows, client, res)
+          var query = buildQuery(req.query, result.rows);
+
+          client.query(query)
+          .then(function (result) {
+            client.release()
+            res.send(result.rows)
+          })
+          .catch(function (err) {
+            console.log('GET distributions error:', err);
+            res.status(500).send(err)
+          });
+        })
+        .catch(function (err) {
+          console.log('GET categories error:', err);
+          res.status(500).send(err)
         });
     });
 });
