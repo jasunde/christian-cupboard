@@ -31,7 +31,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
         .then(function (result) {
           categories.list = result.data;
           categories.map = categories.list.reduce(function (catMap, category) {
-            catMap[category.id] = undefined;
+            catMap[category.name] = category.id;
             return catMap;
           }, {});
           if(verbose) {console.log('map', categories.list);}

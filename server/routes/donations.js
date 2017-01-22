@@ -1,18 +1,32 @@
-var express = require('express')
-var router = express.Router()
-var contactService = require('../modules/contactService')
-var pg = require('pg')
-var config = require('../config')
+var express = require('express');
+var router = express.Router();
+var pgEscape = require('pg-escape');
+var contactService = require('../modules/contactService');
+var pg = require('pg');
+var config = require('../config');
 
 var pool = new pg.Pool(config.pg)
 
 var MAX_GET = 1000
 
-function buildQuery(query) {
+function buildQuery(query, categories) {
   var param = 1;
+  var categoryList = ''
+  categories.forEach(function (category, index) {
+    categoryList += ' "' + pgEscape(category.name) + '" NUMERIC'
+    if(index < categories.length - 1) {
+      categoryList += ', '
+    } 
+  })
   var result = {
-    text: 'SELECT donations.id as donation_id, contacts.id as contact_id, * FROM donations '+
-      'JOIN contacts ON donations.contact_id = contacts.id',
+    text: `SELECT * FROM 
+          crosstab('SELECT donations.id AS donation_id, donations.contact_id AS contact_id, donations.timestamp AS timestamp, name, amount FROM donations 
+          JOIN donation_details ON donations.id = donation_details.donation_id 
+          JOIN categories ON categories.id = donation_details.category_id 
+          ORDER BY 1,2', 
+          'SELECT name FROM categories') 
+          AS ct(donation_id INTEGER, contact_id INTEGER, timestamp TIMESTAMP, ${categoryList}) 
+        JOIN contacts ON contacts.id = contact_id`,
     values: []
   }
 
@@ -50,45 +64,31 @@ function buildQuery(query) {
 router.get('/', function (req, res) {
   pool.connect()
   .then(function (client) {
-    var query = buildQuery(req.query)
-
-    client.query(query)
-    .then(function (result) {
-      var donations = result.rows
-
-      if(donations.length) {
-        donations.forEach(function (donation, index) {
-          client.query(
-            'SELECT * FROM donation_details '+
-            'WHERE donation_id = $1',
-            [donation.donation_id]
-          )
-            .then(function (result) {
-              donation.categories = result.rows.reduce(function (total, current) {
-                total[current.category_id] = parseFloat(current.amount);
-                return total;
-              }, {});
-              if(donations.length === index + 1) {
-                client.release();
-              }
-            });
-        });
-
-        client.on('end', function () {
-          res.send(donations)
+    client.query(
+      'SELECT * FROM categories'
+    )
+      .then(function (result) {
+        var query = buildQuery(req.query, result.rows);
+        console.log(query);
+               
+        client.query(query)
+        .then(function (result) {
+          client.release()
+          res.send(result.rows)
         })
-
-        client.on('error', function (err) {
+        .catch(function (err) {
+          console.log('GET donations error:', err)
           res.status(500).send(err)
-        })
-      } else {
-        client.release()
-        res.send(donations)
-      }
+        });
+      })
+      .catch(function (err) {
+        console.log('GET categories error:', err)
+        res.status(500).send(err)
+      });
+  });
 
-    })
-  })
-})
+
+});
 
 // Get by ID
 router.get('/id/:id', function (req, res) {
