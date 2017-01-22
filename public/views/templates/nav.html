@@ -1,31 +1,56 @@
-<div ng-controller="NavController as nc" id="navStyle">
+<div ng-controller="NavController as nc">
 
-<img src="/resources/CCEFS-Logo-ReverseWhite.png" id="logo">
+<div class = "navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="accentImage">
+      <img src="/resources/background.png"></img>
+    </div>
+    <a href="http://ccefs.org/" class="navbar-brand">Christian Cupboard</a>
 
-<div class="dropdown">
-  <button class="dropbtn">Inbound</button>
-  <div class="dropdown-content">
-    <a href="#foodRescue">Food Rescue</a>
-    <a href="#foodDrive">Food Drive</a>
+    <div ng-if="nc.displayName.name">
+      <button class = "navbar-toggle" data-toggle="collapse" data-target= ".navHeaderCollapse" type="button">
+        <span class = "icon-bar"></span>
+        <span class = "icon-bar"></span>
+        <span class = "icon-bar"></span>
+      </button>
+
+      <div class= "collapse navbar-collapse navHeaderCollapse">
+
+        <ul class= "nav navbar-nav navbar-right">
+          <li class = "dropdown">
+          <a class = "dropdown-toggle" data-toggle = "dropdown">Inbound <b class= "caret"></b></a>
+            <ul class = "dropdown-menu">
+              <li><a href="#foodRescue">Food Rescue</a></li>
+              <li><a href="#foodDrive">Food Drive</a></li>
+            </ul>
+          </li>
+          <li class = "dropdown">
+            <a class = "dropdown-toggle" data-toggle = "dropdown">Outbound <b class= "caret"></b></a>
+              <ul class = "dropdown-menu">
+                  <li><a href="#dailyDistribution">Daily Distribution</a></li>
+                  <li><a href="#subDistribution">Sub Distribution</a></li>
+                </ul>
+              </li>
+          <li class = "dropdown">
+            <a class = "dropdown-toggle" data-toggle = "dropdown">Admin <b class= "caret"></b></a>
+              <ul class = "dropdown-menu">
+                <!-- <li><a href="#">Reports</a></li> -->
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#users">Users</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+              </ul>
+          </li>
+          <li ng-if="nc.displayName.name"><p class="navbar-text">{{nc.displayName.name}}</p>
+          </li>
+          <li>
+            <div class= "btn-group">
+            <button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills">Log Out</button>
+          </div>
+          </li>
+        </ul>
+
+      </div>
   </div>
 </div>
-
-<div class="dropdown">
-  <button class="dropbtn">Outbound</button>
-  <div class="dropdown-content">
-    <a href="#">Distribution</a>
-    <a href="#">Sub Distribution</a>
-  </div>
 </div>
-
-<div class="dropdown">
-  <button class="dropbtn">Admin</button>
-  <div class="dropdown-content">
-    <a href="#">Reports</a>
-    <a href="#categories">Categories</a>
-    <a href="#users">Users</a>
-  </div>
-</div>
-
-<button ng-click="nc.logOut()" id="logOutButton">Log Out</button>
 </div>

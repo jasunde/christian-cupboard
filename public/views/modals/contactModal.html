@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-title">{{$ctrl.action}} Contact</h3>
+</div>
+<div class="modal-body" id="modal-body">
+  <form>
+    <div class="form-group">
+      <label for="org_name">Organization Name</label>
+      <input id="org_name" class="form-control" type="text" ng-model="$ctrl.contact.org_name" placeholder="Organization Name">
+    </div>
+    <div class="form-group">
+      <label for="first_name">First Name</label>
+      <input id="first_name" class="form-control" type="text" ng-model="$ctrl.contact.first_name" placeholder="First Name">
+    </div>
+    <div class="form-group">
+      <label for="last_name">Last Name</label>
+      <input id="last_name" class="form-control" type="text" ng-model="$ctrl.contact.last_name" placeholder="Last Name">
+    </div>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <input id="address" class="form-control" type="text" ng-model="$ctrl.contact.address" placeholder="Address">
+    </div>
+    <div class="form-group">
+      <label for="city">City</label>
+      <input id="city" class="form-control" type="text" ng-model="$ctrl.contact.city" placeholder="City">
+    </div>
+    <div class="form-group">
+      <label for="state">State</label>
+      <input id="state" class="form-control" type="text" ng-model="$ctrl.contact.state" placeholder="State">
+    </div>
+    <div class="form-group">
+      <label for="postal_code">Zip Code</label>
+      <input id="postal_code" class="form-control" type="text" ng-model="$ctrl.contact.postal_code" placeholder="Zip Code">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" class="form-control" type="email" ng-model="$ctrl.contact.email" placeholder="Email">
+    </div>
+    <div class="form-group">
+      <label for="phone_number">Phone Number</label>
+      <input id="phone_number" class="form-control" type="tel" ng-model="$ctrl.contact.phone_number" placeholder="Phone Number">
+    </div>
+    <div class="form-group">
+      <label>
+        Food Rescue
+        <input type="radio" ng-model="$ctrl.contact.org_type" value="food_rescue">
+      </label>
+      <label>
+        Sub-Distribution
+        <input type="radio" ng-model="$ctrl.contact.org_type" value="sub_distribution">
+      </label>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" type="button" ng-click="$ctrl.accept()">{{$ctrl.action}} Contact</button>
+  <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+</div>
