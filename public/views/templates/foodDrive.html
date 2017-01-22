@@ -135,7 +135,7 @@
     <tbody>
 
       <!-- Add User -->
-      <!-- <tr class="add-form">
+      <tr class="add-form">
           <td>
           <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
         </td>
@@ -174,7 +174,7 @@
             <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
           </button>
         </td>
-      </tr> -->
+      </tr>
 
       <tr ng-repeat="donation in (filtered = (fdc.driveDonations.list
       | orderBy:'-timestamp'

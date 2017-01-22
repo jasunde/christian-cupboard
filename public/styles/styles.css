@@ -6163,9 +6163,6 @@ h1 {
 .foodRescue {
   padding: 20px; }
 
-.rescueForm {
-  background-color: #255AA8; }
-
 #loader {
   position: absolute;
   left: 50%;
@@ -6233,22 +6230,35 @@ input[type=date]::-webkit-inner-spin-button {
   background-color: magenta; }
 
 .add-form {
-  color: #FFC600;
   border-top: none;
-  border-bottom: none;
-  background-color: #255AA8; }
+  border-bottom: none; }
   .add-form th, .add-form td, .add-form tr {
     border: none !important;
     text-align: center; }
 
 .form-card {
-  background-color: #FFC600;
+  box-shadow: 0px 10px 43px -6px rgba(0, 0, 0, 0.75);
+  border: 2px solid #FFC600;
   padding: 15px;
   color: #255AA8;
   border-top-left-radius: 11px;
-  border-top-right-radius: 11px; }
+  border-top-right-radius: 11px;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px;
+  margin: 20px; }
   .form-card input {
-    -webkit-appearance: none; }
-  .form-card th, .form-card td, .form-card tr {
-    border: none !important;
-    text-align: center; }
+    margin: 5px; }
+
+.rescueForm {
+  background-color: #255AA8;
+  color: white;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px; }
+
+table input {
+  -webkit-appearance: none !important; }
+
+table th, table td, table tr {
+  border: none !important;
+  text-align: center;
+  border-bottom: solid 10px yellow; }

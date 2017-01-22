@@ -90,9 +90,7 @@ $ccYellow: #FFC600;
 //   }
 // } //end table styles
 
-.rescueForm {
-  background-color: $ccBlue;
-}
+
 
 #loader { // BEGIN LOADER TEMPLATE
   position: absolute;
@@ -182,10 +180,8 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 .add-form {
-  color: $ccYellow;
   border-top: none;
   border-bottom: none;
-  background-color: $ccBlue;
   th, td, tr {
     border: none !important;
     text-align: center;
@@ -193,16 +189,43 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 .form-card {
-  background-color: $ccYellow;
+  -webkit-box-shadow: 0px 10px 43px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 10px 43px -6px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 43px -6px rgba(0,0,0,0.75);
+  border: 2px solid $ccYellow;
   padding: 15px;
   color: $ccBlue;
   border-top-left-radius: 11px;
   border-top-right-radius: 11px;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px;
+  margin: 20px;
+  label {
+    // margin: 10px;
+  }
   input {
-    -webkit-appearance:none
+    margin: 5px;
+  }
+}
+
+.rescueForm {
+  background-color: $ccBlue;
+  color: white;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+}
+
+h2 {
+
+}
+
+table {
+  input {
+    -webkit-appearance:none !important
   }
   th, td, tr {
     border: none !important;
     text-align: center;
+    border-bottom: solid 10px yellow;
   }
 }

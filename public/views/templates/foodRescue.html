@@ -5,9 +5,9 @@
 <h2>Food Rescue Form</h2>
 
 <!-- Filter Form -->
-<div class="row" ng-if="frc.user.is_admin">
+<div class="row form-card" ng-if="frc.user.is_admin">
   <form>
-    <div class="form-group col-sm-3">
+    <div class="col-sm-3">
       <label>Donors:</label>
       <select
          class="form-control"
@@ -17,16 +17,16 @@
       </select>
     </div>
 
-    <div class="form-group col-sm-3">
+    <div class="col-sm-3">
       <label>Start Date:</label>
       <input class="form-control" type="date" ng-model="daterange.start"></input>
     </div>
-    <div class="form-group col-sm-3">
+    <div class="col-sm-3">
       <label>End Date:</label>
       <input class="form-control" type="date" ng-model="daterange.end"></input>
     </div>
 
-    <div class="form-group col-sm-3">
+    <div class="col-sm-3">
       <label>Search:</label>
       <input class="form-control" type="search" ng-model="frc.search">
     </div>
@@ -34,8 +34,7 @@
 </div>
 
   <!-- NEW LAYOUT SHITS, ENTER FORM -->
-<div class = "form-card">
-<div class = "row">
+<div class = "form-card row">
   <div class = "col-sm-6">
   <label>Organization:</label>
   <select ng-model="frc.newDonation.contact_id" class="form-control">
@@ -50,7 +49,7 @@
     <label>Date:</label><input type="date" ng-model="frc.newDonation.timestamp" class="form-control" required>
   </div>
 
-  <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" class= "col-sm-3">
+  <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" class= "col-sm-2">
   <label>{{category.name}}:</label><input type="number"
   placeholder="# of lbs"
   ng-model="frc.newDonation.categories[category.id]"
@@ -63,21 +62,23 @@
   ng-click="frc.submitDonation()">
   <add-glyph boolean="frc.newDonation.saving"></add-glyph>
 </button>
+</div>
 
-</div>
-</div>
 <!-- ENTER FORM DONE -->
 <!-- START TABLE DISPLAY BUT NOT REALLY A TABLE DONT JUDGE ME -->
 <!-- OLD TABLE SHITS -->
 
 <!-- New Donation -->
-<table wt-responsive-table class="table">
+<div class = "container">
+<div class = "row">
+<table wt-responsive-table>
   <thead class="rescueForm">
     <tr class="add-form">
       <th>Donor</th>
       <th>Date</th>
       <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       <th></th>
+      <th><th>
     </tr>
   </thead>
     <tbody>
@@ -85,7 +86,7 @@
     <tr ng-repeat="donation in (filtered = (frc.rescueDonations.list
     | orderBy: '-timestamp'
     | filter: {org_type: 'food_rescue'}
-    | filter: {id: frc.org_id||undefined}:true
+    | filter: {id: frc.contact_id||undefined}:true
     | filter: frc.search
     | dateRange:daterange.start:daterange.end))">
 
@@ -104,7 +105,7 @@
 
         <!-- Timestamp -->
         <td>
-          <span class="form-control"
+          <span
                 disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
             <input class="form-control"
@@ -114,7 +115,7 @@
         </td>
         <!-- Categories -->
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
-          <span class="form-control"
+          <span
                 disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
           <span ng-if="donation.editable">
             <input class="form-control"
@@ -125,7 +126,6 @@
 
         <!-- Edit -->
         <td>
-
           <!-- Not editable -->
           <span ng-if="!donation.editable">
             <button
@@ -169,7 +169,8 @@
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
       </tr>
-
     </tbody>
   </table>
+</div>
+</div>
 </div>
