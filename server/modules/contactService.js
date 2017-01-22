@@ -195,7 +195,7 @@ function post(req, res) {
       contact.postal_code,
       contact.email,
       contact.phone_number,
-      contact.is_active
+      true
     ]
   )
   .then(function(result) {

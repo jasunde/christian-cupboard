@@ -104,7 +104,24 @@
                 ng-click="cc.openModal('md', contact, 'Edit')">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
+            <span ng-if="contact.org">
+              <button 
+                ng-if="contact.is_active"
+                type="button" 
+                class="btn btn-danger" 
+                ng-click="cc.toggleActive(contact)">
+                <delete-glyph boolean="contact.saving"></delete-glyph> Deactivate
+              </button>
+              <button 
+                ng-if="!contact.is_active"
+                type="button" 
+                class="btn btn-success" 
+                ng-click="cc.toggleActive(contact)">
+                <add-glyph boolean="contact.saving"></add-glyph> Activate
+              </button>
+            </span>
           </span>
+
           <!-- Editable -->
           <span ng-if="contact.editable">
             <button
