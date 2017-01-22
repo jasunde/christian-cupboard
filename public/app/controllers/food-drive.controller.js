@@ -93,6 +93,10 @@ app.controller("FoodDriveController",
       }
     };
 
+    self.getCsv = function () {
+      DonationsFactory.getCsv();
+    }
+
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!

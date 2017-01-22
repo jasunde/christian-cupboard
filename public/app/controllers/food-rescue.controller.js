@@ -89,6 +89,9 @@ app.controller("FoodRescueController",
       });
   };
 
+  self.getCsv = function () {
+    DonationsFactory.getCsv();
+  }
 
 //utility functions
 //adding current time to scope, possibly helpful for filtering results by date.
