@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 var express = require('express');
 var router = express.Router();
 var pgEscape = require('pg-escape');
-var slugify = require('slugify');
 var contactService = require('../modules/contactService');
 var pg = require('pg');
 var config = require('../config');
-=======
-var express = require('express')
-var router = express.Router()
-var contactService = require('../modules/contactService')
-var pg = require('pg')
-var config = require('../config')
->>>>>>> develop
 
 var pool = new pg.Pool(config.pg)
 
