@@ -60,6 +60,35 @@ function buildQuery(query, categories) {
   return result;
 }
 
+function taylorData(donations, categories) {
+  donations.forEach(function (donation) {
+    donation = categoryPropsToObject(donation, categories)
+
+    // Convert timestamp to date object
+    donation.timestamp = new Date(donation.timestamp);
+  });
+  return donations
+}
+
+function categoryPropsToObject(donation, categories) {
+  var categoryMap = categories.reduce(function (catMap, category) {
+    catMap[category.name] = category.id;
+    return catMap;
+  }, {});
+  for(prop in donation) {
+    donation.categories = {}
+
+    if(categoryMap.hasOwnProperty(prop)) {
+      if(donation[prop]) {
+        donation.categories[categoryMap[prop]] = parseFloat(donation[prop]);
+      }
+      delete donation[prop]
+    }
+  };
+
+  return donation;
+}
+
 //Takes care of getBy ContactID, getBYDateRange, and getByOrgType
 router.get('/', function (req, res) {
   pool.connect()
@@ -68,13 +97,14 @@ router.get('/', function (req, res) {
       'SELECT * FROM categories'
     )
       .then(function (result) {
-        var query = buildQuery(req.query, result.rows);
-        console.log(query);
+        var categories = result.rows
+        var query = buildQuery(req.query, categories);
                
         client.query(query)
         .then(function (result) {
+          console.log('categories', categories);
           client.release()
-          res.send(result.rows)
+          res.send(taylorData(result.rows, categories))
         })
         .catch(function (err) {
           console.log('GET donations error:', err)
