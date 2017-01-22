@@ -99,6 +99,7 @@
       | orderBy: '-timestamp'
       | filter: {id: sdc.org_id||undefined}:true
       | filter: sdc.search
+      | filter: {org_type: 'sub_distribution'}
       | dateRange:'timestamp':daterange.start:daterange.end))">
         <!-- First Name -->
         <td>

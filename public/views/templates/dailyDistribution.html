@@ -97,6 +97,7 @@
       <!-- Add Distribution -->
       <tr ng-repeat="distribution in (filtered = (ddc.dailyDistributions.list
       | filter: ddc.search
+      | filter: {org: false}
       | orderBy: '-timestamp'
       | dateRange:'timestamp':daterange.start:daterange.end))">
 
