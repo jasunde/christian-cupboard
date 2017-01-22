@@ -17,6 +17,7 @@ app.controller("FoodRescueController",
   self.rescueDonations = DonationsFactory.donations;
   self.user = Auth.user;
 
+    console.log(self.rescueCategories);
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
