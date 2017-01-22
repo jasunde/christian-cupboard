@@ -4,6 +4,8 @@
 <div class="container" ng-show="frc.gotData">
 <h2>Food Rescue Form</h2>
 
+<button ng-click="frc.delete()">Delete</button>
+
 <!-- Filter Form -->
 <div class="row form-card" ng-if="frc.user.is_admin">
   <form>
