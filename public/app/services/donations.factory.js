@@ -7,15 +7,19 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', function($h
   function categoryPropsToObject(donations) {
     donations.list.forEach(function (donation) {
       donation.categories = {}
+
       for(prop in donation) {
+
         if(CategoryFactory.categories.map.hasOwnProperty(prop)) {
           if(donation[prop]) {
             donation.categories[CategoryFactory.categories.map[prop]] = parseFloat(donation[prop]);
           }
           delete donation[prop]
         }
+
       }
     });
+
     return donations;
   }
 
