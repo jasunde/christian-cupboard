@@ -5,14 +5,14 @@
 <h2>Food Rescue Form</h2>
 
 <!-- Filter Form -->
-<div class="row" ng-if="frc.user.is_admin">
+<div class="row form-card" ng-if="frc.user.is_admin">
   <form>
     <div class="form-group col-sm-2">
       <label>Donors:</label>
       <select
          class="form-control"
          ng-options="org.id as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
-         ng-model="frc.org_id">
+         ng-model="frc.contact_id">
          <option value="" ng-value="">All</option>
       </select>
     </div>
@@ -43,10 +43,48 @@
 
 </div>
 
+  <!-- NEW LAYOUT SHITS, ENTER FORM -->
+<div class = "form-card row">
+  <div class = "col-sm-6">
+  <label>Organization:</label>
+  <select ng-model="frc.newDonation.contact_id" class="form-control">
+    <option
+      ng-repeat="contact in frc.rescueContacts.list | filter: 'food_rescue'"
+      value="{{contact.id}}">
+      {{contact.org_name}}
+    </option>
+  </select>
+</div>
+  <div class = "col-sm-6">
+    <label>Date:</label><input type="date" ng-model="frc.newDonation.timestamp" class="form-control" required>
+  </div>
+
+  <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" class= "col-sm-2">
+  <label>{{category.name}}:</label>
+  <input type="number"
+  placeholder="# of lbs"
+  ng-model="frc.newDonation.categories[category.id]"
+  class="form-control">
+</p>
+
+<button
+  type="button"
+  class="btn btn-success form-button"
+  ng-click="frc.submitDonation()">
+  <add-glyph boolean="frc.newDonation.saving"></add-glyph>
+</button>
+</div>
+
+<!-- ENTER FORM DONE -->
+<!-- START TABLE DISPLAY BUT NOT REALLY A TABLE DONT JUDGE ME -->
+<!-- OLD TABLE SHITS -->
 
 <!-- New Donation -->
-<table wt-responsive-table class="table">
-  <thead class="rescueForm">
+<div class = "container">
+<div class = "row">
+  <div class = "col-sm-12">
+<table wt-responsive-table class = "table-control table table-bordered">
+  <thead class="table-header">
     <tr class="add-form">
       <th>Donor</th>
       <th>Date</th>
@@ -55,62 +93,30 @@
     </tr>
   </thead>
     <tbody>
-      <tr class="add-form">
-
-        <!-- Select Org -->         
-        <td>
-        <select ng-model="frc.newDonation.contact_id" class="form-control">
-          <option 
-            ng-repeat="contact in frc.rescueContacts.list | filter: 'food_rescue'" 
-            value="{{contact.id}}">
-            {{contact.org_name}}
-          </option>
-        </select>
-      </td>
-
-      <!-- Select Date -->
-      <td>
-        <input type="date" ng-model="frc.newDonation.timestamp" class="form-control" required>
-      </td>
-
-      <!-- Input Weights -->
-      <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
-        <input type="number" placeholder="# of lbs" ng-model="frc.newDonation.categories[category.id]" class="form-control">
-      </td>
-
-      <!-- Add Button -->
-        <td>
-          <button
-            type="button"
-            class="btn btn-success"
-            ng-click="frc.submitDonation()">
-            <add-glyph boolean="frc.newDonation.saving"></add-glyph>
-          </button>
-        </td>
-      </tr>
-
     <!-- List Donations -->
     <tr ng-repeat="donation in (filtered = (frc.rescueDonations.list
     | orderBy: '-timestamp'
     | filter: {org_type: 'food_rescue'}
-    | filter: {id: frc.org_id||undefined}:true
+    | filter: {id: frc.contact_id||undefined}:true
     | filter: frc.search
     | dateRange:'timestamp':daterange.start:daterange.end))">
 
         <!-- Donor -->
         <td>
-          <span class="form-control"
-                disabled ng-if="!donation.editable">{{donation.org_name}}</span>
+          <span
+                ng-if="!donation.editable">{{donation.org_name}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control"
-                   type="text"
-                   ng-model="donation.org_name">
+            <select
+               class="form-control"
+               ng-options="org.id as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
+               ng-model="donation.contact_id"
+               >
           </span>
         </td>
 
         <!-- Timestamp -->
         <td>
-          <span class="form-control"
+          <span
                 disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
           <span ng-if="donation.editable">
             <input class="form-control"
@@ -120,7 +126,7 @@
         </td>
         <!-- Categories -->
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
-          <span class="form-control"
+          <span
                 disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
           <span ng-if="donation.editable">
             <input class="form-control"
@@ -131,14 +137,13 @@
 
         <!-- Edit -->
         <td>
-
           <!-- Not editable -->
           <span ng-if="!donation.editable">
             <button
                 type="button"
                 class="btn btn-primary"
                 ng-click="frc.toggleEditable(donation)">
-              <span class="glyphicon glyphicon-pencil"></span> Edit
+              <span class="glyphicon glyphicon-pencil"></span>
             </button>
             <button
               type="button"
@@ -161,7 +166,7 @@
                 type="button"
                 class="btn btn-default"
                 ng-click="frc.toggleEditable(donation)">
-              <span class="glyphicon glyphicon-remove"></span> Cancel
+              <span class="glyphicon glyphicon-remove"></span>
             </button>
           </span>
         </td>
@@ -174,8 +179,11 @@
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
+        <td></td>
       </tr>
-
     </tbody>
   </table>
+</div>
+</div>
+</div>
 </div>
