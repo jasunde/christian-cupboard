@@ -87,6 +87,15 @@ router.get('/id/:id', function(req, res) {
 });
 
 router.post('/', function (req, res) {
+  req.body.donor = true
+  if(req.body.org_name) {
+    req.body.org = true
+    if(!req.body.org_type) {
+      req.body.org_type = 'food_rescue'
+    }
+  } else {
+    req.body.org = false
+  }
   contactService.post(req,res)
   .then(function (response) {
     if(response) {
