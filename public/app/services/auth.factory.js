@@ -88,6 +88,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
       if(!is_user) {
         getToken(firebaseUser)
           .then(function (token) {
+            console.log('token', token);
             isUser(firebaseUser, token, 'user:updated');
           });
       }

@@ -124,12 +124,38 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
     });
   }
 
+  function getCsv(){
+    $http({
+      method: 'GET',
+      url: '/distributions/csvtest',
+      dataType: "text/csv",
+      headers: {id_token: Auth.user.idToken}
+    })
+    .then(function(result) {
+      console.log(result);
+      // var headers = result.headers()
+      var blob = new Blob([result.data], { type: result.config.dataType })
+      var windowUrl = (window.URL || window.webkitURL)
+      var downloadUrl = windowUrl.createObjectURL(blob)
+      var anchor = document.createElement("a")
+      anchor.href = downloadUrl
+      // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+      // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
+      anchor.download = "distributions.csv"
+      document.body.appendChild(anchor)
+      anchor.click()
+      windowUrl.revokeObjectURL(blob)
+
+    })
+  }
+
   return {
     getDistributions: getDistributions,
     addDistribution: addDistribution,
     updateDistribution: updateDistribution,
     distributions: distributions,
-    deleteDistribution: deleteDistribution
+    deleteDistribution: deleteDistribution,
+    getCsv: getCsv
   };
 
 }]);

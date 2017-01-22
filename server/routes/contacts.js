@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var csv = require('express-csv');
 var contactService = require('../modules/contactService')
 
 var pg = require('pg');
@@ -152,5 +153,23 @@ router.get('/donors/individual', function(req, res) {
     res.status(500).send(err);
   });
 });
+
+router.get('/csvtest', function(req, res) {
+  pool.query(
+    'SELECT * FROM contacts'
+  )
+  .then(function(result) {
+    console.log('result: ', result.rows);
+    res.attachment('testing.csv');
+    res.csv(
+      result.rows
+    );
+  })
+  .catch(function(err) {
+    console.log('GET all contacts err:', err);
+    res.status(500).send(err);
+  });
+});
+
 
 module.exports = router;
