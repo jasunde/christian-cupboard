@@ -5,13 +5,13 @@
 <div class="container" ng-show="sdc.gotData">
 <h2>Sub Distribution</h2>
 
-<div class="row" ng-if="sdc.user.is_admin">
+<div class="row form-card" ng-if="sdc.user.is_admin">
   <form>
     <div class="form-group col-sm-2">
       <label>Reciever:</label>
       <select
          class="form-control"
-         ng-options="org.id as org.org_name for org in sdc.contacts.list 
+         ng-options="org.id as org.org_name for org in sdc.contacts.list
          | filter: {org_type: 'sub_distribution'}"
          ng-model="sdc.org_id">
          <option value="" ng-value="">All</option>
@@ -43,13 +43,46 @@
   </form>
 </div>
 
+<!-- END FILTERS -->
+
+
+<div class = "form-card row">
+  <div class = "col-sm-6">
+  <label>Reciever:</label>
+  <select class="form-control"
+  ng-options="org.id as org.org_name for org in sdc.contacts.list
+  | filter: {org_type: 'sub_distribution'}"
+  ng-model="sdc.newSubDistribution.contact_id">
+  </select>
+</div>
+  <div class = "col-sm-6">
+    <label>Date:</label>
+    <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp" required>
+  </div>
+
+  <p ng-repeat="category in sdc.subDistributionCategories.list | filter: {sub_dist: true}" class= "col-sm-2">
+    <label>{{category.name}}:</label>
+    <input  class="form-control"
+      type="number"
+      placeholder="# of lbs."
+      ng-model="sdc.newSubDistribution.categories[category.id]">
+  </p>
+
+  <button
+    type="button"
+    class="btn btn-success form-button"
+    ng-click="sdc.addSubDistribution()">
+    <add-glyph boolean="sdc.newSubDistribution.saving"></add-glyph>
+  </button>
+</div>
+
 <table wt-responsive-table class="table admin">
   <thead class="add-form rescueForm">
     <tr>
       <th>Reciever</th>
       <th>Date</th>
       <!-- Switch to Angular Repeat from Category Factory -->
-      <th ng-repeat="category in sdc.subDistributionCategories.list 
+      <th ng-repeat="category in sdc.subDistributionCategories.list
         | filter: {sub_dist: true}">
         {{category.name}}
       </th>
@@ -58,38 +91,6 @@
     </tr>
   </thead>
     <tbody>
-
-      <!-- Add Distribution -->
-      <tr class="add-form">
-        <td>
-        <select class="form-control"
-        ng-options="org.id as org.org_name for org in sdc.contacts.list 
-        | filter: {org_type: 'sub_distribution'}"
-        ng-model="sdc.newSubDistribution.contact_id">
-        </select>
-      </td>
-        <td>
-            <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp">
-        </td>
-        <td ng-repeat="category in sdc.subDistributionCategories.list 
-          | filter: {sub_dist: true}">
-          <input 
-            class="form-control" 
-            type="number" 
-            placeholder="# of lbs." 
-            ng-model="sdc.newSubDistribution.categories[category.id]">
-          </input>
-        </td>
-        <td>
-          <button
-            type="button"
-            class="btn btn-success"
-            ng-click="sdc.addSubDistribution()">
-            <add-glyph boolean="sdc.newSubDistribution.saving"></add-glyph>
-          </button>
-        </td>
-      </tr>
-
       <!-- List Distributions -->
       <tr ng-repeat="subDistribution in (filtered = (sdc.subDistributions.list
       | orderBy: '-timestamp'
@@ -98,9 +99,9 @@
       | dateRange:'timestamp':daterange.start:daterange.end))">
         <!-- First Name -->
         <td>
-          <span 
-            class="form-control" 
-            disabled 
+          <span
+            class="form-control"
+            disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.org_name}}
           </span>
@@ -111,9 +112,9 @@
 
         <!-- Last Name -->
         <td>
-          <span 
-            class="form-control" 
-            disabled 
+          <span
+            class="form-control"
+            disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.timestamp | date: 'MM/dd/yyyy'}}
           </span>
@@ -123,19 +124,19 @@
         </td>
 
         <!-- Categories -->
-        <td 
-          ng-repeat="category in sdc.subDistributionCategories.list 
+        <td
+          ng-repeat="category in sdc.subDistributionCategories.list
           | filter: {sub_dist: true}">
-          <span 
-            class="form-control" 
-            disabled 
+          <span
+            class="form-control"
+            disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.categories[category.id]}}
           </span>
           <span ng-if="subDistribution.editable">
-            <input 
-              class="form-control" 
-              type="number" 
+            <input
+              class="form-control"
+              type="number"
               ng-model="subDistribution.categories[category.id]">
           </span>
         </td>
@@ -180,8 +181,8 @@
       <tr ng-if="sdc.user.is_admin">
         <td></td>
         <td>Totals:</td>
-        <td 
-          ng-repeat="category in sdc.subDistributionCategories.list 
+        <td
+          ng-repeat="category in sdc.subDistributionCategories.list
           | filter: {sub_dist: true}">
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
