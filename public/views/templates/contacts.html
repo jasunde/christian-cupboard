@@ -5,26 +5,32 @@
   <div class="row">
     <form>
       <div class="form-group col-sm-2">
-        <label>Organizations:</label>
+        <label>Filter Contacts:</label>
         <select
            class="form-control"
-           ng-options="type.filter as type.name for type in cc.org_types" 
+           ng-options="type.filter as type.name for type in cc.contact_filter" 
            ng-model="cc.filter">
         </select>
       </div>
 
       <div class="form-group col-sm-2">
-        <label>Individuals:</label>
-        <select
-           class="form-control"
-           ng-options="type.filter as type.name for type in cc.ind_types" 
-           ng-model="cc.filter">
-        </select>
+        <label>Start Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.start"></input>
+      </div>
+      <div class="form-group col-sm-2">
+        <label>End Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.end"></input>
       </div>
 
       <div class="form-group col-sm-4">
         <label>Search:</label>
         <input class="form-control" type="search" ng-model="cc.search">
+      </div>
+
+      <div class="form-group col-sm-2">
+      <button class="btn btn-success form-control" ng-click="cc.openModal('md', cc.newContact, 'Add')">
+        <add-glyph></add-glyph> Contact
+      </button>
       </div>
     </form>
   </div>
@@ -36,7 +42,9 @@
       | filter: {org_type: cc.filter.org_type} 
       | filter: {org: cc.filter.org} 
       | filter: {donor: cc.filter.donor} 
-      | filter: cc.search">
+      | filter: cc.search
+      | orderBy: 'sort_name'
+      | dateRange:'date_entered':daterange.start:daterange.end">
 
       <div class="clearfix" ng-if="$index % 3 == 0"></div>
       <div class="col-sm-4">
@@ -82,7 +90,7 @@
             <button 
                 type="button" 
                 class="btn btn-primary" 
-                ng-click="cc.toggleEditable(contact)">
+                ng-click="cc.openModal('md', contact, 'Edit')">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
           </span>
