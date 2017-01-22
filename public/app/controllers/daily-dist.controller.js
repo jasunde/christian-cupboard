@@ -87,6 +87,10 @@ $scope.$on('user:updated', function (event, data) {
       });
   };
 
+  self.getCsv = function() {
+    DistributionFactory.getCsv()
+  }
+
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth()+1; //January is 0!

@@ -1,6 +1,6 @@
-app.controller('CategoryController', ['$scope', 'Auth', 'CategoryFactory', '$timeout', function ($scope, Auth, CategoryFactory, $timeout) {
+app.controller('CategoryController', ['$scope', 'Auth', 'CategoryFactory', '$timeout', '$http', function ($scope, Auth, CategoryFactory, $timeout, $http) {
   console.log('Category Controller Running');
-  
+
   var self = this;
 
   self.categories = CategoryFactory.categories;
@@ -19,9 +19,9 @@ app.controller('CategoryController', ['$scope', 'Auth', 'CategoryFactory', '$tim
     category.saving = true;
 
     CategoryFactory.updateCategory(category)
-      .then(function (result) {
-        category.saving = false;
-      });
+    .then(function (result) {
+      category.saving = false;
+    });
   };
 
   self.toggleEditable = function (category) {
