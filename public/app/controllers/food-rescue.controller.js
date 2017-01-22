@@ -83,7 +83,7 @@ app.controller("FoodRescueController",
 
     var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Donation', item: donation});
 
-    confirm.result.then(function (action) {
+    confirm.result.then(function (config) {
       donation.saving = true;
       DonationsFactory.deleteDonations(donation)
         .then(function (result) {
@@ -91,7 +91,7 @@ app.controller("FoodRescueController",
         });
     })
     .catch(function (err) {
-    })
+    });
   };
   
   self.getCsv = function () {
