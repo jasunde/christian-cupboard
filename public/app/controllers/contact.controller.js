@@ -157,7 +157,11 @@ app.controller('ContactController',
         });
       };
 
-    }]);
+  self.getCsv = function(){
+    ContactsFactory.getCsv()
+  }
+
+}]);
 
 app.controller('ContactCtrl', function ($uibModalInstance, contact, action) {
   var $ctrl = this;
