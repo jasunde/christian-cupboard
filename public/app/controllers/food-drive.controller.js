@@ -59,6 +59,9 @@ app.controller("FoodDriveController",
             contact_id: undefined,
             timestamp: new Date(),
           };
+        })
+        .catch(function (err) {
+          self.newDonation.saving = false;
         });
     };
 
@@ -70,6 +73,10 @@ app.controller("FoodDriveController",
         DonationsFactory.editDonations(donation)
         .then(function (result){
           donation.saving=false;
+        })
+        .catch(function (err) {
+          donation.editable = false;
+          donation.saving = false;
         });
     };
 
@@ -87,6 +94,7 @@ app.controller("FoodDriveController",
         });
       })
       .catch(function (err) {
+        donation.saving = false;
       });
     };
 
