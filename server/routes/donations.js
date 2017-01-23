@@ -251,7 +251,7 @@ router.put('/', function (req, res) {
   // console.log(donation);
   pool.connect()
   .then(function (client) {
-    var d = new Date();
+    var date = new Date();
     client.query(
       'UPDATE donations '+
       'SET contact_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
@@ -261,31 +261,30 @@ router.put('/', function (req, res) {
         donation.timestamp,
         donation.timestamp,
         req.user.id,
-        d.toISOString(),
+        date.toISOString(),
         donation.donation_id
       ]
     )
     .then(function (result) {
       var categories = Object.keys(donation.categories);
+      var query = {
+        text: `WITH vals (distribution_id, category_id, amount) AS (VALUES ${details})
+              INSERT INTO distribution_details 
+              SELECT * FROM vals
+              ON CONFLICT (distribution_id, category_id) DO UPDATE
+              SET amount = excluded.amount`,
+        values: []
+      };
+
       categories.forEach(function (category) {
-        client.query({
-          text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
-          'VALUES ($1, $2, $3) '+
-          'ON CONFLICT (donation_id, category_id) DO UPDATE '+
-          'SET amount = $3',
-          values: [donation.donation_id, category, donation.categories[category]],
-          name: 'upsert-donation-details'
-        })
+
       })
 
-
-      client.on('drain', client.end.bind(client) )
-
-      client.on('end', function () {
+      client.query(query)
+      .then(function (response) {
         res.sendStatus(200)
       })
-
-      client.on('error', function (err) {
+      .catch(function (err) { 
         console.log('UPSERT donation detail error:', err);
         res.status(500).send(err)
       })

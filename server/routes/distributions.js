@@ -12,7 +12,7 @@ var MAX_GET = 1000;
 
 function buildQuery(query, categories) {
   var param = 1;
-  console.log('categories', categories);
+  // console.log('categories', categories);
   var categoryList = ''
   categories.forEach(function (category, index) {
     categoryList += ' "' + pgEscape(category.name) + '" NUMERIC'
@@ -59,7 +59,7 @@ function buildQuery(query, categories) {
     result.text += ' LIMIT ' + MAX_GET
   }
 
-  console.log('result', result);
+  // console.log('result', result);
   return result
 }
 
@@ -261,7 +261,7 @@ router.post('/', function (req, res) {
         query.values.push(distribution_id, category, distribution.categories[category])
       });
 
-      console.log('details query', query);
+      // console.log('details query', query);
 
         client.query(query)
         .then(function (response) {
