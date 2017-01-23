@@ -244,24 +244,33 @@ router.post('/', function (req, res) {
       var distribution_id = result.rows[0].id
       var categories = Object.keys(distribution.categories);
 
-      categories.forEach(function(category) {
-        client.query({
+      var param = 1;
+
+      var query = {
           text: 'INSERT INTO distribution_details (distribution_id, category_id, amount) '+
-          'VALUES ($1, $2, $3)',
-          values: [distribution_id, category, distribution.categories[category]],
-          name: 'insert-distribution-details'
+          'VALUES ',
+          values: [],
+          name: 'insert-donation-details'
+        }
+
+      categories.forEach(function (category, index) {
+        query.text += '($' + (param++) +', $' + (param++) +', $' + (param++) +')'
+        if(index < categories.length - 1) {
+          query.text += ', '
+        }
+        query.values.push(distribution_id, category, distribution.categories[category])
+      });
+
+      console.log('details query', query);
+
+        client.query(query)
+        .then(function (response) {
+          res.sendStatus(201)
         })
-      })
-
-      client.on('drain', client.end.bind(client) )
-
-      client.on('end', function() {
-        res.sendStatus(200)
-      })
-
-      client.on('error', function(err) {
-        res.status(500).send(err)
-      })
+        .catch(function (err) {
+          console.log('POST distribution details error:', err);
+          res.status(500).send(err)
+        })
     })
     .catch(function(err) {
       console.log('POST distributions error:' , err);

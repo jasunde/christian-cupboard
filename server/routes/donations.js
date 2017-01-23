@@ -70,7 +70,7 @@ router.get('/', function (req, res) {
     )
       .then(function (result) {
         var query = buildQuery(req.query, result.rows);
-        console.log(query);
+        // console.log(query);
                
         client.query(query)
         .then(function (result) {
@@ -211,24 +211,33 @@ router.post('/', function (req, res) {
 
       var categories = Object.keys(donation.categories);
 
-      categories.forEach(function (category) {
-        client.query({
+      var param = 1;
+
+      var query = {
           text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
-          'VALUES ($1, $2, $3)',
-          values: [donation_id, category, donation.categories[category]],
+          'VALUES ',
+          values: [],
           name: 'insert-donation-details'
+        }
+
+      categories.forEach(function (category, index) {
+        query.text += '($' + (param++) +', $' + (param++) +', $' + (param++) +')'
+        if(index < categories.length - 1) {
+          query.text += ', '
+        }
+        query.values.push(donation_id, category, donation.categories[category])
+      });
+
+      console.log('details query', query);
+
+        client.query(query)
+        .then(function (response) {
+          res.sendStatus(201)
         })
-      })
-
-      client.on('drain', client.end.bind(client) )
-
-      client.on('end', function () {
-        res.sendStatus(201)
-      })
-
-      client.on('error', function (err) {
-        res.status(500).send(err)
-      })
+        .catch(function (err) {
+          console.log('POST donation details error:', err);
+          res.status(500).send(err)
+        })
     })
     .catch(function (err) {
       console.log('POST donation error:', err)
@@ -239,7 +248,7 @@ router.post('/', function (req, res) {
 
 router.put('/', function (req, res) {
   var donation = req.body
-  console.log(donation);
+  // console.log(donation);
   pool.connect()
   .then(function (client) {
     var d = new Date();
@@ -293,7 +302,7 @@ router.get('/csvtest', function(req, res) {
     'SELECT * FROM donations'
   )
   .then(function(result) {
-    console.log('result: ', result.rows);
+    // console.log('result: ', result.rows);
     res.attachment('testing.csv');
     res.csv(
       result.rows
