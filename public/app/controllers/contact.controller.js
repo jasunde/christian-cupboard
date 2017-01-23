@@ -25,8 +25,9 @@ app.controller('ContactController',
       }
       today = mm+'/'+dd+'/'+yyyy;
 
+
       $scope.daterange = {
-        start: new Date(today),
+        start: moment().subtract(1, 'month').toDate(),
         end: new Date(today)
       };
 
