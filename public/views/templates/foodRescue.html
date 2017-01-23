@@ -2,9 +2,7 @@
 <div id="loader"></div>
 </div>
 <div class="container" ng-show="frc.gotData">
-<h2>Food Rescue Form</h2>
-
-<button ng-click="frc.delete()">Delete</button>
+<h2 class = "accentImage">Food Rescue Form</h2>
 
 <!-- Filter Form -->
 <div class="row form-card" ng-if="frc.user.is_admin">
@@ -35,14 +33,13 @@
   </form>
 
   <div class="form-group col-sm-2">
-    <button 
-       type="button" 
-       class="btn btn-primary form-control form-button" 
+    <button
+       type="button"
+       class="btn btn-primary form-control form-button"
        ng-click="fdc.getCsv()">
       Download as CSV
     </button>
   </div>
-
 </div>
 
   <!-- NEW LAYOUT SHITS, ENTER FORM -->
@@ -69,12 +66,12 @@
   class="form-control">
 </p>
 
-<button
-  type="button"
-  class="btn btn-success form-button"
-  ng-click="frc.submitDonation()">
-  <add-glyph boolean="frc.newDonation.saving"></add-glyph>
-</button>
+    <button
+      type="button"
+      class="btn btn-success form-button"
+      ng-click="frc.submitDonation()">
+        <add-glyph boolean="frc.newDonation.saving"></add-glyph>
+    </button>
 </div>
 
 <!-- ENTER FORM DONE -->
@@ -84,12 +81,13 @@
 <!-- New Donation -->
 <div class = "row">
   <div class = "col-sm-12">
-<table wt-responsive-table class = "table-control table table-bordered table-condensed">
+<table wt-responsive-table class = "table-control table">
   <thead class="table-header">
     <tr class="add-form">
       <th>Donor</th>
       <th>Date</th>
-      <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
+      <th
+        ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       <th></th>
     </tr>
   </thead>
@@ -126,7 +124,7 @@
           </span>
         </td>
         <!-- Categories -->
-        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" valign="middle">
           <span
                 disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
           <span ng-if="donation.editable">
@@ -176,7 +174,7 @@
       <!-- Totals -->
       <tr ng-if="frc.user.is_admin">
         <td></td>
-        <td>Totals:</td>
+        <td class = "total-td">Totals:</td>
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
@@ -184,7 +182,6 @@
       </tr>
     </tbody>
   </table>
-</div>
 </div>
 </div>
 </div>

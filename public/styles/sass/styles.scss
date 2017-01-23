@@ -1,7 +1,6 @@
 @import 'bootstrap';
 @import 'customnavbar';
 @import 'admin';
-@import 'filter-form';
 
 
 h1 {
@@ -167,14 +166,10 @@ input[type=date]::-webkit-inner-spin-button {
 .accentImage img {
     position: absolute;
     top: 0px;
-    left: -30px;
+    left: -40px;
     height: 50px;
 }
 
-.table {
-  color: black;
-  border-collapse: collapse;
-}
 
 .tableForms {
   background-color: magenta
@@ -193,7 +188,7 @@ input[type=date]::-webkit-inner-spin-button {
   -webkit-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
   -moz-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
   box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
-  border: 1px solid $ccYellow;
+  // border: 1px solid $ccYellow;
   padding: 15px;
   color: $ccBlue;
   border-top-left-radius: 11px;
@@ -218,8 +213,8 @@ input[type=date]::-webkit-inner-spin-button {
   // margin: 10px;
 }
 
-h2 {
-
+.table > tbody > tr > td {
+  vertical-align: middle;
 }
 
 .table-control {
@@ -230,8 +225,10 @@ h2 {
   -webkit-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
   -moz-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
   box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
-
-
+  *border-collapse: collapse; /* IE7 and lower */
+  border-spacing: 0;
+  // table-layout: fixed;
+  white-space: nowrap;
   input {
     // -webkit-appearance:none !important;
     // border: none !important;
@@ -242,6 +239,21 @@ h2 {
   }
   th, td {
     border: none !important;
+  th:first-child {
+    border-radius: 11px 0 0 0;
+  }
+  th:last-child {
+    border-radius: 0 11px 0 0;
+  }
+  th:only-child{
+    border-radius: 11px 11px 0 0;
+  }
+  th, td, tr {
+    border-bottom: 1px solid $ccYellow;
     text-align: center;
   }
 }
+//
+// .total-td {
+//   font-size: 20px;
+// }

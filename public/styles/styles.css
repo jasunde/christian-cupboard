@@ -6134,9 +6134,6 @@ button.close {
   position: relative;
   margin-left: 0; }
 
-.form-button {
-  margin-top: 23px; }
-
 h1 {
   color: gainsboro; }
 
@@ -6222,12 +6219,8 @@ input[type=date]::-webkit-inner-spin-button {
 .accentImage img {
   position: absolute;
   top: 0px;
-  left: -30px;
+  left: -40px;
   height: 50px; }
-
-.table {
-  color: black;
-  border-collapse: collapse; }
 
 .tableForms {
   background-color: magenta; }
@@ -6241,7 +6234,6 @@ input[type=date]::-webkit-inner-spin-button {
 
 .form-card {
   box-shadow: 0px 4px 31px -4px rgba(0, 0, 0, 0.39);
-  border: 1px solid #FFC600;
   padding: 15px;
   color: #255AA8;
   border-top-left-radius: 11px;
@@ -6260,6 +6252,7 @@ input[type=date]::-webkit-inner-spin-button {
   background-color: #255AA8;
   color: white;
   padding: 10px; }
+<<<<<<< Updated upstream
 
 .table-control {
   padding: 15px;
@@ -6273,4 +6266,29 @@ input[type=date]::-webkit-inner-spin-button {
     border-bottom: 1px solid #FFC600; }
   .table-control th, .table-control td {
     border: none !important;
+=======
+
+.table > tbody > tr > td {
+  vertical-align: middle; }
+
+.table-control {
+  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0px 4px 31px -4px rgba(0, 0, 0, 0.39);
+  *border-collapse: collapse;
+  /* IE7 and lower */
+  border-spacing: 0;
+  white-space: nowrap; }
+  .table-control input {
+    text-align: center; }
+  .table-control th:first-child {
+    border-radius: 11px 0 0 0; }
+  .table-control th:last-child {
+    border-radius: 0 11px 0 0; }
+  .table-control th:only-child {
+    border-radius: 11px 11px 0 0; }
+  .table-control th, .table-control td, .table-control tr {
+    border-bottom: 1px solid #FFC600;
+>>>>>>> Stashed changes
     text-align: center; }
