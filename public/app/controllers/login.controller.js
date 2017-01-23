@@ -1,7 +1,7 @@
 app.controller('LoginController', ['Auth', '$location', '$scope', function (Auth, $location, $scope) {
   var self = this;
 
-  // self.currentUser = Auth.user.currentUser;
+  self.user = Auth.user;
 
   //runs whenever the user logs in
   self.logIn = function () {
