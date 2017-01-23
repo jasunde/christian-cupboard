@@ -27,8 +27,8 @@ app.controller('ContactController',
 
 
       $scope.daterange = {
-        start: moment().subtract(1, 'month').toDate(),
-        end: new Date(today)
+        start: null,
+        end: null
       };
 
       self.contact_filter = [ {
