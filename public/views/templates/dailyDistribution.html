@@ -56,7 +56,6 @@
 
   <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
   <label>{{category.name}}:</label><input type="number"
-  placeholder="# of lbs"
   ng-model="ddc.newDistribution.categories[category.id]"
   class="form-control">
   <p></p>
