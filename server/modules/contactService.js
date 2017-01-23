@@ -177,9 +177,10 @@ function getByID(req, res, id) {
 
 function post(req, res) {
   var contact = req.contact;
+  var date = new Date();
   return pool.query(
-    'INSERT INTO contacts (donor, org, org_type, org_id, org_name, first_name, last_name, address, city, state, postal_code, email, phone_number, is_active)'+
-    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) '+
+    'INSERT INTO contacts (donor, org, org_type, org_id, org_name, first_name, last_name, address, city, state, postal_code, email, phone_number, is_active, date_entered)'+
+    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) '+
     'RETURNING id',
     [
       contact.donor,
@@ -195,7 +196,8 @@ function post(req, res) {
       contact.postal_code,
       contact.email,
       contact.phone_number,
-      true
+      true,
+      date.toISOString()
     ]
   )
   .then(function(result) {

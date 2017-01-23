@@ -5,8 +5,9 @@ app.controller("DailyDistributionController",
   var self = this;
   var verbose = false;
   var distribution = {};
-  self.newDistribution = {};
-  self.newDistribution.timestamp = new Date();
+  self.newDistribution = {
+    timestamp: new Date()
+  };
 
   self.dailyDistributions = DistributionFactory.distributions;
   self.categories = CategoryFactory.categories;
@@ -57,7 +58,9 @@ $scope.$on('user:updated', function (event, data) {
     self.newDistribution.saving = true;
     DistributionFactory.addDistribution(self.newDistribution)
       .then(function (result) {
-        self.newDistribution = {};
+        self.newDistribution = {
+          timestamp: new Date()
+        };
         self.newDistribution.saving = false;
       })
       .catch(function (err) {
