@@ -1,6 +1,6 @@
 app.controller("FoodDriveController", 
-  ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', 
-  function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q, dateRangeFilter){
+  ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', 'ConfirmFactory',
+  function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q, dateRangeFilter, ConfirmFactory){
     var self = this;
     var verbose = true;
 
@@ -51,11 +51,15 @@ app.controller("FoodDriveController",
     self.submitDonation = function() {
         if(verbose) {console.log("Submitting newDonation", self.newDonation);
       }
-        DonationsFactory.submitDonations(self.newDonation);
-        self.newDonation = {
-          contact_id: undefined,
-          timestamp: new Date(),
-        };
+        self.newDonation.saving=true;
+        DonationsFactory.submitDonations(self.newDonation)
+        .then(function (result) {
+          self.newDonation.saving=false;
+          self.newDonation = {
+            contact_id: undefined,
+            timestamp: new Date(),
+          };
+        });
     };
 
     self.editDonation = function(donation) {
@@ -72,13 +76,18 @@ app.controller("FoodDriveController",
     self.deleteDonation = function(donation) {
         if(verbose) {console.log("deleting");
       }
+      
+      var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Donation', item: donation});
 
+      confirm.result.then(function (config) {
       donation.saving=true;
-
         DonationsFactory.deleteDonations(donation)
         .then(function (result){
           donation.saving=false;
         });
+      })
+      .catch(function (err) {
+      });
     };
 
       self.toggleEditable = function (donation) {
@@ -88,6 +97,10 @@ app.controller("FoodDriveController",
         donation.editable = true;
       }
     };
+
+    self.getCsv = function () {
+      DonationsFactory.getCsv();
+    }
 
     var today = new Date();
     var dd = today.getDate();
