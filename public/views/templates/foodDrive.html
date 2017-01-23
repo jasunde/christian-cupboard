@@ -93,7 +93,7 @@
 
     <div class = "col-sm-2">
       <label>Telephone:</label>
-        <input class="form-control" type="text" ng-model="fdc.newDonation.telephone">
+        <input class="form-control" type="text" ng-model="fdc.newDonation.phone_number">
     </div>
 
     <div class = "col-sm-2">
@@ -220,9 +220,9 @@
         <!-- Telephone -->
         <td>
           <span
-           disabled ng-if="!donation.editable">{{donation.telephone}}</span>
+           disabled ng-if="!donation.editable">{{donation.phone_number}}</span>
           <span ng-if="donation.editable">
-            <input class="form-control" type="text" ng-model="donation.telephone">
+            <input class="form-control" type="text" ng-model="donation.phone_number">
           </span>
         </td>
         <!-- Organization Name -->
