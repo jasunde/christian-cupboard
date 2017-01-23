@@ -20,13 +20,14 @@ function buildQuery(query, categories) {
   })
   var result = {
     text: `SELECT * FROM 
-          crosstab('SELECT donations.id AS donation_id, donations.contact_id AS contact_id, donations.timestamp AS timestamp, name, amount FROM donations 
-          JOIN donation_details ON donations.id = donation_details.donation_id 
-          JOIN categories ON categories.id = donation_details.category_id 
+          crosstab(
+          'SELECT donations.id AS donation_id, donations.contact_id AS contact_id, donations.timestamp AS timestamp, name, amount FROM donations 
+          LEFT JOIN donation_details ON donations.id = donation_details.donation_id 
+          LEFT JOIN categories ON categories.id = donation_details.category_id 
           ORDER BY 1,2', 
           'SELECT name FROM categories') 
           AS ct(donation_id INTEGER, contact_id INTEGER, timestamp TIMESTAMP, ${categoryList}) 
-        JOIN contacts ON contacts.id = contact_id`,
+          LEFT JOIN contacts ON contacts.id = contact_id`,
     values: []
   }
 
