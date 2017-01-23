@@ -1,4 +1,5 @@
 <img src="/resources/background.png" id="loginLogo">
 <div class="log-in-div">
-<button ng-click="lc.logIn()" class="button log-in">Log In<span>&nbsp&nbspBe the Change!</span></button>
+  
+<button ng-if="!lc.user.currentUser" ng-click="lc.logIn()" class="button log-in">Log In<span>&nbsp&nbspBe the Change!</span></button>
 </div>
