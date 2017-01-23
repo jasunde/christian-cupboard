@@ -51,12 +51,11 @@
 
   <div class = "col-sm-4">
     <label>Last Name:</label>
-    <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name">
+    <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
   </div>
 
   <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
   <label>{{category.name}}:</label><input type="number"
-  placeholder="# of lbs"
   ng-model="ddc.newDistribution.categories[category.id]"
   class="form-control">
   <p></p>
@@ -139,7 +138,7 @@
             {{distribution.last_name}}
           </span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.last_name">
+            <input class="form-control" type="text" ng-model="distribution.last_name" maxlength="3">
           </span>
         </td>
 
