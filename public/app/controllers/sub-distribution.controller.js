@@ -89,6 +89,10 @@ app.controller("SubDistributionController",
       subDistribution = {
         timestamp: new Date()
       };
+    })
+    .catch(function (err) {
+      subDistribution.saving = false;
+      subDistribution.editable = false;
     });
   };
 
@@ -99,6 +103,9 @@ app.controller("SubDistributionController",
         item.saving = true;
         DistributionFactory.deleteDistribution(item)
           .then(function (result) {
+            item.saving = false;
+          })
+          .catch(function (err) {
             item.saving = false;
           });
       })

@@ -84,15 +84,17 @@ $scope.$on('user:updated', function (event, data) {
 
       var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Distribution', item: distribution});
 
-      confirm.result.then(function (config) {
+      confirm.result
+        .then(function (config) {
         distribution.saving = true;
 
         DistributionFactory.deleteDistribution(distribution)
           .then(function (result) {
             distribution.saving = false;
           });
-      })
+        })
         .catch(function (err) {
+
         });
     };
 
