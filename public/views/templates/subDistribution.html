@@ -3,6 +3,9 @@
 </div>
 
 <div class="container" ng-show="sdc.gotData">
+  <div class="banner">
+    <img src="/resources/background.png">
+  </div>
 <h2>Sub Distribution</h2>
 
 <div class="row form-card" ng-if="sdc.user.is_admin">
@@ -33,9 +36,9 @@
     </div>
 
     <div class="form-group col-sm-2">
-      <button 
-         type="button" 
-         class="btn btn-primary form-control form-button" 
+      <button
+         type="button"
+         class="btn btn-primary form-control form-button"
          ng-click="sdc.getCsv()">
         Download as CSV
       </button>
@@ -76,8 +79,8 @@
   </button>
 </div>
 
-<table wt-responsive-table class="table admin">
-  <thead class="add-form rescueForm">
+<table wt-responsive-table class="table-control table">
+  <thead class="table-header">
     <tr>
       <th>Reciever</th>
       <th>Date</th>
@@ -100,7 +103,7 @@
         <!-- First Name -->
         <td>
           <span
-            class="form-control"
+
             disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.org_name}}
@@ -113,7 +116,7 @@
         <!-- Last Name -->
         <td>
           <span
-            class="form-control"
+
             disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.timestamp | date: 'MM/dd/yyyy'}}
@@ -128,7 +131,7 @@
           ng-repeat="category in sdc.subDistributionCategories.list
           | filter: {sub_dist: true}">
           <span
-            class="form-control"
+
             disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.categories[category.id]}}
@@ -149,7 +152,7 @@
                 type="button"
                 class="btn btn-primary"
                 ng-click="sdc.toggleEditable(subDistribution)">
-              <span class="glyphicon glyphicon-pencil"></span> Edit
+              <span class="glyphicon glyphicon-pencil"></span>
             </button>
             <button
               type="button"

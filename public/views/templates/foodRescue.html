@@ -2,7 +2,11 @@
 <div id="loader"></div>
 </div>
 <div class="container" ng-show="frc.gotData">
-<h2 class = "accentImage">Food Rescue Form</h2>
+<!-- <div class="weee"> -->
+<div class="banner">
+<img src="/resources/background.png">
+</div>
+<h2>Food Rescue</h2>
 
 <!-- Filter Form -->
 <div class="row form-card" ng-if="frc.user.is_admin">
@@ -31,7 +35,7 @@
       <input class="form-control" type="search" ng-model="frc.search">
     </div>
   </form>
-
+<br>
   <div class="form-group col-sm-2">
     <button
        type="button"
@@ -44,6 +48,9 @@
 
   <!-- NEW LAYOUT SHITS, ENTER FORM -->
 <div class = "form-card row">
+  <!-- <div class = "row">
+    <h4> Inbound Form </h4>
+  </div> -->
   <div class = "col-sm-6">
   <label>Organization:</label>
   <select ng-model="frc.newDonation.contact_id" class="form-control">
@@ -58,13 +65,13 @@
     <label>Date:</label><input type="date" ng-model="frc.newDonation.timestamp" class="form-control" required>
   </div>
 
-  <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" class= "col-sm-2">
+  <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}"  class= "col-sm-2">
   <label>{{category.name}}:</label>
   <input type="number"
   placeholder="# of lbs"
   ng-model="frc.newDonation.categories[category.id]"
   class="form-control">
-</p>
+  </p>
 
     <button
       type="button"
@@ -185,3 +192,4 @@
 </div>
 </div>
 </div>
+<!-- </div> -->
