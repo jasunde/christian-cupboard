@@ -64,6 +64,9 @@ app.controller("FoodRescueController",
           contact_id: undefined,
           timestamp: new Date(),
         };
+      })
+      .catch(function (err) {
+        self.newDonation.saving = false;
       });
 
   };
@@ -76,6 +79,10 @@ app.controller("FoodRescueController",
     DonationsFactory.editDonations(donation)
       .then(function (result) {
         donation.saving = false;
+      })
+      .catch(function (err) {
+        donation.saving = false;
+        donation.editable = false;
       });
   };
 
@@ -88,6 +95,9 @@ app.controller("FoodRescueController",
       donation.saving = true;
       DonationsFactory.deleteDonations(donation)
         .then(function (result) {
+          donation.saving = false;
+        })
+        .catch(function (err) {
           donation.saving = false;
         });
     })

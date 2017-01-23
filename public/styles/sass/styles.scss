@@ -1,12 +1,9 @@
 @import 'bootstrap';
 @import 'customnavbar';
 @import 'admin';
-@import 'filter-form';
-
-
-h1 {
-  color: gainsboro;
-}
+@import 'form-card';
+@import 'log-in';
+@import 'fade-in';
 
 // Variables
 $ccBlue: #255AA8;
@@ -40,58 +37,10 @@ $ccYellow: #FFC600;
     top: 50%;
 }
 
-// input {
-//   padding: 10px;
-//   border: none;
-//   border-bottom: solid 2px #c9c9c9;
-//   transition: border 0.3s;
-// }
-//
-// input:focus,
-// input.focus {
-//   border-bottom: solid 2px #969696;
-// }
 
 .foodRescue {
   padding: 20px;
 }
-
-// .rescueTable { //basic table styles
-//   background-color: $ccBlue;
-//   max-width: 500px;
-//   margin: 20px;
-//   input{
-//     width: 70px;
-//     color: black;
-//   }
-//   select{
-//     color: black;
-//   }
-//   table {
-//     table-layout: fixed;
-//     width: 100%;
-//   }
-//   table.center {
-//   margin-left:auto;
-//   margin-right:auto;
-//   }
-//   th{
-//     color: $ccYellow;
-//     text-decoration: underline;
-//   }
-//   td{
-//     color: white;
-//   }
-//   th,td {
-//     padding: 5px;
-//     word-wrap: break-word;
-//   }
-//   button {
-//     color: black;
-//   }
-// } //end table styles
-
-
 
 #loader { // BEGIN LOADER TEMPLATE
   position: absolute;
@@ -103,7 +52,8 @@ $ccYellow: #FFC600;
   margin: -75px 0 0 -75px;
   border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid $ccBlue;
+  border-bottom: 16px solid $ccYellow;
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite;
@@ -156,24 +106,14 @@ input[type=date]::-webkit-inner-spin-button {
     display: none;
 }// remove arrows on date input
 
-// .accentImage {
-//   background-image: url("/resources/background.png");
-//   background-repeat: no-repeat;
-// }
-
 .accentImage {
     position: relative;
+    // padding-bottom: 9px;
 }
 .accentImage img {
     position: absolute;
-    top: 0px;
-    left: -30px;
-    height: 50px;
-}
-
-.table {
-  color: black;
-  border-collapse: collapse;
+    top: 9px;
+    height: 35px;
 }
 
 .tableForms {
@@ -189,56 +129,87 @@ input[type=date]::-webkit-inner-spin-button {
   }
 }
 
-.form-card {
-  -webkit-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
-  -moz-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
-  box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
-  border: 1px solid $ccYellow;
-  padding: 15px;
-  color: $ccBlue;
-  border-top-left-radius: 11px;
-  border-top-right-radius: 11px;
-  border-bottom-left-radius: 11px;
-  border-bottom-right-radius: 11px;
-  margin: 20px;
-  label {
-    margin: 3px;
-  }
-  input {
-    margin: 5px;
-  }
-}
-
 .table-header {
   background-color: $ccBlue;
   color: white;
   padding: 10px;
-  margin: 10px;
+  border-bottom: 3px solid $ccYellow;
+  // margin: 10px;
 }
 
-h2 {
-
+.table > tbody > tr > td {
+  vertical-align: middle;
 }
 
 .table-control {
-  border: 1px solid $ccYellow;
+  padding: 15px;
   margin-left:auto;
   margin-right:auto;
   -webkit-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
   -moz-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
   box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
-  border-top-left-radius: 11px;
-  border-top-right-radius: 11px;
-  border-bottom-left-radius: 11px;
-  border-bottom-right-radius: 11px;
-
+  *border-collapse: collapse; /* IE7 and lower */
+  border-spacing: 0;
+  white-space: nowrap;
   input {
-    // -webkit-appearance:none !important;
-    // border: none !important;
     text-align: center;
+  }
+  th:first-child {
+    border-radius: 6px 0 0 0;
+  }
+
+  th:last-child {
+    border-radius: 0 6px 0 0;
+  }
+
+  th:only-child{
+    border-radius: 6px 6px 0 0;
   }
   th, td, tr {
-    border: none !important;
+    border-bottom: 1px solid gainsboro;
     text-align: center;
   }
+}
+
+@media (max-width: 760px) {
+  h1 {
+    text-align: center;
+  }
+}
+
+.banner {
+  position: absolute;
+  img {
+    top: 9px;
+    right:18px;
+    position: relative;
+    height: 55px;
+  }
+  z-index: -1;
+}
+
+.navbar {
+  // border-top: 2px solid black;
+  // border-bottom: 2px solid black;
+}
+
+.log-out {
+  background: #255AA8;
+  background-image: -webkit-linear-gradient(top, #255AA8, #2980b9);
+  background-image: -moz-linear-gradient(top, #255AA8, #2980b9);
+  background-image: -ms-linear-gradient(top, #255AA8, #2980b9);
+  background-image: -o-linear-gradient(top, #255AA8, #2980b9);
+  background-image: linear-gradient(to bottom, #255AA8, #2980b9);
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 6px 6px 6px 6px;
+  text-decoration: none;
+}
+
+.log-out:hover {
+  background: #294f66;
+  text-decoration: none;
 }

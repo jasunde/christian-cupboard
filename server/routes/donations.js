@@ -178,7 +178,7 @@ router.use(function (req, res, next) {
     req.body.donor = true;
     if(req.body.org_name) {
       req.body.org = true;
-      req.body.org_type = donor;
+      req.body.org_type = 'donor';
     } else {
       req.body.org = false;
     }

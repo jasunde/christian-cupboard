@@ -2,7 +2,12 @@
 <div id="loader"></div>
 </div>
 <div class="container" ng-show="frc.gotData">
-<h2>Food Rescue Form</h2>
+
+<!-- <div class="weee"> -->
+<div class="banner">
+<img src="/resources/background.png">
+</div>
+<h2>Food Rescue</h2>
 
 <!-- Filter Form -->
 <div class="row form-card" ng-if="frc.user.is_admin">
@@ -31,20 +36,22 @@
       <input class="form-control" type="search" ng-model="frc.search">
     </div>
   </form>
-
+<br>
   <div class="form-group col-sm-2">
-    <button 
-       type="button" 
-       class="btn btn-primary form-control form-button" 
+    <button
+       type="button"
+       class="btn btn-primary form-control form-button"
        ng-click="fdc.getCsv()">
       Download as CSV
     </button>
   </div>
-
 </div>
 
   <!-- NEW LAYOUT SHITS, ENTER FORM -->
 <div class = "form-card row">
+  <!-- <div class = "row">
+    <h4> Inbound Form </h4>
+  </div> -->
   <div class = "col-sm-6">
   <label>Organization:</label>
   <select ng-model="frc.newDonation.contact_id" class="form-control">
@@ -59,20 +66,20 @@
     <label>Date:</label><input type="date" ng-model="frc.newDonation.timestamp" class="form-control" required>
   </div>
 
-  <p ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" class= "col-sm-2">
+  <div ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}"   class= "col-sm-2">
   <label>{{category.name}}:</label>
   <input type="number"
   placeholder="# of lbs"
   ng-model="frc.newDonation.categories[category.id]"
   class="form-control">
-</p>
+</div>
 
-<button
-  type="button"
-  class="btn btn-success form-button"
-  ng-click="frc.submitDonation()">
-  <add-glyph boolean="frc.newDonation.saving"></add-glyph>
-</button>
+    <button
+      type="button"
+      class="btn btn-success form-button"
+      ng-click="frc.submitDonation()">
+        <add-glyph boolean="frc.newDonation.saving"></add-glyph>
+    </button>
 </div>
 
 <!-- ENTER FORM DONE -->
@@ -80,15 +87,15 @@
 <!-- OLD TABLE SHITS -->
 
 <!-- New Donation -->
-<div class = "container">
 <div class = "row">
   <div class = "col-sm-12">
-<table wt-responsive-table class = "table-control table table-bordered">
+<table wt-responsive-table class = "table-control table">
   <thead class="table-header">
     <tr class="add-form">
       <th>Donor</th>
       <th>Date</th>
-      <th ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
+      <th
+        ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">{{category.name}}</th>
       <th></th>
     </tr>
   </thead>
@@ -125,7 +132,7 @@
           </span>
         </td>
         <!-- Categories -->
-        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
+        <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}" valign="middle">
           <span
                 disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
           <span ng-if="donation.editable">
@@ -175,7 +182,7 @@
       <!-- Totals -->
       <tr ng-if="frc.user.is_admin">
         <td></td>
-        <td>Totals:</td>
+        <td class = "total-td">Totals:</td>
         <td ng-repeat="category in frc.rescueCategories.list | filter: {food_rescue: true}">
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
@@ -186,4 +193,4 @@
 </div>
 </div>
 </div>
-</div>
+<!-- </div> -->
