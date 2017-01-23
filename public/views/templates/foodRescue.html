@@ -71,13 +71,16 @@
   ng-model="frc.newDonation.categories[category.id]"
   class="form-control">
 </div>
-
+<div class = "buttonCheat">
+<div class = "rescueButton">
     <button
       type="button"
-      class="btn btn-success form-button"
+      class="btn btn-success form-button rescueButton"
       ng-click="frc.submitDonation()">
         <add-glyph boolean="frc.newDonation.saving"></add-glyph>
     </button>
+  </div>
+</div>
 </div>
 
 <!-- ENTER FORM DONE -->

@@ -6366,3 +6366,7 @@ input[type=date]::-webkit-inner-spin-button {
 .log-out:hover {
   background: #294f66;
   text-decoration: none; }
+
+.rescueButton {
+  margin-top: 29px;
+  margin-left: 20px; }
