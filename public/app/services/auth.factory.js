@@ -23,7 +23,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
           is_user = true;
           return getToken(firebaseUser.user)
           .then(function (token) {
-            console.log('token', token);
+            // console.log('token', token);
             return isUser(firebaseUser.user, token, 'user:login');
           });
       }
@@ -88,7 +88,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
       if(!is_user) {
         getToken(firebaseUser)
           .then(function (token) {
-            console.log('token', token);
+            // console.log('token', token);
             isUser(firebaseUser, token, 'user:updated');
           });
       }
