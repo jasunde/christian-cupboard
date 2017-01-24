@@ -1,52 +1,70 @@
 <div ng-hide="ddc.gotData" class="ng-hide">
-<div id="loader"></div>
+  <div id="loader"></div>
 </div>
 
 <div class="container" ng-show="ddc.gotData">
   <div class="banner">
     <img src="/resources/background.png">
   </div>
-<h2>Daily Distribution</h2>
+  <h2>Daily Distribution</h2>
 
-<div class= "row form-card" ng-if="ddc.user.is_admin">
+  <div class= "row form-card" ng-if="ddc.user.is_admin">
+    <form>
+      <div class="form-group col-sm-3">
+        <label>Start Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.start">
+      </div>
+      <div class="form-group col-sm-3">
+        <label>End Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.end">
+      </div>
 
-<form>
-  <div class="form-group col-sm-3">
-    <label>Start Date:</label>
-    <input class = "form-control" type="date" ng-model="daterange.start"></input>
-  </div>
-  <div class="form-group col-sm-3">
-    <label>End Date:</label>
-    <input class = "form-control" type="date" ng-model="daterange.end"></input>
-  </div>
+      <div class="form-group col-sm-3">
+        <label>Search:</label>
+        <input class="form-control" type="search" ng-model="ddc.search">
+      </div>
 
-  <div class="form-group col-sm-3">
-    <label>Search:</label>
-    <input class="form-control" type="search" ng-model="ddc.search">
-  </div>
-
-  <div class="form-group col-sm-3">
-    <label name="Download CSV"></label>
-    <button
-       type="button"
-       class="btn btn-primary form-control form-button"
-       ng-click="ddc.getCsv()">
-      Download as CSV
-    </button>
-  </div>
-</form>
-</div>
-
-<div class = "form-card row">
-
-  <div class = "col-sm-4">
-    <label>Date:</label>
-    <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
+      <div class="form-group col-sm-3">
+        <label name="Download CSV"></label>
+        <button
+          type="button"
+          class="btn btn-primary form-control form-button"
+          ng-click="ddc.getCsv()">
+          Download as CSV
+        </button>
+      </div>
+    </form>
   </div>
 
-  <div class = "col-sm-4">
-    <label>First Name:</label>
-    <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+  <div class = "form-card row">
+    <div class = "col-sm-4">
+      <label>Date:</label>
+      <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
+    </div>
+
+    <div class = "col-sm-4">
+      <label>First Name:</label>
+      <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+    </div>
+
+    <div class = "col-sm-4">
+      <label>Last Name:</label>
+      <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
+    </div>
+
+    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
+      <label>{{category.name}}:</label><input type="number"
+      ng-model="ddc.newDistribution.categories[category.id]"
+      class="form-control">
+    </p>
+    <div class="col-sm-1 align-button">
+        <button
+          type="button"
+          class="btn btn-success form-control"
+          ng-click="ddc.addDistribution()">
+          <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
+        </button>
+    </div>
   </div>
 
   <div class = "col-sm-4">
@@ -195,24 +213,24 @@
             </button>
             <button
                 type="button"
-                class="btn btn-default"
-                ng-click="ddc.toggleEditable(distribution)">
-              <span class="glyphicon glyphicon-remove"></span> Cancel
-            </button>
-          </span>
-        </td>
-      </tr>
+                class="btn btn-danger"
+                ng-click="ddc.deleteDistribution(distribution)">
+                <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
+                <delete-glyph boolean="distribution.saving"></delete-glyph>
+              </button>
+            </span>
+          </td>
+        </tr>
 
-      <!-- Totals -->
-      <tr ng-if="ddc.user.is_admin">
-        <td colspan="2"></td>
-        <td>Totals:</td>
-        <td ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}">
-          <span>{{(filtered | mergeCategories)[category.id]}}</span>
-        </td>
-      </tr>
-
-    </tbody>
+        <!-- Totals -->
+        <tr ng-if="ddc.user.is_admin">
+          <td colspan="2"></td>
+          <td>Totals:</td>
+          <td ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}">
+            <span>{{(filtered | mergeCategories)[category.id]}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </div>
   </table>
-</div>
-</div>
+ </div>

@@ -109,9 +109,9 @@
           <!-- Not editable -->
           <span ng-if="!category.editable">
             <button
-                type="button"
-                class="btn btn-primary"
-                ng-click="cc.toggleEditable(category)">
+              type="button"
+              class="btn btn-primary"
+              ng-click="cc.toggleEditable(category)">
               <span class="glyphicon glyphicon-pencil"></span> 
             </button>
             <!-- <button -->
@@ -124,15 +124,15 @@
           <!-- Editable -->
           <span ng-if="category.editable">
             <button
-                type="button"
-                class="btn btn-primary"
-                ng-click="cc.update(category)">
+              type="button"
+              class="btn btn-primary"
+              ng-click="cc.update(category)">
               <save-glyph boolean="category.saving"></save-glyph>
             </button>
             <button
-                    type="button"
-                    class="btn btn-default"
-                    ng-click="cc.toggleEditable(category)">
+              type="button"
+              class="btn btn-default"
+              ng-click="cc.toggleEditable(category)">
               <span class="glyphicon glyphicon-remove"></span> Cancel
             </button>
           </span>

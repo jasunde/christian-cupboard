@@ -6,7 +6,6 @@
       <a href="http://ccefs.org/" class="navbar-brand"><img src="/resources/CCLogoReversed.png"></img></a>
     </div>
 
-
     <div ng-if="nc.displayName.name">
       <button class = "navbar-toggle" data-toggle="collapse" data-target= ".navHeaderCollapse" type="button">
         <span class = "icon-bar"></span>
@@ -15,22 +14,21 @@
       </button>
 
       <div class= "collapse navbar-collapse navHeaderCollapse">
-
         <ul class= "nav navbar-nav navbar-right">
           <li class = "dropdown">
-          <a class = "dropdown-toggle" data-toggle = "dropdown">Inbound <b class= "caret"></b></a>
-            <ul class = "dropdown-menu">
-              <li><a href="#foodRescue">Food Rescue</a></li>
-              <li><a href="#foodDrive">Food Drive</a></li>
-            </ul>
+            <a class = "dropdown-toggle" data-toggle = "dropdown">Inbound <b class= "caret"></b></a>
+              <ul class = "dropdown-menu">
+                <li><a href="#foodRescue">Food Rescue</a></li>
+                <li><a href="#foodDrive">Food Drive</a></li>
+              </ul>
           </li>
           <li class = "dropdown">
             <a class = "dropdown-toggle" data-toggle = "dropdown">Outbound <b class= "caret"></b></a>
               <ul class = "dropdown-menu">
-                  <li><a href="#dailyDistribution">Daily Distribution</a></li>
-                  <li><a href="#subDistribution">Sub Distribution</a></li>
-                </ul>
-              </li>
+                <li><a href="#dailyDistribution">Daily Distribution</a></li>
+                <li><a href="#subDistribution">Sub Distribution</a></li>
+              </ul>
+          </li>
           <li ng-if="nc.user.is_admin" class = "dropdown">
             <a class = "dropdown-toggle" data-toggle = "dropdown">Admin <b class= "caret"></b></a>
               <ul class = "dropdown-menu">
@@ -43,11 +41,10 @@
           </li>
           <li>
             <div class= "btn-group">
-            <button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills log-out">Log Out</button>
-          </div>
+              <button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills log-out">Log Out</button>
+            </div>
           </li>
         </ul>
-
       </div>
   </div>
 </div>

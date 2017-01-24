@@ -10,19 +10,19 @@
       <div class="form-group col-sm-2">
         <label>Filter Contacts:</label>
         <select
-           class="form-control"
-           ng-options="type.filter as type.name for type in cc.contact_filter"
-           ng-model="cc.filter">
+          class="form-control"
+          ng-options="type.filter as type.name for type in cc.contact_filter"
+          ng-model="cc.filter">
         </select>
       </div>
 
       <div class="form-group col-sm-2">
         <label>Start Date:</label>
-        <input class = "form-control" type="date" ng-model="daterange.start"></input>
+        <input class = "form-control" type="date" ng-model="daterange.start">
       </div>
       <div class="form-group col-sm-2">
         <label>End Date:</label>
-        <input class = "form-control" type="date" ng-model="daterange.end"></input>
+        <input class = "form-control" type="date" ng-model="daterange.end">
       </div>
 
       <div class="form-group col-sm-2">
@@ -32,21 +32,21 @@
 
       <div class="form-group col-sm-2">
         <button
-           type="button"
-           class="btn btn-primary form-control form-button"
-           ng-click="cc.getCsv()">
+          type="button"
+          class="btn btn-primary form-control form-button"
+          ng-click="cc.getCsv()">
           Download as CSV
         </button>
       </div>
 
       <div class="form-group col-sm-2">
-      <button class="btn btn-success form-control form-button" ng-click="cc.openModal('md', cc.newContact, 'Add')">
-        <add-glyph></add-glyph> Add Contact
-      </button>
+        <button 
+          class="btn btn-success form-control form-button" 
+          ng-click="cc.openModal('md', cc.newContact, 'Add')">
+          <add-glyph></add-glyph> Add Contact
+        </button>
       </div>
     </form>
-
-
   </div>
 
   <!-- Contact Cards -->
@@ -59,92 +59,87 @@
       | filter: cc.search
       | orderBy: 'sort_name'
       | dateRange:'date_entered':daterange.start:daterange.end">
-
       <div class="clearfix" ng-if="$index % 3 == 0"></div>
       <div class="col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="panel-title">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              <div ng-if="!contact.editable">
+                <span ng-if="!contact.org">{{contact.first_name}} {{contact.last_name}}</span>
+                <span ng-if="contact.org">{{contact.org_name}}</span>
+              </div>
+              <div ng-if="contact.editable">
+                <input class="form-control" type="text" ng-model="contact.first_name" placeholder="First Name">
+                <input class="form-control" type="text" ng-model="contact.last_name" placeholder="Last Name">
+                <input class="form-control" type="text" ng-model="contact.org_name" placeholder="Organization Name">
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">
             <div ng-if="!contact.editable">
-              <span ng-if="!contact.org">{{contact.first_name}} {{contact.last_name}}</span>
-              <span ng-if="contact.org">{{contact.org_name}}</span>
+              {{contact.address}}
+              <span ng-if="contact.address"><br /></span>
+                {{contact.city}}<span ng-if="contact.state">,</span>
+                {{contact.state}}
+                {{contact.postal_code}}
+              <span ng-if="contact.city || contact.state 
+                || contact.postal_code"><br /></span>
+                {{contact.email}}
+              <span ng-if="contact.email"><br /></span>
+                {{contact.phone_number}}
             </div>
             <div ng-if="contact.editable">
-              <input class="form-control" type="text" ng-model="contact.first_name" placeholder="First Name">
-              <input class="form-control" type="text" ng-model="contact.last_name" placeholder="Last Name">
-              <input class="form-control" type="text" ng-model="contact.org_name" placeholder="Organization Name">
-
+              <input class="form-control" type="text" ng-model="contact.address" placeholder="Address">
+              <input class="form-control" type="text" ng-model="contact.city" placeholder="City">
+              <input class="form-control" type="text" ng-model="contact.state" placeholder="State">
+              <input class="form-control" type="text" ng-model="contact.postal_code" placeholder="Zip Code">
+              <input class="form-control" type="email" ng-model="contact.email" placeholder="Email">
+              <input class="form-control" type="tel" ng-model="contact.phone_number" placeholder="Phone Number">
             </div>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div ng-if="!contact.editable">
-            {{contact.address}}
-            <span ng-if="contact.address"><br /></span>
-            {{contact.city}}<span ng-if="contact.state">,</span>
-            {{contact.state}}
-            {{contact.postal_code}}
-            <span ng-if="contact.city || contact.state || contact.postal_code"><br /></span>
-            {{contact.email}}
-            <span ng-if="contact.email"><br /></span>
-            {{contact.phone_number}}
-          </div>
 
-          <div ng-if="contact.editable">
-            <input class="form-control" type="text" ng-model="contact.address" placeholder="Address">
-            <input class="form-control" type="text" ng-model="contact.city" placeholder="City">
-            <input class="form-control" type="text" ng-model="contact.state" placeholder="State">
-            <input class="form-control" type="text" ng-model="contact.postal_code" placeholder="Zip Code">
-            <input class="form-control" type="email" ng-model="contact.email" placeholder="Email">
-            <input class="form-control" type="tel" ng-model="contact.phone_number" placeholder="Phone Number">
-          </div>
-
-          <!-- Not editable -->
-          <span ng-if="!contact.editable">
-            <button
-                type="button"
-                class="btn btn-primary"
-                ng-click="cc.openModal('md', contact, 'Edit')">
-              <span class="glyphicon glyphicon-pencil"></span> 
-            </button>
-            <!-- <span ng-if="contact.org"> -->
-            <!--   <button -->
-            <!--     ng-if="contact.is_active" -->
-            <!--     type="button" -->
-            <!--     class="btn btn-danger" -->
-            <!--     ng-click="cc.toggleActive(contact)"> -->
-            <!--     <delete-glyph boolean="contact.saving"></delete-glyph> Deactivate -->
-            <!--   </button> -->
-            <!--   <button -->
-            <!--     ng-if="!contact.is_active" -->
-            <!--     type="button" -->
-            <!--     class="btn btn-success" -->
-            <!--     ng-click="cc.toggleActive(contact)"> -->
-            <!--     <add-glyph boolean="contact.saving"></add-glyph> Activate -->
-            <!--   </button> -->
+            <!-- Not editable -->
+            <span ng-if="!contact.editable">
+              <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-click="cc.openModal('md', contact, 'Edit')">
+                <span class="glyphicon glyphicon-pencil"></span> 
+              </button>
+              <!-- <span ng-if="contact.org"> -->
+              <!--   <button -->
+              <!--     ng-if="contact.is_active" -->
+              <!--     type="button" -->
+              <!--     class="btn btn-danger" -->
+              <!--     ng-click="cc.toggleActive(contact)"> -->
+              <!--     <delete-glyph boolean="contact.saving"></delete-glyph> Deactivate -->
+              <!--   </button> -->
+              <!--   <button -->
+              <!--     ng-if="!contact.is_active" -->
+              <!--     type="button" -->
+              <!--     class="btn btn-success" -->
+              <!--     ng-click="cc.toggleActive(contact)"> -->
+              <!--     <add-glyph boolean="contact.saving"></add-glyph> Activate -->
+              <!--   </button> -->
             </span>
-          </span>
 
-          <!-- Editable -->
-          <span ng-if="contact.editable">
-            <button
+            <!-- Editable -->
+            <span ng-if="contact.editable">
+              <button
                 type="button"
                 class="btn btn-primary"
                 ng-click="cc.update(contact)">
-              <save-glyph boolean="contact.saving"></save-glyph>
-            </button>
-            <button
-                    type="button"
-                    class="btn btn-default"
-                    ng-click="cc.toggleEditable(contact)">
-              <span class="glyphicon glyphicon-remove"></span> Cancel
-            </button>
-          </span>
+                <save-glyph boolean="contact.saving"></save-glyph>
+              </button>
+              <button
+                type="button"
+                class="btn btn-default"
+                ng-click="cc.toggleEditable(contact)">
+                <span class="glyphicon glyphicon-remove"></span> Cancel
+              </button>
+            </span>
+          </div>
         </div>
       </div>
-      </div>
-
     </div>
   </div>
-
 </div>
