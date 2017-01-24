@@ -19,16 +19,15 @@
         <input class = "form-control" type="date" ng-model="daterange.end">
       </div>
 
-      <div class="form-group col-sm-3">
+      <div class="form-group col-sm-4">
         <label>Search:</label>
         <input class="form-control" type="search" ng-model="ddc.search">
       </div>
 
-      <div class="form-group col-sm-3">
-        <label name="Download CSV"></label>
+      <div class="form-group col-sm-2 admin-button">
         <button
           type="button"
-          class="btn btn-primary form-control form-button"
+          class="btn btn-primary form-control"
           ng-click="ddc.getCsv()">
           Download as CSV
         </button>
