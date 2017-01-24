@@ -19,5 +19,5 @@ var localPoolConfig = {
 }
 
 module.exports = {
-  pg: pgPoolConfig
+  pg: localPoolConfig
 }

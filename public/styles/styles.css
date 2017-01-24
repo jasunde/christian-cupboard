@@ -6367,6 +6367,6 @@ input[type=date]::-webkit-inner-spin-button {
   background: #294f66;
   text-decoration: none; }
 
-.rescueButton {
+.align-button {
   margin-top: 29px;
-  margin-left: 20px; }
+  float: right; }

@@ -1,109 +1,111 @@
 <div ng-hide="sdc.gotData" class="ng-hide">
-<div id="loader"></div>
+  <div id="loader"></div>
 </div>
 
 <div class="container" ng-show="sdc.gotData">
   <div class="banner">
-    <img src="/resources/background.png">
+    <img src="/resources/background.png"/>>
   </div>
-<h2>Sub Distribution</h2>
+  <h2>Sub Distribution</h2>
 
-<div class="row form-card" ng-if="sdc.user.is_admin">
-  <form>
-    <div class="form-group col-sm-2">
+  <div class="row form-card" ng-if="sdc.user.is_admin">
+    <form>
+      <div class="form-group col-sm-2">
+        <label>Reciever:</label>
+        <select
+          class="form-control"
+          ng-options="org.id as org.org_name for org in sdc.contacts.list
+          | filter: {org_type: 'sub_distribution'}"
+          ng-model="sdc.org_id">
+          <option value="" ng-value="">All</option>
+        </select>
+      </div>
+
+      <div class="form-group col-sm-2">
+        <label>Start Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.start">
+      </div>
+
+      <div class="form-group col-sm-2">
+        <label>End Date:</label>
+        <input class = "form-control" type="date" ng-model="daterange.end">
+      </div>
+
+      <div class="form-group col-sm-4">
+        <label>Search:</label>
+        <input class="form-control" type="search" ng-model="sdc.search">
+      </div>
+
+      <div class="form-group col-sm-2">
+        <button
+          type="button"
+          class="btn btn-primary form-control form-button"
+          ng-click="sdc.getCsv()">
+          Download as CSV
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- END FILTERS -->
+
+
+  <div class = "form-card row">
+    <div class = "col-sm-6">
       <label>Reciever:</label>
-      <select
-         class="form-control"
-         ng-options="org.id as org.org_name for org in sdc.contacts.list
-         | filter: {org_type: 'sub_distribution'}"
-         ng-model="sdc.org_id">
-         <option value="" ng-value="">All</option>
-      </select>
+        <select class="form-control"
+          ng-options="org.id as org.org_name for org in sdc.contacts.list
+          | filter: {org_type: 'sub_distribution'}"
+          ng-model="sdc.newSubDistribution.contact_id">
+        </select>
     </div>
 
-    <div class="form-group col-sm-2">
-      <label>Start Date:</label>
-      <input class = "form-control" type="date" ng-model="daterange.start"></input>
-    </div>
-    <div class="form-group col-sm-2">
-      <label>End Date:</label>
-      <input class = "form-control" type="date" ng-model="daterange.end"></input>
+    <div class = "col-sm-6">
+      <label>Date:</label>
+      <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp" required>
     </div>
 
-    <div class="form-group col-sm-4">
-      <label>Search:</label>
-      <input class="form-control" type="search" ng-model="sdc.search">
-    </div>
-
-    <div class="form-group col-sm-2">
+    <p ng-repeat="category in sdc.subDistributionCategories.list | filter: {sub_dist: true}" class= "col-sm-2">
+      <label>{{category.name}}:</label>
+      <input  class="form-control"
+        type="number"
+        ng-model="sdc.newSubDistribution.categories[category.id]">
+    </p>
+    <div class="col-sm-1 align-button">
       <button
-         type="button"
-         class="btn btn-primary form-control form-button"
-         ng-click="sdc.getCsv()">
-        Download as CSV
+        type="button"
+        class="btn btn-success form-control"
+        ng-click="sdc.addSubDistribution()">
+        <add-glyph boolean="sdc.newSubDistribution.saving"></add-glyph>
       </button>
     </div>
-  </form>
-</div>
-
-<!-- END FILTERS -->
-
-
-<div class = "form-card row">
-  <div class = "col-sm-6">
-  <label>Reciever:</label>
-  <select class="form-control"
-  ng-options="org.id as org.org_name for org in sdc.contacts.list
-  | filter: {org_type: 'sub_distribution'}"
-  ng-model="sdc.newSubDistribution.contact_id">
-  </select>
-</div>
-  <div class = "col-sm-6">
-    <label>Date:</label>
-    <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp" required>
   </div>
 
-  <p ng-repeat="category in sdc.subDistributionCategories.list | filter: {sub_dist: true}" class= "col-sm-2">
-    <label>{{category.name}}:</label>
-    <input  class="form-control"
-      type="number"
-      ng-model="sdc.newSubDistribution.categories[category.id]">
-  </p>
-
-  <button
-    type="button"
-    class="btn btn-success form-button rescueButton"
-    ng-click="sdc.addSubDistribution()">
-    <add-glyph boolean="sdc.newSubDistribution.saving"></add-glyph>
-  </button>
-</div>
-
-<table wt-responsive-table class="table-control table">
-  <thead class="table-header">
-    <tr>
-      <th>Reciever</th>
-      <th>Date</th>
-      <!-- Switch to Angular Repeat from Category Factory -->
-      <th ng-repeat="category in sdc.subDistributionCategories.list
-        | filter: {sub_dist: true}">
-        {{category.name}}
-      </th>
-      <th></th>
-      <!-- End Angular Category Repeat -->
-    </tr>
-  </thead>
+  <table wt-responsive-table class="table-control table">
+    <thead class="table-header">
+      <tr>
+        <th>Reciever</th>
+        <th>Date</th>
+        <!-- Switch to Angular Repeat from Category Factory -->
+        <th ng-repeat="category in sdc.subDistributionCategories.list
+          | filter: {sub_dist: true}">
+          {{category.name}}
+        </th>
+        <th></th>
+        <!-- End Angular Category Repeat -->
+      </tr>
+    </thead>
     <tbody>
       <!-- List Distributions -->
       <tr ng-repeat="subDistribution in (filtered = (sdc.subDistributions.list
-      | orderBy: '-timestamp'
-      | filter: {id: sdc.org_id||undefined}:true
-      | filter: sdc.search
-      | filter: {org_type: 'sub_distribution'}
-      | dateRange:'timestamp':daterange.start:daterange.end))">
+        | orderBy: '-timestamp'
+        | filter: {id: sdc.org_id||undefined}:true
+        | filter: sdc.search
+        | filter: {org_type: 'sub_distribution'}
+        | dateRange:'timestamp':daterange.start:daterange.end))">
         <!-- First Name -->
         <td>
           <span
-
             disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.org_name}}
@@ -116,7 +118,6 @@
         <!-- Last Name -->
         <td>
           <span
-
             disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.timestamp | date: 'MM/dd/yyyy'}}
@@ -131,7 +132,6 @@
           ng-repeat="category in sdc.subDistributionCategories.list
           | filter: {sub_dist: true}">
           <span
-
             disabled
             ng-if="!subDistribution.editable">
             {{subDistribution.categories[category.id]}}
@@ -190,7 +190,6 @@
           <span>{{(filtered | mergeCategories)[category.id]}}</span>
         </td>
       </tr>
-
     </tbody>
   </table>
 </div>
