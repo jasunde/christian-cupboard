@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', function($http, Auth, $q, CategoryFactory){
+=======
+app.factory("DistributionFactory", ["$http", "Auth", '$q', "toastr", function($http, Auth, $q, toastr){
+>>>>>>> toasts are working
  var verbose = false;
  var self = this;
  var distributions = {
@@ -61,6 +65,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', fu
         })
         .then(function (result) {
           getDistributions()
+          .then(function(){
+            toastr.success('Distribution Successful');
+          })
           .then(function (result) {
             resolve(result);
           })
@@ -93,6 +100,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', fu
         })
           .then(function (result) {
             getDistributions()
+            .then(function(){
+            toastr.info('Distribution Edited');
+            })
               .then(function (result) {
                 resolve(result)
               })
@@ -124,6 +134,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', fu
         })
           .then(function (result) {
             getDistributions()
+            .then(function(){
+              toastr.error('Distribution Deleted');
+            })
             .then(function (result) {
               resolve(result);
             })
