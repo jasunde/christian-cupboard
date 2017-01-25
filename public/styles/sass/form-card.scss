@@ -1,0 +1,27 @@
+$ccBlue: #255AA8;
+$ccYellow: #FFC600;
+
+.form-card {
+  -webkit-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
+  -moz-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
+  box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
+  border-bottom: 1px solid $ccYellow;
+  padding: 15px;
+  color: $ccBlue;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px;
+  margin: 20px;
+  margin-left:auto;
+  margin-right:auto;
+  label {
+    margin: 3px;
+  }
+  input {
+    margin: 5px;
+  }
+  select{
+    margin: 5px;
+  }
+}

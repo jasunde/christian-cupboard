@@ -1,5 +1,223 @@
 @import 'bootstrap';
+@import 'customnavbar';
+@import 'admin';
+@import 'form-card';
+@import 'log-in';
+@import 'fade-in';
 
-h1 {
-  color: magenta;
+// Variables
+$ccBlue: #255AA8;
+$ccYellow: #FFC600;
+
+.rescueTable {
+  z-index: 500;
+  width: 100%;
+}
+
+#logo {
+  max-width: 140px;
+  height: auto;
+  width: auto;
+  padding: 30px;
+}
+
+#loginLogo {
+  margin-top: 40px;
+  display: block;
+  margin: auto;
+  width: 30%;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+.button {
+    position: absolute;
+    top: 50%;
+}
+
+
+.foodRescue {
+  padding: 20px;
+}
+
+#loader { // BEGIN LOADER TEMPLATE
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid $ccBlue;
+  border-bottom: 16px solid $ccYellow;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 }
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+} // END LOADER TEMPLATE
+
+//NO MOAR NUMBER SPINNERS
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}//END NO MOAR NUMBER SPINNERS
+
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}// remove arrows on date input
+
+.accentImage {
+    position: relative;
+    // padding-bottom: 9px;
+}
+.accentImage img {
+    position: absolute;
+    top: 9px;
+    height: 35px;
+}
+
+.tableForms {
+  background-color: magenta
+}
+
+.add-form {
+  border-top: none;
+  border-bottom: none;
+  th, td, tr {
+    border: none !important;
+    text-align: center;
+  }
+}
+
+.table-header {
+  background-color: $ccBlue;
+  color: white;
+  padding: 10px;
+  border-bottom: 3px solid $ccYellow;
+  // margin: 10px;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+.table-control {
+  padding: 15px;
+  margin-left:auto;
+  margin-right:auto;
+  -webkit-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
+  -moz-box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
+  box-shadow: 0px 4px 31px -4px rgba(0,0,0,0.39);
+  *border-collapse: collapse; /* IE7 and lower */
+  border-spacing: 0;
+  white-space: nowrap;
+  input {
+    text-align: center;
+  }
+  th:first-child {
+    border-radius: 6px 0 0 0;
+  }
+
+  th:last-child {
+    border-radius: 0 6px 0 0;
+  }
+
+  th:only-child{
+    border-radius: 6px 6px 0 0;
+  }
+  th, td, tr {
+    border-bottom: 1px solid gainsboro;
+    text-align: center;
+  }
+}
+
+@media (max-width: 760px) {
+  h1 {
+    text-align: center;
+  }
+}
+
+.banner {
+  position: absolute;
+  img {
+    top: 9px;
+    right:18px;
+    position: relative;
+    height: 55px;
+  }
+  z-index: -1;
+}
+
+.navbar {
+  // border-top: 2px solid black;
+  // border-bottom: 2px solid black;
+}
+
+.log-out {
+  background: #255AA8;
+  background-image: -webkit-linear-gradient(top, #255AA8, #2980b9);
+  background-image: -moz-linear-gradient(top, #255AA8, #2980b9);
+  background-image: -ms-linear-gradient(top, #255AA8, #2980b9);
+  background-image: -o-linear-gradient(top, #255AA8, #2980b9);
+  background-image: linear-gradient(to bottom, #255AA8, #2980b9);
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 6px 6px 6px 6px;
+  text-decoration: none;
+}
+
+.log-out:hover {
+  background: #294f66;
+  text-decoration: none;
+}
+
+.admin-button{
+  margin-top: 29px;
+}
+.align-button{
+  margin-top: 29px;
+  float: right;
 }
