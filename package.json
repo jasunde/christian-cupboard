@@ -23,6 +23,7 @@
     "karma-jasmine": "^1.1.0"
   },
   "dependencies": {
+    "angular-toastr": "^2.1.1",
     "body-parser": "^1.15.2",
     "bootstrap-sass": "^3.3.7",
     "dotenv": "^4.0.0",

@@ -1,4 +1,4 @@
-app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
+app.factory("DistributionFactory", ["$http", "Auth", '$q', "toastr", function($http, Auth, $q, toastr){
  var verbose = false;
  var self = this;
  var distributions = {
@@ -45,6 +45,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
         })
         .then(function (result) {
           getDistributions()
+          .then(function(){
+            toastr.success('Distribution Successful');
+          })
           .then(function (result) {
             resolve(result);
           })
@@ -77,6 +80,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
         })
           .then(function (result) {
             getDistributions()
+            .then(function(){
+            toastr.info('Distribution Edited');
+            })
               .then(function (result) {
                 resolve(result)
               })
@@ -108,6 +114,9 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
         })
           .then(function (result) {
             getDistributions()
+            .then(function(){
+              toastr.error('Distribution Deleted');
+            })
             .then(function (result) {
               resolve(result);
             })

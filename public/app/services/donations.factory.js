@@ -1,4 +1,4 @@
-app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
+app.factory("DonationsFactory", ["$http", "Auth", "toastr", function($http, Auth, toastr){
  var verbose = false;
  var donations = {
    list: null
@@ -44,7 +44,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        return getDonations();
+        return getDonations()
+        .then(function (){
+        toastr.success('Donation Submitted');
+        })
       });
     }
   }
@@ -61,7 +64,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        return getDonations();
+        return getDonations()
+        .then(function(){
+          toastr.info('Donation Edited');
+        })
       })
       .catch(function (err) {
         console.log('POST donation error:', err);
@@ -83,7 +89,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
           }
         })
           .then(function (result){
-            return getDonations();
+            return getDonations()
+            .then(function(){
+              toastr.error('Donation Deleted');
+            })
           })
         .catch(function (err) {
           console.log('DELETE donation error:', err);
