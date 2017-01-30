@@ -7,6 +7,13 @@ var config = require('../config');
 
 var pool = new pg.Pool(config.pg)
 
+var rollback = function (client, done, res) {
+  client.query('ROLLBACK', function (err) {
+    res.status(500).send(err);
+    return done(err);
+  });
+};
+
 var MAX_GET = 1000
 
 function buildQuery(query, categories) {
@@ -54,6 +61,10 @@ function buildQuery(query, categories) {
     result.text += ' WHERE org_type = $' + param
     result.values.push(query.org_type)
     param++
+  } else if (query.donation_id) {
+    result.text += ' WHERE donation_id = $' + param
+    result.values.push(query.donation_id)
+    param++
   }
 
   if(query.start_date && query.end_date) {
@@ -97,75 +108,30 @@ router.get('/', function (req, res) {
         console.log('GET categories error:', err)
         res.status(500).send(err)
       });
-  // pool.connect()
-  // .then(function (client) {
-  //   client.query(
-  //     'SELECT * FROM categories'
-  //   )
-  //     .then(function (result) {
-  //       var query = buildQuery(req.query, result.rows);
-  //       // console.log(query);
-               
-  //       client.query(query)
-  //       .then(function (result) {
-  //         client.release()
-  //         res.send(result.rows)
-  //       })
-  //       .catch(function (err) {
-  //         client.release()
-  //         console.log('GET donations error:', err)
-  //         res.status(500).send(err)
-  //       });
-  //     })
-  //     .catch(function (err) {
-  //       client.release()
-  //       console.log('GET categories error:', err)
-  //       res.status(500).send(err)
-  //     });
-  // });
-
 
 });
 
 // Get by ID
 router.get('/id/:id', function (req, res) {
-  pool.connect()
-  .then(function (client) {
-    client.query(
-      'SELECT donations.id as donation_id, contacts.id as contact_id, * FROM donations '+
-      'JOIN contacts ON donations.contact_id = contacts.id '+
-      'WHERE donations.id = $1',
-      [req.params.id]
-    )
+  pool.query(
+    'SELECT * FROM categories'
+  )
     .then(function (result) {
-      var donation = result.rows[0]
+      var query = buildQuery({donation_id: req.params.id}, result.rows);
 
-      client.query(
-        'SELECT * FROM donation_details '+
-        'WHERE donation_id = $1',
-        [donation.donation_id]
-      )
-      .then(function (result) {
-        client.release()
-        donation.categories = result.rows.reduce(function (total, current) {
-          total[current.category_id] = parseFloat(current.amount);
-          return total;
-        }, {})
-        res.send(donation)
-      })
-      .catch(function (err) {
-        client.release()
-        console.log('GET donation details by ID error:', err);
-        res.status(500).send(err)
-      })
+      pool.query(query)
+        .then(function (result) {
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('GET donation by id error:', err);
+          res.status(500).send(err);
+        })
     })
     .catch(function (err) {
-      client.release()
-
-      console.log('GET donation by ID error:', err);
-      res.status(500).send(err)
-    })
-  })
+      console.log('GET categories error:', err);
+      res.status(500).send(err);
+    });
 })
 
 router.delete('/:id', function (req, res) {
@@ -217,113 +183,127 @@ router.use(function (req, res, next) {
 
 router.post('/', function (req, res) {
   var donation = req.body
-  pool.connect()
-  .then(function (client) {
-    var date = new Date();
-    client.query(
-      'INSERT INTO donations (contact_id, timestamp, date, added_by, date_entered) '+
-      'VALUES ($1, $2, $3, $4, $5) '+
-      'RETURNING id',
-      [
-        req.contact.id,
-        donation.timestamp,
-        donation.timestamp,
-        req.user.id,
-        date.toISOString()
-      ]
-    )
-    .then(function (result) {
-      var donation_id = result.rows[0].id
+  pool.connect(function (err, client, done) {
+    if(err) throw err;
 
-      var categories = Object.keys(donation.categories);
+    client.query('BEGIN', function (err) {
+      if(err) return rollback(client, done, res);
 
-      var param = 1;
+      process.nextTick(function () {
+        var date = new Date()
 
-      var query = {
-          text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
-          'VALUES ',
-          values: [],
-          name: 'insert-donation-details'
+        var query = {
+          text: 'INSERT INTO donations (contact_id, timestamp, date, added_by, date_entered) '+
+          'VALUES ($1, $2, $3, $4, $5) '+
+          'RETURNING id',
+          values: [
+            req.contact.id,
+            donation.timestamp,
+            donation.timestamp,
+            req.user.id,
+            date.toISOString()
+          ]
         }
 
-      categories.forEach(function (category, index) {
-        query.text += '($' + (param++) +', $' + (param++) +', $' + (param++) +')'
-        if(index < categories.length - 1) {
-          query.text += ', '
-        }
-        query.values.push(donation_id, category, donation.categories[category])
-      });
+        client.query(query, function (err, result) {
+          if(err) return rollback(client, done, res);
+          
+          var donation_id = result.rows[0].id
 
-      console.log('details query', query);
+          var categories = Object.keys(donation.categories);
 
-        client.query(query)
-        .then(function (response) {
-          client.release()
-          res.sendStatus(201)
+          var param = 1;
+
+          var query = {
+              text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
+              'VALUES ',
+              values: [],
+              name: 'insert-donation-details'
+            }
+
+          categories.forEach(function (category, index) {
+            query.text += '($' + (param++) +', $' + (param++) +', $' + (param++) +')'
+            if(index < categories.length - 1) {
+              query.text += ', '
+            }
+            query.values.push(donation_id, category, donation.categories[category])
+          });
+          
+          client.query(query, function (err) {
+            if(err) return rollback(client, done, res);
+            client.query('COMMIT', function () {
+              done()
+              res.sendStatus(200)
+            });
+          })
         })
-        .catch(function (err) {
-          client.release()
-          console.log('POST donation details error:', err);
-          res.status(500).send(err)
-        })
-    })
-    .catch(function (err) {
-      client.release()
-      console.log('POST donation error:', err)
-      res.status(500).send(err)
+      })
     })
   })
 })
 
 router.put('/', function (req, res) {
   var donation = req.body
-  // console.log(donation);
-  pool.connect()
-  .then(function (client) {
-    var date = new Date();
-    client.query(
-      'UPDATE donations '+
-      'SET contact_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
-      'WHERE id = $6',
-      [
-        donation.contact_id,
-        donation.timestamp,
-        donation.timestamp,
-        req.user.id,
-        date.toISOString(),
-        donation.donation_id
-      ]
-    )
-    .then(function (result) {
-      var categories = Object.keys(donation.categories);
-      var query = {
-        text: `WITH vals (distribution_id, category_id, amount) AS (VALUES ${details})
-              INSERT INTO distribution_details 
-              SELECT * FROM vals
-              ON CONFLICT (distribution_id, category_id) DO UPDATE
-              SET amount = excluded.amount`,
-        values: []
-      };
+  
+  pool.connect(function (err, client, done) {
+    if(err) throw err
 
-      categories.forEach(function (category) {
+    client.query('BEGIN', function (err) {
+      if(err) return rollback(client, done, res)
 
-      })
+      process.nextTick(function () {
+        var date = new Date()
+        var query = {
+          text: 'UPDATE donations '+
+            'SET contact_id = $1, timestamp = $2, date = $3, updated_by = $4, last_update = $5 '+
+            'WHERE id = $6',
+          values: [
+            donation.contact_id,
+            donation.timestamp,
+            donation.timestamp,
+            req.user.id,
+            date.toISOString(),
+            donation.donation_id
+          ]
+        }
 
-      client.query(query)
-      .then(function (response) {
-        client.release()
-        res.sendStatus(200)
+        client.query(query, function (err, result) {
+          if(err) return rollback(client, done, res)
+
+          var param = 1;
+          var categories = Object.keys(donation.categories);
+          var details = '';
+          var values = []
+
+          categories.forEach(function (category, index) {
+            details += '($' + (param++) +'::int, $' + (param++) +'::int, $' + (param++) +'::numeric)'
+            if(index < categories.length - 1) {
+              details += ', '
+            }
+            values.push(donation.donation_id, category, donation.categories[category])
+          });
+          console.log('values', values);
+
+          var query = {
+            text: `WITH vals (donation_id, category_id, amount) AS (VALUES ${details})
+                  INSERT INTO donation_details 
+                  SELECT * FROM vals
+                  ON CONFLICT (donation_id, category_id) DO UPDATE
+                  SET amount = excluded.amount`,
+            values: values
+          };
+
+          
+          client.query(query, function (err) {
+            if(err) return rollback(client, done, res)
+            
+            client.query('COMMIT', function () {
+              done()
+              res.sendStatus(200)
+            })
+          })
+        })
       })
-      .catch(function (err) { 
-        client.release()
-        console.log('UPSERT donation detail error:', err);
-        res.status(500).send(err)
-      })
-    })
-    .catch(function (err) {
-      client.release()
-      console.log('POST donation error:', err)
-      res.status(500).send(err)
     })
   })
 })
