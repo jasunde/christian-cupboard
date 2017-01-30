@@ -62,6 +62,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
       })
       .then(function (result){
         return getDonations();
+      })
+      .catch(function (err) {
+        console.log('POST donation error:', err);
+        return err;
       });
     }
   }

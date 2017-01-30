@@ -3,7 +3,7 @@ app.controller('NavController', ['$location', 'Auth', function ($location, Auth)
   self.currentUser = {};
   self.displayName = {};
   self.message = "Hello World";
-
+  self.user = Auth.user;
   self.displayName = Auth.displayName;
 
 // This code runs when the user logs out

@@ -1,4 +1,6 @@
-app.controller("DailyDistributionController", ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q){
+app.controller("DailyDistributionController", 
+  ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', 'ConfirmFactory',
+  function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q, ConfirmFactory){
 
   var self = this;
   var verbose = false;
@@ -77,15 +79,24 @@ $scope.$on('user:updated', function (event, data) {
       });
   };
 
-  self.deleteDistribution = function (distribution) {
-    console.log('deleting');
-    distribution.saving = true;
+    self.deleteDistribution = function (distribution) {
+      if(verbose) {console.log('deleting');}
 
-    DistributionFactory.deleteDistribution(distribution)
-      .then(function (result) {
-        distribution.saving = false;
-      });
-  };
+      var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Distribution', item: distribution});
+
+      confirm.result
+        .then(function (config) {
+        distribution.saving = true;
+
+        DistributionFactory.deleteDistribution(distribution)
+          .then(function (result) {
+            distribution.saving = false;
+          });
+        })
+        .catch(function (err) {
+
+        });
+    };
 
   self.getCsv = function() {
     DistributionFactory.getCsv()

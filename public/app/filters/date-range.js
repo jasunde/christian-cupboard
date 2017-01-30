@@ -1,7 +1,5 @@
 app.filter('dateRange', function() {
 
-
-
   return function(entries, dateProp, startDate, endDate){
     var filteredDates = [];
     angular.forEach(entries, function(entry){

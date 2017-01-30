@@ -1,6 +1,6 @@
 app.controller("FoodRescueController", 
-  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter',
-  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter){
+  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory',
+  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory){
 
   var self = this;
   var verbose = true;
@@ -16,6 +16,8 @@ app.controller("FoodRescueController",
   self.rescueContacts = ContactsFactory.contacts;
   self.rescueDonations = DonationsFactory.donations;
   self.user = Auth.user;
+
+  console.log(self.rescueDonations);
 
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
@@ -63,6 +65,9 @@ app.controller("FoodRescueController",
           contact_id: undefined,
           timestamp: new Date(),
         };
+      })
+      .catch(function (err) {
+        self.newDonation.saving = false;
       });
 
   };
@@ -75,20 +80,32 @@ app.controller("FoodRescueController",
     DonationsFactory.editDonations(donation)
       .then(function (result) {
         donation.saving = false;
+      })
+      .catch(function (err) {
+        donation.saving = false;
+        donation.editable = false;
       });
   };
 
   self.deleteDonation = function(donation) {
     if(verbose) {console.log("deleting"); }
 
-    donation.saving = true;
+    var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Donation', item: donation});
 
-    DonationsFactory.deleteDonations(donation)
-      .then(function (result) {
-        donation.saving = false;
-      });
+    confirm.result.then(function (config) {
+      donation.saving = true;
+      DonationsFactory.deleteDonations(donation)
+        .then(function (result) {
+          donation.saving = false;
+        })
+        .catch(function (err) {
+          donation.saving = false;
+        });
+    })
+    .catch(function (err) {
+    });
   };
-
+  
   self.getCsv = function () {
     DonationsFactory.getCsv();
   }
@@ -127,4 +144,4 @@ $scope.daterange = {
       }
     };
 
-}]);
+  }]);

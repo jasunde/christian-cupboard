@@ -3,9 +3,14 @@
 </div>
 
 <div class="container" ng-show="ddc.gotData">
+  <div class="banner">
+    <img src="/resources/background.png">
+  </div>
 <h2>Daily Distribution</h2>
 
-<form ng-if="ddc.user.is_admin">
+<div class= "row form-card" ng-if="ddc.user.is_admin">
+
+<form>
   <div class="form-group col-sm-3">
     <label>Start Date:</label>
     <input class = "form-control" type="date" ng-model="daterange.start"></input>
@@ -21,18 +26,56 @@
   </div>
 
   <div class="form-group col-sm-3">
-    <button 
-       type="button" 
-       class="btn btn-primary form-control form-button" 
+    <label name="Download CSV"></label>
+    <button
+       type="button"
+       class="btn btn-primary form-control form-button"
        ng-click="ddc.getCsv()">
       Download as CSV
     </button>
   </div>
 </form>
+</div>
 
-<table wt-responsive-table class="table">
+<div class = "form-card row">
+
+  <div class = "col-sm-4">
+    <label>Date:</label>
+    <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
+  </div>
+
+  <div class = "col-sm-4">
+    <label>First Name:</label>
+    <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+  </div>
+
+  <div class = "col-sm-4">
+    <label>Last Name:</label>
+    <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name">
+  </div>
+
+  <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
+  <label>{{category.name}}:</label><input type="number"
+  placeholder="# of lbs"
+  ng-model="ddc.newDistribution.categories[category.id]"
+  class="form-control">
+  <p></p>
+</p>
+<br>
+<div class = "col-sm-1">
+<button
+  type="button"
+  class="btn btn-success form-button form-control"
+  ng-click="ddc.addDistribution()">
+  <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
+</button>
+</div>
+</div>
+
+
+<table wt-responsive-table class="table-control table">
   <div>
-  <thead class="add-form">
+  <thead class="table-header">
 
     <!-- Headings -->
     <tr>
@@ -40,9 +83,8 @@
       <th>First Name</th>
       <th>Last Name Initals</th>
       <!-- Switch to Angular Repeat from Category Factory -->
-      <th 
-        ng-repeat="category in ddc.categories.list 
-        | filter: {daily_dist: true}">
+      <th
+        ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}">
         {{category.name}}
       </th>
       <!-- End Angular Category Repeat -->
@@ -53,34 +95,6 @@
 
     <tbody>
       <!-- Add Distribution -->
-      <tr class="add-form">
-        <td><input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp"></td>
-        <td>
-          <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
-        </td>
-        <td>
-            <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name">
-        </td>
-
-        <!-- Categories -->
-        <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
-          <input 
-            class="form-control" 
-            type="number" 
-            ng-model="ddc.newDistribution.categories[category.id]">
-          </input>
-        </td>
-        <!-- <td><input class="form-control" ng-model="ddc.newDistribution.time_weighted"></td> -->
-        <td>
-          <button
-            type="button"
-            class="btn btn-success"
-            ng-click="ddc.addDistribution()">
-            <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
-          </button>
-        </td>
-      </tr>
-
       <tr ng-repeat="distribution in (filtered = (ddc.dailyDistributions.list
       | filter: ddc.search
       | orderBy: '-timestamp'
@@ -88,25 +102,25 @@
 
         <!-- Date Weighed -->
         <td>
-          <span 
-            class="form-control"
-            disabled 
+          <span
+
+            disabled
             type="date"
             ng-if="!distribution.editable">
             {{distribution.timestamp | date: 'MM/dd/yyyy'}}
           </span>
           <span ng-if="distribution.editable">
             <input class="form-control"
-            type="date" 
+            type="date"
             ng-model="distribution.timestamp" required>
           </span>
         </td>
 
         <!-- First Name -->
         <td>
-          <span 
-            class="form-control" 
-            disabled 
+          <span
+
+            disabled
             ng-if="!distribution.editable">
             {{distribution.first_name}}
           </span>
@@ -117,9 +131,9 @@
 
         <!-- Last Name -->
         <td>
-          <span 
-            class="form-control" 
-            disabled 
+          <span
+
+            disabled
             ng-if="!distribution.editable">
             {{distribution.last_name}}
           </span>
@@ -130,16 +144,16 @@
 
         <!-- Categories -->
         <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
-          <span 
-            class="form-control" 
-            disabled 
+          <span
+
+            disabled
             ng-if="!distribution.editable">
             {{distribution.categories[category.id]}}
           </span>
           <span ng-if="distribution.editable">
-            <input 
-              class="form-control" 
-              type="text" 
+            <input
+              class="form-control"
+              type="text"
               ng-model="distribution.categories[category.id]">
           </span>
         </td>
@@ -160,7 +174,7 @@
                 type="button"
                 class="btn btn-primary"
                 ng-click="ddc.toggleEditable(distribution)">
-              <span class="glyphicon glyphicon-pencil"></span> Edit
+              <span class="glyphicon glyphicon-pencil"></span>
             </button>
             <button
               type="button"

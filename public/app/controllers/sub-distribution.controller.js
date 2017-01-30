@@ -1,6 +1,6 @@
 app.controller("SubDistributionController", 
-  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 
-  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q){
+  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'ConfirmFactory',
+  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, ConfirmFactory){
   var self = this;
   var verbose = true;
 
@@ -89,16 +89,29 @@ app.controller("SubDistributionController",
       subDistribution = {
         timestamp: new Date()
       };
+    })
+    .catch(function (err) {
+      subDistribution.saving = false;
+      subDistribution.editable = false;
     });
   };
 
-  self.delete = function (item) {
-    item.saving = true;
-    DistributionFactory.deleteDistribution(item)
-    .then(function (result) {
-        item.saving = false;
-    })
-  }
+    self.delete = function (item) {
+      var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Distribution', item: item});
+
+      confirm.result.then(function (config) {
+        item.saving = true;
+        DistributionFactory.deleteDistribution(item)
+          .then(function (result) {
+            item.saving = false;
+          })
+          .catch(function (err) {
+            item.saving = false;
+          });
+      })
+        .catch(function (err) {
+        });
+    }
 
   self.getCsv = function() {
     DistributionFactory.getCsv()

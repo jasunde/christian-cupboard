@@ -1,4 +1,7 @@
 <div class="container">
+  <div class="banner">
+    <img src="/resources/background.png">
+  </div>
   <h2>Manage Categories</h2>
 
   <table class="table admin">
@@ -109,15 +112,14 @@
                 type="button"
                 class="btn btn-primary"
                 ng-click="cc.toggleEditable(category)">
-              <span class="glyphicon glyphicon-pencil"></span> Edit
+              <span class="glyphicon glyphicon-pencil"></span> 
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              ng-click="cc.delete(category)">
-              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
-              <delete-glyph boolean="category.saving"></delete-glyph>
-            </button>
+            <!-- <button -->
+            <!--   type="button" -->
+            <!--   class="btn btn-danger" -->
+            <!--   ng-click="cc.delete(category)"> -->
+            <!--   <delete-glyph boolean="category.saving"></delete-glyph> -->
+            <!-- </button> -->
           </span>
           <!-- Editable -->
           <span ng-if="category.editable">

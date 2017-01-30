@@ -3,9 +3,9 @@
 <div class = "navbar navbar-inverse navbar-static-top">
   <div class="container">
     <div class="accentImage">
-      <img src="/resources/background.png"></img>
+      <a href="http://ccefs.org/" class="navbar-brand"><img src="/resources/CCLogoReversed.png"></img></a>
     </div>
-    <a href="http://ccefs.org/" class="navbar-brand">Christian Cupboard</a>
+
 
     <div ng-if="nc.displayName.name">
       <button class = "navbar-toggle" data-toggle="collapse" data-target= ".navHeaderCollapse" type="button">
@@ -31,10 +31,9 @@
                   <li><a href="#subDistribution">Sub Distribution</a></li>
                 </ul>
               </li>
-          <li class = "dropdown">
+          <li ng-if="nc.user.is_admin" class = "dropdown">
             <a class = "dropdown-toggle" data-toggle = "dropdown">Admin <b class= "caret"></b></a>
               <ul class = "dropdown-menu">
-                <!-- <li><a href="#">Reports</a></li> -->
                 <li><a href="#categories">Categories</a></li>
                 <li><a href="#users">Users</a></li>
                 <li><a href="#contacts">Contacts</a></li>
@@ -44,7 +43,7 @@
           </li>
           <li>
             <div class= "btn-group">
-            <button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills">Log Out</button>
+            <button ng-click="nc.logOut()" id="logOutButton" class="nav nav-pills log-out">Log Out</button>
           </div>
           </li>
         </ul>
