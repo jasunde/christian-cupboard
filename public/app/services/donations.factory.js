@@ -91,7 +91,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
     $http({
       method: 'GET',
       url: '/donations/csvtest',
-      dataType: "text/csv",
+      dataType: 'text/csv',
       headers: {id_token: Auth.user.idToken}
     })
     .then(function(result) {

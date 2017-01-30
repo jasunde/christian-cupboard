@@ -65,7 +65,7 @@ router.get('/', function (req, res) {
           )
             .then(function (result) {
               donation.categories = result.rows.reduce(function (total, current) {
-                total[current.category_id] = current.amount;
+                total[current.category_id] = parseFloat(current.amount);
                 return total;
               }, {});
               if(donations.length === index + 1) {
@@ -111,7 +111,7 @@ router.get('/id/:id', function (req, res) {
       .then(function (result) {
         client.release()
         donation.categories = result.rows.reduce(function (total, current) {
-          total[current.category_id] = current.amount;
+          total[current.category_id] = parseFloat(current.amount);
           return total;
         }, {})
         res.send(donation)
@@ -174,6 +174,14 @@ router.use(function (req, res, next) {
         })
     }
   } else {
+    req.body.donor = true;
+    if(req.body.org_name) {
+      req.body.org = true;
+      req.body.org_type = donor;
+    } else {
+      req.body.org = false;
+    }
+
     contactService.upsert(req, res)
       .then(function (response) {
         req.body.contact_id = req.contact.id
