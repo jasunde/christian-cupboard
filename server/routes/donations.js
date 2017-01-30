@@ -21,12 +21,27 @@ function buildQuery(query, categories) {
   var result = {
     text: `SELECT * FROM 
           crosstab(
-          'SELECT donations.id AS donation_id, donations.date AS date, donations.contact_id AS contact_id, donations.timestamp AS timestamp, name, amount FROM donations 
+          'SELECT 
+            donations.id AS donation_id, 
+            donations.date AS date, 
+            donations.contact_id AS contact_id, 
+            donations.timestamp AS timestamp, 
+            donations.date_entered AS donation_entered, 
+            name, 
+            amount 
+          FROM donations 
           LEFT JOIN donation_details ON donations.id = donation_details.donation_id 
           LEFT JOIN categories ON categories.id = donation_details.category_id 
           ORDER BY 1,2', 
           'SELECT name FROM categories') 
-          AS ct(donation_id INTEGER, date DATE, contact_id INTEGER, timestamp TIMESTAMP, ${categoryList}) 
+          AS ct(
+            donation_id INTEGER, 
+            date DATE, 
+            contact_id INTEGER, 
+            timestamp TIMESTAMP, 
+            donation_entered TIMESTAMP, 
+            ${categoryList}
+          ) 
           LEFT JOIN contacts ON contacts.id = contact_id`,
     values: []
   }
@@ -63,18 +78,14 @@ function buildQuery(query, categories) {
 
 //Takes care of getBy ContactID, getBYDateRange, and getByOrgType
 router.get('/', function (req, res) {
-  pool.connect()
-  .then(function (client) {
-    client.query(
+    pool.query(
       'SELECT * FROM categories'
     )
       .then(function (result) {
         var query = buildQuery(req.query, result.rows);
-        // console.log(query);
                
-        client.query(query)
+        pool.query(query)
         .then(function (result) {
-          client.release()
           res.send(result.rows)
         })
         .catch(function (err) {
@@ -86,7 +97,32 @@ router.get('/', function (req, res) {
         console.log('GET categories error:', err)
         res.status(500).send(err)
       });
-  });
+  // pool.connect()
+  // .then(function (client) {
+  //   client.query(
+  //     'SELECT * FROM categories'
+  //   )
+  //     .then(function (result) {
+  //       var query = buildQuery(req.query, result.rows);
+  //       // console.log(query);
+               
+  //       client.query(query)
+  //       .then(function (result) {
+  //         client.release()
+  //         res.send(result.rows)
+  //       })
+  //       .catch(function (err) {
+  //         client.release()
+  //         console.log('GET donations error:', err)
+  //         res.status(500).send(err)
+  //       });
+  //     })
+  //     .catch(function (err) {
+  //       client.release()
+  //       console.log('GET categories error:', err)
+  //       res.status(500).send(err)
+  //     });
+  // });
 
 
 });
@@ -118,11 +154,14 @@ router.get('/id/:id', function (req, res) {
         res.send(donation)
       })
       .catch(function (err) {
+        client.release()
         console.log('GET donation details by ID error:', err);
         res.status(500).send(err)
       })
     })
     .catch(function (err) {
+      client.release()
+
       console.log('GET donation by ID error:', err);
       res.status(500).send(err)
     })
@@ -130,33 +169,18 @@ router.get('/id/:id', function (req, res) {
 })
 
 router.delete('/:id', function (req, res) {
-  pool.connect()
-  .then(function (client) {
-    client.query(
-      'DELETE FROM donation_details '+
-      'WHERE donation_id = $1',
-      [req.params.id]
-    )
+  pool.query(
+    'DELETE FROM donations '+
+    'WHERE id = $1',
+    [req.params.id]
+  )
     .then(function () {
-      client.query(
-        'DELETE FROM donations '+
-        'WHERE id = $1',
-        [req.params.id]
-      )
-      .then(function () {
-        client.release();
-        res.sendStatus(200);
-      })
-      .catch(function (err) {
-        console.log('DELETE donation error:', err)
-        req.sendStatus(500)
-      })
+      res.sendStatus(200);
     })
     .catch(function (err) {
-      console.log('DELETE donation_details error:', err)
+      console.log('DELETE donation error:', err)
       req.sendStatus(500)
     })
-  })
 })
 
 router.use(contactService.find)
@@ -195,15 +219,17 @@ router.post('/', function (req, res) {
   var donation = req.body
   pool.connect()
   .then(function (client) {
+    var date = new Date();
     client.query(
-      'INSERT INTO donations (contact_id, timestamp, date, added_by) '+
-      'VALUES ($1, $2, $3, $4) '+
+      'INSERT INTO donations (contact_id, timestamp, date, added_by, date_entered) '+
+      'VALUES ($1, $2, $3, $4, $5) '+
       'RETURNING id',
       [
         req.contact.id,
         donation.timestamp,
         donation.timestamp,
-        req.user.id
+        req.user.id,
+        date.toISOString()
       ]
     )
     .then(function (result) {
@@ -232,14 +258,17 @@ router.post('/', function (req, res) {
 
         client.query(query)
         .then(function (response) {
+          client.release()
           res.sendStatus(201)
         })
         .catch(function (err) {
+          client.release()
           console.log('POST donation details error:', err);
           res.status(500).send(err)
         })
     })
     .catch(function (err) {
+      client.release()
       console.log('POST donation error:', err)
       res.status(500).send(err)
     })
@@ -282,14 +311,17 @@ router.put('/', function (req, res) {
 
       client.query(query)
       .then(function (response) {
+        client.release()
         res.sendStatus(200)
       })
       .catch(function (err) { 
+        client.release()
         console.log('UPSERT donation detail error:', err);
         res.status(500).send(err)
       })
     })
     .catch(function (err) {
+      client.release()
       console.log('POST donation error:', err)
       res.status(500).send(err)
     })
