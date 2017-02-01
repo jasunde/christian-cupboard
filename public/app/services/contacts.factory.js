@@ -1,4 +1,4 @@
-app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
+app.factory("ContactsFactory", ["$http", "Auth", '$q', 'toastr', function($http, Auth, $q, toastr){
 
   var verbose = false;
   var contacts = {};
@@ -79,6 +79,9 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
         .then(function (result) {
           console.log('Added contact', result);
           getNonClients()
+          .then(function(){
+              toastr.sucess('Contact Added');
+            })
           .then(function (result) {
             resolve(result);
           })
@@ -109,6 +112,9 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
         .then(function (result) {
           console.log('updated contact', result);
           getNonClients()
+          .then(function(){
+              toastr.info('Contact Updated');
+            })
           .then(function (result) {
             resolve(result);
           })
