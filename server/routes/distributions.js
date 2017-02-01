@@ -187,11 +187,11 @@ router.delete('/:id', function(req, res) {
     [req.params.id]
   )
     .then(function () {
-      res.sendStatus(200);
+      res.status(200);
     })
     .catch(function (err) {
       console.log('DELETE distribution error:', err)
-      req.sendStatus(500)
+      req.status(500)
     })
 })
 
@@ -273,7 +273,7 @@ router.post('/', function (req, res) {
             if(err) return rollback(client, done, res)
             client.query('COMMIT', function () {
               done()
-              res.sendStatus(200)
+              res.status(200)
             })
           })
         })
@@ -335,7 +335,7 @@ router.put('/', function(req, res) {
 
             client.query('COMMIT', function () {
               done()
-              res.sendStatus(200)
+              res.status(200)
             })
           })
         })
