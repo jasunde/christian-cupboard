@@ -36,22 +36,22 @@
   </div>
 
   <div class = "form-card row">
-    <div class = "col-sm-3">
+    <div class = "col-sm-4">
       <label>Date:</label>
       <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
     </div>
 
-    <div class = "col-sm-3">
+    <div class = "col-sm-4">
       <label>First Name:</label>
       <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
     </div>
 
-    <div class = "col-sm-3">
+    <div class = "col-sm-4">
       <label>Last Name:</label>
       <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
     </div>
 
-    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
+    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-2">
       <label>{{category.name}}:</label><input type="number"
       ng-model="ddc.newDistribution.categories[category.id]"
       class="form-control">
@@ -66,7 +66,6 @@
     </div>
   </div>
 
-</div>
 
 
 <table wt-responsive-table class="table-control table">
@@ -211,3 +210,4 @@
     </div>
   </table>
  </div>
+</div>
