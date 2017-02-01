@@ -1,9 +1,24 @@
-app.factory("DistributionFactory", ["$http", "Auth", '$q', "toastr", function($http, Auth, $q, toastr){
+app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 'toastr', function($http, Auth, $q, CategoryFactory, toastr){
  var verbose = false;
  var self = this;
  var distributions = {
    list: null
  };
+
+  function categoryPropsToObject(distributions) {
+    distributions.list.forEach(function (distribution) {
+      distribution.categories = {}
+      for(prop in distribution) {
+        if(CategoryFactory.categories.map.hasOwnProperty(prop)) {
+          if(distribution[prop]) {
+            distribution.categories[CategoryFactory.categories.map[prop]] = parseFloat(distribution[prop]);
+          }
+          delete distribution[prop]
+        }
+      }
+    });
+    return distributions;
+  }
 
  function getDistributions(){
    if(Auth.user.idToken) {
@@ -17,6 +32,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', "toastr", function($h
      })
      .then(function (result) {
        distributions.list = result.data
+       distributions = categoryPropsToObject(distributions)
        distributions.list.forEach(function (distribution) {
          distribution.timestamp = new Date(distribution.timestamp);
        });
@@ -92,7 +108,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', "toastr", function($h
               });
           })
         .catch(function (err) {
-          console.log('PUT user error:', err);
+          console.log('PUT distribution error:', err);
           reject();
         });
       } else {

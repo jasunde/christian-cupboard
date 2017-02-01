@@ -19,7 +19,6 @@ app.controller("FoodRescueController",
 
   console.log(self.rescueDonations);
 
-
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
   } else {
