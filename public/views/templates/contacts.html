@@ -35,7 +35,7 @@
         <button 
           class="btn btn-success form-control" 
           ng-click="cc.openModal('md', cc.newContact, 'Add')">
-          <add-glyph></add-glyph> Add Contact
+          <add-glyph></add-glyph><span class="hidden-sm hidden-md"> Add Contact</span>
         </button>
       </div>
       
@@ -44,7 +44,7 @@
           type="button"
           class="btn btn-primary form-control"
           ng-click="cc.getCsv()">
-          Download as CSV
+          Download<span class="hidden-sm hidden-md"> as CSV</span>
         </button>
       </div>
     </form>
