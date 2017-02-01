@@ -51,7 +51,7 @@
       <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
     </div>
 
-    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
+    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-2">
       <label>{{category.name}}:</label><input type="number"
       ng-model="ddc.newDistribution.categories[category.id]"
       class="form-control">
@@ -65,28 +65,6 @@
         </button>
     </div>
   </div>
-
-  <div class = "col-sm-4">
-    <label>Last Name:</label>
-    <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
-  </div>
-
-  <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
-  <label>{{category.name}}:</label><input type="number"
-  ng-model="ddc.newDistribution.categories[category.id]"
-  class="form-control">
-  <p></p>
-</p>
-<br>
-<div class = "col-sm-1">
-<button
-  type="button"
-  class="btn btn-success form-button form-control rescueButton"
-  ng-click="ddc.addDistribution()">
-  <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
-</button>
-</div>
-</div>
 
 
 <table wt-responsive-table class="table-control table">
@@ -233,3 +211,4 @@
     </div>
   </table>
  </div>
+</div>
