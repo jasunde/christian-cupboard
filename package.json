@@ -30,6 +30,8 @@
     "express-csv": "^0.6.0",
     "firebase-admin": "^4.0.4",
     "moment": "^2.17.1",
-    "pg": "^6.1.2"
+    "pg": "^6.1.2",
+    "pg-escape": "^0.2.0",
+    "slugify": "^1.1.0"
   }
 }
