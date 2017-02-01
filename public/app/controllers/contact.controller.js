@@ -25,9 +25,10 @@ app.controller('ContactController',
       }
       today = mm+'/'+dd+'/'+yyyy;
 
+
       $scope.daterange = {
-        start: new Date(today),
-        end: new Date(today)
+        start: null,
+        end: null
       };
 
       self.contact_filter = [ {

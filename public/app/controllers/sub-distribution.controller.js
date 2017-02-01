@@ -63,7 +63,9 @@ app.controller("SubDistributionController",
     self.newSubDistribution.saving = true;
     DistributionFactory.addDistribution(self.newSubDistribution)
     .then(function (result) {
-      self.newSubDistribution = {};
+      self.newSubDistribution = {
+        timestamp: new Date()
+      };
       self.newSubDistribution.saving = false;
     })
     .catch(function (err) {

@@ -25,7 +25,7 @@
             <input class="form-control" type="text" ng-model="uc.newUser.last_name">
         </td>
         <td>
-            <input class="form-control" type="email" ng-model="uc.newUser.email">
+            <input class="form-control" type="email" ng-model="uc.newUser.email" required>
         </td>
         <td class="text-center">
           <div class="checkbox">
@@ -85,13 +85,12 @@
                 ng-click="uc.toggleEditable(user)">
               <span class="glyphicon glyphicon-pencil"></span> 
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              ng-click="uc.delete(user)">
-              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
-              <delete-glyph boolean="user.saving"></delete-glyph>
-            </button>
+            <!-- <button -->
+            <!--   type="button" -->
+            <!--   class="btn btn-danger" -->
+            <!--   ng-click="uc.delete(user)"> -->
+            <!--   <delete-glyph boolean="user.saving"></delete-glyph> -->
+            <!-- </button> -->
           </span>
           <!-- Editable -->
           <span ng-if="user.editable">
