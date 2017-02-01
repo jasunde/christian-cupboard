@@ -297,6 +297,8 @@ router.get('/csvtest', function(req, res) {
   .then(function(result) {
     console.log('result: ', result.rows);
     res.attachment('testing.csv');
+    var headers = Object.keys(result.rows[0]);
+    result.rows.unshift(headers);
     res.csv(
       result.rows
     );
