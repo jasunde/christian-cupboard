@@ -1,4 +1,4 @@
-app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($http, Auth, $rootScope, $q) {
+app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', "toastr", function ($http, Auth, $rootScope, $q, toastr) {
   var verbose = false;
   var categories = {
     list: null,
@@ -31,7 +31,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
         .then(function (result) {
           categories.list = result.data;
           categories.map = categories.list.reduce(function (catMap, category) {
-            catMap[category.id] = undefined;
+            catMap[category.name] = category.id;
             return catMap;
           }, {});
           if(verbose) {console.log('map', categories.list);}
@@ -58,7 +58,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           }
         })
         .then(function (result) {
-          getCategories();
+          getCategories()
+            .then(function(){
+              toastr.success('Category Added');
+            })
           resolve(result);
         })
         .catch(function (err) {
@@ -83,7 +86,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           }
         })
           .then(function (result) {
-            getCategories();
+            getCategories()
+              .then(function(){
+              toastr.info('Category Updated');
+            })
             resolve(result);
           })
           .catch(function (err) {

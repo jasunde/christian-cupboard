@@ -1,6 +1,7 @@
 app.controller("FoodRescueController",
-  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory',
-  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory){
+  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory', 'toastr',
+  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory, toastr){
+
 
   var self = this;
   var verbose = true;
@@ -18,7 +19,6 @@ app.controller("FoodRescueController",
   self.user = Auth.user;
 
   console.log(self.rescueDonations);
-
 
   if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
     self.gotData = true;
@@ -59,7 +59,7 @@ app.controller("FoodRescueController",
     DonationsFactory.submitDonations(self.newDonation)
       .then(function (result) {
         self.newDonation.saving = false;
-
+        // toastr.success('Donation Submitted');
         self.newDonation = {
           contact_id: undefined,
           timestamp: new Date(),

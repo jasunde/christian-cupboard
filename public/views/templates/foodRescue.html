@@ -2,7 +2,8 @@
   <div id="loader"></div>
 </div>
 <div class="container" ng-show="frc.gotData">
-  <div class="banner">
+
+<div class="banner">
   <img src="/resources/background.png">
 </div>
 <h2>Food Rescue</h2>
@@ -11,7 +12,7 @@
   <div class="row form-card" ng-if="frc.user.is_admin">
     <form>
       <div class="form-group col-sm-2">
-        <label>Donors:</label>
+        <label>Donors</label>
         <select
           class="form-control"
           ng-options="org.id as org.org_name for org in frc.rescueContacts.list | filter: {org_type: 'food_rescue'}"
@@ -21,16 +22,16 @@
       </div>
 
       <div class="form-group col-sm-2">
-        <label>Start Date:</label>
+        <label>Start Date</label>
         <input class="form-control" type="date" ng-model="daterange.start">
       </div>
       <div class="form-group col-sm-2">
-        <label>End Date:</label>
+        <label>End Date</label>
         <input class="form-control" type="date" ng-model="daterange.end">
       </div>
 
       <div class="form-group col-sm-4">
-        <label>Search:</label>
+        <label>Search</label>
         <input class="form-control" type="search" ng-model="frc.search">
       </div>
     </form>
@@ -40,7 +41,7 @@
         type="button"
         class="btn btn-primary form-control"
         ng-click="frc.getCsv()">
-        Download as CSV
+        Download<span class="hidden-sm hidden-md"> as CSV</span>
       </button>
     </div>
   </div>
@@ -69,7 +70,7 @@
     <div
       ng-repeat="category in frc.rescueCategories.list
       | filter: {food_rescue: true}" class= "col-sm-2">
-      <label>{{category.name}}:</label>
+      <label>{{category.name}}</label>
       <input type="number"
              ng-model="frc.newDonation.categories[category.id]"
              class="form-control"]
@@ -178,7 +179,7 @@
                   type="button"
                   class="btn btn-default"
                   ng-click="frc.toggleEditable(donation)">
-                  <span class="glyphicon glyphicon-remove"></span>
+                  <span class="glyphicon glyphicon-remove"></span> Cancel
                 </button>
               </span>
             </td>

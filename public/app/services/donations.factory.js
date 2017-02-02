@@ -1,8 +1,28 @@
-app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
+
+app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', function($http, Auth, CategoryFactory, toastr){
  var verbose = false;
  var donations = {
    list: null
  };
+
+  function categoryPropsToObject(donations) {
+    donations.list.forEach(function (donation) {
+      donation.categories = {}
+
+      for(prop in donation) {
+
+        if(CategoryFactory.categories.map.hasOwnProperty(prop)) {
+          if(donation[prop]) {
+            donation.categories[CategoryFactory.categories.map[prop]] = parseFloat(donation[prop]);
+          }
+          delete donation[prop]
+        }
+
+      }
+    });
+
+    return donations;
+  }
 
  function getDonations(){
    if(Auth.user.idToken) {
@@ -16,6 +36,7 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
      })
      .then(function (result) {
        donations.list = result.data;
+        donations = categoryPropsToObject(donations);
        for (var i = 0; i < donations.list.length; i++) {
          donations.list[i].timestamp = new Date(donations.list[i].timestamp);
        }
@@ -44,7 +65,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        return getDonations();
+        return getDonations()
+        .then(function (){
+        toastr.success('Donation Submitted');
+        })
       });
     }
   }
@@ -61,7 +85,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        return getDonations();
+        return getDonations()
+        .then(function(){
+          toastr.info('Donation Edited');
+        })
       })
       .catch(function (err) {
         console.log('POST donation error:', err);
@@ -83,7 +110,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
           }
         })
           .then(function (result){
-            return getDonations();
+            return getDonations()
+            .then(function(){
+              toastr.error('Donation Deleted');
+            })
           })
         .catch(function (err) {
           console.log('DELETE donation error:', err);
