@@ -245,14 +245,13 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-click="fdc.openModal('md', donation, 'Edit', fdc.driveCategories)">
+                  ng-click="fdc.openModal('md', donation, 'Edit', fdc.driveCategories); fdc.toggleEditable(donation)">
                   <span class="glyphicon glyphicon-pencil"></span>
                 </button>
                 <button
                   type="button"
                   class="btn btn-danger"
                   ng-click="fdc.deleteDonation(donation)">
-                  <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
                   <delete-glyph boolean="donation.saving"></delete-glyph>
                 </button>
               </span>
@@ -262,7 +261,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-click="fdc.toggleEditable(donation)">
+                  ng-click="fdc.editDonation(donation)">
                   <save-glyph boolean="donation.saving"></save-glyph>
                 </button>
                 <button
