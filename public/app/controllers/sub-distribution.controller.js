@@ -1,4 +1,4 @@
-app.controller("SubDistributionController", 
+app.controller("SubDistributionController",
   ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'ConfirmFactory',
   function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, ConfirmFactory){
   var self = this;
@@ -140,5 +140,28 @@ app.controller("SubDistributionController",
       start: new Date(today),
       end: new Date(today)
     };
+
+    self.valueCheck = function () {
+      if(hasOne(self.newSubDistribution.categories)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    function hasOne(obj) {
+      var result = false;
+      if(obj) {
+        var keys = Object.keys(obj);
+
+        if(keys) {
+          result = keys.some(function (key) {
+            return obj[key];
+          });
+        }
+
+      }
+      return result;
+    }
 
   }]);

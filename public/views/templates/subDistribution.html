@@ -67,12 +67,40 @@
       <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp" required>
     </div>
 
-    <p ng-repeat="category in sdc.subDistributionCategories.list | filter: {sub_dist: true}" class= "col-sm-2">
+    <!-- <p ng-repeat="category in sdc.subDistributionCategories.list | filter: {sub_dist: true}" class= "col-sm-2">
       <label>{{category.name}}</label>
       <input  class="form-control"
         type="number"
         ng-model="sdc.newSubDistribution.categories[category.id]">
-    </p>
+    </p> -->
+
+    <ng-form name="categoryFields">
+      <div class = "col-sm-2"
+        ng-repeat="category in sdc.subDistributionCategories.list | filter: {sub_dist: true}"
+        ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
+
+          <label>{{category.name}}</label>
+          <input
+            class="form-control"
+            type="number"
+            ng-model="sdc.newSubDistribution.categories[category.id]"
+            ng-required="sdc.valueCheck()">
+      </div>
+      <div class = "col-sm-4" ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
+        <label></label>
+        <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$dirty">*Amount Required for One Category</p>
+      </div>
+    </ng-form>
+
+
+
+
+
+
+
+
+
+
     <div class="col-sm-1 align-button">
       <button
         type="button"
