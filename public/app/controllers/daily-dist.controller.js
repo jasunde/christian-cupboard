@@ -129,4 +129,28 @@ $scope.$on('user:updated', function (event, data) {
     start: new Date(today),
     end: new Date(today)
   };
+
+  self.valueCheck = function () {
+    if(hasOne(self.newDistribution.categories)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function hasOne(obj) {
+    var result = false;
+    if(obj) {
+      var keys = Object.keys(obj);
+
+      if(keys) {
+        result = keys.some(function (key) {
+          return obj[key];
+        });
+      }
+
+    }
+    return result;
+  }
+
 }]);

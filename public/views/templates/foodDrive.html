@@ -105,7 +105,7 @@
   <ng-form name="categoryFields">
     <div class = "col-sm-2"
       ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}"
-      ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$pristine }">
+      ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
 
         <label>{{category.name}}</label>
         <input
@@ -113,8 +113,10 @@
           type="number"
           ng-model="fdc.newDonation.categories[category.id]"
           ng-required="fdc.valueCheck()">
-          
-        <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$pristine">Weight Required</p>
+    </div>
+    <div class = "col-sm-4" ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
+      <label></label>
+      <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$dirty">*Amount Required for One Category</p>
     </div>
   </ng-form>
 
@@ -124,7 +126,7 @@
         type="button"
         class="btn btn-success form-control"
         ng-click="fdc.submitDonation()"
-        ng-disabled="foodDrive.$valid">
+        ng-disabled="foodDrive.$invalid">
         <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
       </button>
     </div>

@@ -37,21 +37,25 @@
   <div class = "form-card row">
   <form name="dailyDistForm" novalidate>
     <div class = "col-sm-4">
-      <label>Date:</label>
-      <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
+      <label>Date*</label>
+      <input class="form-control"
+             type="date"
+             ng-model="ddc.newDistribution.timestamp"
+             required>
     </div>
 
-    <div class = "col-sm-4" ng-class="{ 'has-error' : dailyDistForm.name.$invalid && !dailyDistForm.name.$pristine }">
-      <label>First Name:</label>
+  <ng-form name="dDFirstName">
+    <div class = "col-sm-4">
+      <label>First Name*</label>
       <input class="form-control"
              type="text"
              ng-model="ddc.newDistribution.first_name"
              required>
-      <p ng-show="dailyDistForm.first_name.$invalid && !dailyDistForm.first_name.$pristine" class="help-block">First name is required.</p>
     </div>
+  </ng-form>
 
     <div class = "col-sm-4">
-      <label>Last Name:</label>
+      <label>Last 3 Initals*</label>
       <input class="form-control"
              type="text"
              ng-model="ddc.newDistribution.last_name"
@@ -59,11 +63,32 @@
              required>
     </div>
 
-    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-2">
-      <label>{{category.name}}</label><input type="number"
-      ng-model="ddc.newDistribution.categories[category.id]"
-      class="form-control">
-    </p>
+    <div class = "col-sm-2">
+      <label>Family Size*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.family_size"
+             maxlength="3"
+             required>
+    </div>
+
+    <ng-form name="categoryFields">
+      <div class = "col-sm-2"
+        ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}"
+        ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty}">
+
+          <label>{{category.name}}</label>
+          <input
+            class="form-control"
+            type="number"
+            ng-model="ddc.newDistribution.categories[category.id]"
+            ng-required="ddc.valueCheck()">
+      </div>
+      <div class = "col-sm-4" ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
+        <label></label>
+        <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$dirty">*Amount Required for One Category</p>
+      </div>
+    </ng-form>
     <div class="col-sm-1 align-button">
         <button
           type="button"

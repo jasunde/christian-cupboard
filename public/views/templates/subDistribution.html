@@ -51,17 +51,19 @@
 
 
   <div class = "form-card row">
+    <form name="subDistForm">
     <div class = "col-sm-6">
-      <label>Reciever</label>
+      <label>Reciever*</label>
         <select class="form-control"
           ng-options="org.id as org.org_name for org in sdc.contacts.list
           | filter: {org_type: 'sub_distribution'}"
-          ng-model="sdc.newSubDistribution.contact_id">
+          ng-model="sdc.newSubDistribution.contact_id"
+          required>
         </select>
     </div>
 
     <div class = "col-sm-6">
-      <label>Date</label>
+      <label>Date*</label>
       <input class="form-control" type="date" ng-model="sdc.newSubDistribution.timestamp" required>
     </div>
 
@@ -75,10 +77,12 @@
       <button
         type="button"
         class="btn btn-success form-control"
-        ng-click="sdc.addSubDistribution()">
+        ng-click="sdc.addSubDistribution()"
+        ng-disabled="subDistForm.$invalid">
         <add-glyph boolean="sdc.newSubDistribution.saving"></add-glyph>
       </button>
     </div>
+  </form>
   </div>
 
   <table wt-responsive-table class="table-control table">

@@ -1,6 +1,6 @@
 app.controller("FoodRescueController",
-  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory', 'toastr',
-  function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory, toastr){
+['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory', 'toastr',
+function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory, toastr){
 
 
   var self = this;
@@ -36,7 +36,7 @@ app.controller("FoodRescueController",
       DistributionFactory.getDistributions();
       self.gotData = true;
     });
-}
+  }
 
   $scope.$on('user:updated', function (event, data) {
 
@@ -57,17 +57,17 @@ app.controller("FoodRescueController",
     self.newDonation.saving = true;
     if(verbose) {console.log("Submitting newDonation", self.newDonation); }
     DonationsFactory.submitDonations(self.newDonation)
-      .then(function (result) {
-        self.newDonation.saving = false;
-        // toastr.success('Donation Submitted');
-        self.newDonation = {
-          contact_id: undefined,
-          timestamp: new Date(),
-        };
-      })
-      .catch(function (err) {
-        self.newDonation.saving = false;
-      });
+    .then(function (result) {
+      self.newDonation.saving = false;
+      // toastr.success('Donation Submitted');
+      self.newDonation = {
+        contact_id: undefined,
+        timestamp: new Date(),
+      };
+    })
+    .catch(function (err) {
+      self.newDonation.saving = false;
+    });
   };
 
   self.editDonation = function(donation) {
@@ -76,13 +76,13 @@ app.controller("FoodRescueController",
     donation.saving = true;
 
     DonationsFactory.editDonations(donation)
-      .then(function (result) {
-        donation.saving = false;
-      })
-      .catch(function (err) {
-        donation.saving = false;
-        donation.editable = false;
-      });
+    .then(function (result) {
+      donation.saving = false;
+    })
+    .catch(function (err) {
+      donation.saving = false;
+      donation.editable = false;
+    });
   };
 
   self.deleteDonation = function(donation) {
@@ -93,12 +93,12 @@ app.controller("FoodRescueController",
     confirm.result.then(function (config) {
       donation.saving = true;
       DonationsFactory.deleteDonations(donation)
-        .then(function (result) {
-          donation.saving = false;
-        })
-        .catch(function (err) {
-          donation.saving = false;
-        });
+      .then(function (result) {
+        donation.saving = false;
+      })
+      .catch(function (err) {
+        donation.saving = false;
+      });
     })
     .catch(function (err) {
     });
@@ -108,38 +108,61 @@ app.controller("FoodRescueController",
     DonationsFactory.getCsv();
   }
 
-//utility functions
-//adding current time to scope, possibly helpful for filtering results by date.
+  //utility functions
+  //adding current time to scope, possibly helpful for filtering results by date.
 
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; //January is 0!
-var yyyy = today.getFullYear();
-if(dd<10) {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  if(dd<10) {
     dd='0'+dd
-}
-if(mm<10) {
+  }
+  if(mm<10) {
     mm='0'+mm
-}
-today = mm+'/'+dd+'/'+yyyy;
+  }
+  today = mm+'/'+dd+'/'+yyyy;
 
 
   var now = new Date().getTime();
-    $scope.date = new Date(2015, 10, 10);
-    $scope.ago = now < $scope.date.getTime();
-    $scope.before = now > $scope.date.getTime();
-$scope.daterange = {
-  start: new Date(today),
-  end: new Date(today)
-};
-    // $scope.dateRange = dateRangeFilter(date, $scope.startDate, $scope.endDate)
+  $scope.date = new Date(2015, 10, 10);
+  $scope.ago = now < $scope.date.getTime();
+  $scope.before = now > $scope.date.getTime();
+  $scope.daterange = {
+    start: new Date(today),
+    end: new Date(today)
+  };
+  // $scope.dateRange = dateRangeFilter(date, $scope.startDate, $scope.endDate)
 
-    self.toggleEditable = function (donation) {
-      if(donation.editable) {
-        donation.editable = false;
-      } else {
-        donation.editable = true;
+  self.toggleEditable = function (donation) {
+    if(donation.editable) {
+      donation.editable = false;
+    } else {
+      donation.editable = true;
+    }
+  };
+
+  self.valueCheck = function () {
+    if(hasOne(self.newDonation.categories)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function hasOne(obj) {
+    var result = false;
+    if(obj) {
+      var keys = Object.keys(obj);
+
+      if(keys) {
+        result = keys.some(function (key) {
+          return obj[key];
+        });
       }
-    };
+
+    }
+    return result;
+  }
 
 }]);

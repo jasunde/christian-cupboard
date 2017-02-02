@@ -134,9 +134,9 @@ $scope.daterange = {
 
 self.valueCheck = function () {
   if(hasOne(self.newDonation.categories)) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
 }
 
