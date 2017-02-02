@@ -128,17 +128,20 @@ app.controller("FoodDriveController",
     $scope.ago = now < $scope.date.getTime();
     $scope.before = now > $scope.date.getTime();
 
+    if(Auth.user.is_admin) {
+      $scope.dateProp = 'timestamp';
+      var startDate = moment(today).subtract(2, 'months').toDate();
+      console.log('daterange.start', daterange.start);
+    } else {
+      $scope.dateProp = 'date_entered';
+      startDate = moment(today).subtract(1, 'months').toDate();
+    }
+
     $scope.daterange = {
-      start: moment(today).subtract(2, 'months').toDate(),
+      start: startDate,
+      // start: moment(today).subtract(2, 'months').toDate(),
       end: new Date(today)
     };
 
-    if(Auth.user.is_admin) {
-      $scope.dateProp = 'timestamp';
-      $scope.daterange.start = moment(today).subtract(2, 'months').toDate();
-      console.log('daterange.start', daterange.start)
-    } else {
-      $scope.dateProp = 'date_entered';
-    }
 
   }]);
