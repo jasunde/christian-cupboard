@@ -61,10 +61,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
         })
         .then(function (result) {
           getDistributions()
-          .then(function(){
-            toastr.success('Distribution Successful');
-          })
           .then(function (result) {
+            toastr.success('Distribution Successful');
             resolve(result);
           })
           .catch(function (err) {
@@ -96,10 +94,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
         })
           .then(function (result) {
             getDistributions()
-            .then(function(){
-            toastr.info('Distribution Edited');
-            })
               .then(function (result) {
+                toastr.info('Distribution Edited');
                 resolve(result)
               })
               .catch(function (err) {
@@ -129,11 +125,10 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
           }
         })
           .then(function (result) {
+            console.log('getting distributions')
             getDistributions()
-            .then(function(){
-              toastr.error('Distribution Deleted');
-            })
             .then(function (result) {
+              toastr.error('Distribution Deleted');
               resolve(result);
             })
             .catch(function (err) {
