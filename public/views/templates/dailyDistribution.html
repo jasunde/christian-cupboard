@@ -9,7 +9,6 @@
   <h2>Daily Distribution</h2>
 
   <div class= "row form-card" ng-if="ddc.user.is_admin">
-    <form>
       <div class="form-group col-sm-3">
         <label>Start Date:</label>
         <input class = "form-control" type="date" ng-model="daterange.start">
@@ -36,19 +35,28 @@
   </div>
 
   <div class = "form-card row">
+  <form name="dailyDistForm" novalidate>
     <div class = "col-sm-4">
       <label>Date:</label>
       <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
     </div>
 
-    <div class = "col-sm-4">
+    <div class = "col-sm-4" ng-class="{ 'has-error' : dailyDistForm.name.$invalid && !dailyDistForm.name.$pristine }">
       <label>First Name:</label>
-      <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.first_name"
+             required>
+      <p ng-show="dailyDistForm.first_name.$invalid && !dailyDistForm.first_name.$pristine" class="help-block">First name is required.</p>
     </div>
 
     <div class = "col-sm-4">
       <label>Last Name:</label>
-      <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.last_name"
+             maxlength="3"
+             required>
     </div>
 
     <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
@@ -60,10 +68,12 @@
         <button
           type="button"
           class="btn btn-success form-control"
-          ng-click="ddc.addDistribution()">
+          ng-click="ddc.addDistribution()"
+          ng-disabled="dailyDistForm.$invalid">
           <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
         </button>
     </div>
+  </form>
   </div>
 
   <table wt-responsive-table class="table-control table">

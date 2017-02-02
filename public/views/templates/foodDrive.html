@@ -10,7 +10,7 @@
 
   <!-- FILTERS -->
   <div class = "row form-card"  ng-if="fdc.user.is_admin">
-    <form>
+    <form name="driveForm" novalidate>
       <div class="form-group col-sm-2">
         <label>Organizations:</label>
         <select
@@ -51,6 +51,7 @@
 
   <!-- NEW LAYOUT SHITS, ENTER FORM -->
   <div class = "form-card row">
+    <form name="foodDrive" novalidate>
     <div class = "col-sm-4">
       <label>Date:</label>
       <input class="form-control" type="date" ng-model="fdc.newDonation.timestamp" required>
@@ -101,18 +102,33 @@
       <input class="form-control" type="text" ng-model="fdc.newDonation.org_name">
     </div>
 
-    <div class = "col-sm-2" ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
-      <label>{{category.name}}</label>
-      <input class="form-control" type="number" ng-model="fdc.newDonation.categories[category.id]">
+  <ng-form name="categoryFields">
+    <div class = "col-sm-2"
+      ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}"
+      ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$pristine }">
+
+        <label>{{category.name}}</label>
+        <input
+          class="form-control"
+          type="number"
+          ng-model="fdc.newDonation.categories[category.id]"
+          ng-required="fdc.valueCheck()">
+          
+        <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$pristine">Weight Required</p>
     </div>
+  </ng-form>
+
+
     <div class="col-sm-1 align-button">
-      <button 
-        type="button" 
-        class="btn btn-success form-control" 
-        ng-click="fdc.submitDonation()">
+      <button
+        type="button"
+        class="btn btn-success form-control"
+        ng-click="fdc.submitDonation()"
+        ng-disabled="foodDrive.$valid">
         <add-glyph boolean="fdc.newDonation.saving"></add-glyph>
       </button>
     </div>
+  </form>
   </div>
   <!-- ENTER FORM DONE -->
   <div class = "row">
@@ -188,7 +204,7 @@
             </td>
             <!-- State -->
             <td>
-              <span 
+              <span
                 disabled ng-if="!donation.editable">{{donation.state}}</span>
               <span ng-if="donation.editable">
                 <input class="form-control" type="text" ng-model="donation.state" maxlength="2">

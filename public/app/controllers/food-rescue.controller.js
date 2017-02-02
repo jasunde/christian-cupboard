@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", 
+app.controller("FoodRescueController",
   ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory',
   function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory){
 
@@ -53,10 +53,9 @@ app.controller("FoodRescueController",
   });
 
   self.submitDonation = function() {
-    if(verbose) {console.log("Submitting newDonation", self.newDonation); }
-
+    console.log("click");
     self.newDonation.saving = true;
-
+    if(verbose) {console.log("Submitting newDonation", self.newDonation); }
     DonationsFactory.submitDonations(self.newDonation)
       .then(function (result) {
         self.newDonation.saving = false;
@@ -69,7 +68,6 @@ app.controller("FoodRescueController",
       .catch(function (err) {
         self.newDonation.saving = false;
       });
-
   };
 
   self.editDonation = function(donation) {
@@ -105,7 +103,7 @@ app.controller("FoodRescueController",
     .catch(function (err) {
     });
   };
-  
+
   self.getCsv = function () {
     DonationsFactory.getCsv();
   }
@@ -144,4 +142,4 @@ $scope.daterange = {
       }
     };
 
-  }]);
+}]);

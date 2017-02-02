@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", 
+app.controller("DailyDistributionController",
   ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', 'ConfirmFactory',
   function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q, ConfirmFactory){
 
@@ -54,6 +54,7 @@ $scope.$on('user:updated', function (event, data) {
 
   self.addDistribution = function () {
     if(verbose) {console.log(self.newDistribution);}
+    if ($scope.dailyDistForm.$valid) {
     console.log('adding');
     self.newDistribution.saving = true;
     DistributionFactory.addDistribution(self.newDistribution)
@@ -66,6 +67,7 @@ $scope.$on('user:updated', function (event, data) {
       .catch(function (err) {
         self.newDistribution.saving = false;
       });
+    };
   };
 
   self.updateDistribution = function (distribution) {
