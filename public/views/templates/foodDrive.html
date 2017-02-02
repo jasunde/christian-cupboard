@@ -245,7 +245,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-click="fdc.toggleEditable(donation)">
+                  ng-click="fdc.openModal('md', donation, 'Edit', fdc.driveCategories)">
                   <span class="glyphicon glyphicon-pencil"></span>
                 </button>
                 <button
@@ -262,7 +262,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  ng-click="fdc.editDonation(donation)">
+                  ng-click="fdc.toggleEditable(donation)">
                   <save-glyph boolean="donation.saving"></save-glyph>
                 </button>
                 <button
