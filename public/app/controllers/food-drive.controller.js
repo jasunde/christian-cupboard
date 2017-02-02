@@ -129,7 +129,16 @@ app.controller("FoodDriveController",
     $scope.before = now > $scope.date.getTime();
 
     $scope.daterange = {
-      start: new Date(today),
+      start: moment(today).subtract(2, 'months').toDate(),
       end: new Date(today)
     };
+
+    if(Auth.user.is_admin) {
+      $scope.dateProp = 'timestamp';
+      $scope.daterange.start = moment(today).subtract(2, 'months').toDate();
+      console.log('daterange.start', daterange.start)
+    } else {
+      $scope.dateProp = 'date_entered';
+    }
+
   }]);
