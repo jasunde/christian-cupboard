@@ -149,94 +149,39 @@
             | filter: fdc.search
             | dateRange:'timestamp':daterange.start:daterange.end))">
               <!-- Date of Donation -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.timestamp | date: 'MM/dd/yyyy'}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="date" ng-model="donation.timestamp" required>
-              </span>
-            </td>
+            <td>{{donation.timestamp | date: 'MM/dd/yyyy'}}</td>
+
             <!-- First Name -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.first_name}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.first_name">
-              </span>
-            </td>
+            <td>{{donation.first_name}}</td>
+
             <!-- Last Name -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.last_name}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.last_name">
-              </span>
-            </td>
+            <td>{{donation.last_name}}</td>
+
             <!-- Address -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.address}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.address">
-              </span>
-            </td>
+            <td>{{donation.address}}</td>
+
             <!-- City -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.city}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.city">
-              </span>
-            </td>
+            <td>{{donation.city}}</td>
+
             <!-- State -->
-            <td>
-              <span 
-                disabled ng-if="!donation.editable">{{donation.state}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.state" maxlength="2">
-              </span>
-            </td>
+            <td>{{donation.state}}</td>
+
             <!-- Zip -->
-            <!-- <td>
-              <span
-              disabled ng-if="!donation.editable">{{donation.postal_code}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.postal_code">
-              </span>
-            </td> -->
+             <!--<td>{{donation.postal_code}}</td>-->
+
             <!-- Email -->
-            <!-- <td>
-              <span
-              disabled ng-if="!donation.editable">{{donation.email}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.email">
-              </span>
-            </td> -->
-            <!-- Telephone -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.phone_number}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.phone_number">
-              </span>
-            </td>
+            <!--<td>{{donation.email}}</td> -->
+
+             <!--Telephone -->
+            <td>{{donation.phone_number}}</td>
+            
             <!-- Organization Name -->
-            <td>
-              <span
-                disabled ng-if="!donation.editable">{{donation.org_name}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control" type="text" ng-model="donation.org_name">
-              </span>
-            </td>
+            <td>{{donation.org_name}}</td>
+            
             <!-- Categories -->
-            <td ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
-              <span
-                disabled ng-if="!donation.editable">{{donation.categories[category.id]}}</span>
-              <span ng-if="donation.editable">
-                <input class="form-control"
-                type="text"
-                ng-model="donation.categories[category.id]">
-              </span>
+            <td 
+              ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
+              {{donation.categories[category.id]}}
             </td>
             <!-- Edit -->
             <td>
