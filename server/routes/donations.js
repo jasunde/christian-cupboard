@@ -4,6 +4,7 @@ var pgEscape = require('pg-escape');
 var contactService = require('../modules/contactService');
 var pg = require('pg');
 var config = require('../config');
+var moment = require('moment')
 
 var pool = new pg.Pool(config.pg)
 
@@ -16,7 +17,7 @@ var rollback = function (client, done, res) {
 
 var MAX_GET = 1000
 
-function buildQuery(query, categories) {
+function buildQuery(query, categories, toCsv) {
   var param = 1;
   var categoryList = ''
   categories.forEach(function (category, index) {
@@ -24,24 +25,32 @@ function buildQuery(query, categories) {
     if(index < categories.length - 1) {
       categoryList += ', '
     } 
-  })
+  });
+
+
+  if(toCsv) {
+    var selection = 'contacts.org_name, contacts.first_name, contacts.last_name, ct.*';
+  } else {
+    selection = '*';
+  }
+
   var result = {
-    text: `SELECT * FROM 
+    text: `SELECT ${selection} FROM 
           crosstab(
-          'SELECT 
-            donations.id AS donation_id, 
-            donations.date AS date, 
-            donations.contact_id AS contact_id, 
-            donations.timestamp AS timestamp, 
-            donations.date_entered AS donation_entered, 
-            name, 
-            amount 
-          FROM donations 
-          LEFT JOIN donation_details ON donations.id = donation_details.donation_id 
-          LEFT JOIN categories ON categories.id = donation_details.category_id 
-          ORDER BY 1,2', 
-          'SELECT name FROM categories') 
-          AS ct(
+            'SELECT 
+              donations.id AS donation_id, 
+              donations.date AS date, 
+              donations.contact_id AS contact_id, 
+              donations.timestamp AS timestamp, 
+              donations.date_entered AS donation_entered, 
+              name, 
+              amount 
+            FROM donations 
+            LEFT JOIN donation_details ON donations.id = donation_details.donation_id 
+            LEFT JOIN categories ON categories.id = donation_details.category_id 
+            ORDER BY 1,2', 
+            'SELECT name FROM categories'
+          ) AS ct(
             donation_id INTEGER, 
             date DATE, 
             contact_id INTEGER, 
@@ -67,18 +76,28 @@ function buildQuery(query, categories) {
     param++
   }
 
-  if(query.start_date && query.end_date) {
+  if(query.start_date || query.end_date) {
     if(query.contact_id || query.org_type) {
       result.text += ' AND'
     } else {
       result.text += ' WHERE'
     }
 
-    result.text += ' date >= $' + param
-    param++
-    result.text += ' AND date <= $' + param
-    param++
-    result.values.push(query.start_date, query.end_date)
+    if(query.start_date) {
+      result.text += ' date >= $' + param
+      param++
+      result.values.push(query.start_date)
+    }
+
+    if(query.start_date && query.end_date) {
+      result.text += ' AND'
+    }
+
+    if(query.end_date) {
+      result.text += ' date <= $' + param
+      param++
+      result.values.push(query.end_date)
+    }
   } else {
     result.text += ' LIMIT ' + MAX_GET
   }
@@ -148,6 +167,37 @@ router.delete('/:id', function (req, res) {
       req.sendStatus(500)
     })
 })
+
+router.get('/csv', function(req, res) {
+  pool.query(
+    'SELECT * FROM categories'
+  )
+    .then(function (result) {
+      var query = buildQuery(req.query, result.rows, true);
+
+      pool.query(query)
+        .then(function (result) {
+          var data = result.rows.map(function (row) {
+            row.date = toDateString(row.date);
+            row.donation_entered = toDateString(row.donation_entered)
+            return row;
+          });
+          res.attachment('testing.csv');
+          var headers = Object.keys(result.rows[0]);
+          data.unshift(headers);
+          res.csv(data);
+        })
+        .catch(function (err) {
+          console.log('GET donations error:', err)
+          res.status(500).send(err)
+        });
+    })
+    .catch(function (err) {
+      console.log('GET categories error:', err)
+      res.status(500).send(err)
+    });
+
+});
 
 router.use(contactService.find)
 router.use(function (req, res, next) {
@@ -308,22 +358,8 @@ router.put('/', function (req, res) {
   })
 })
 
-router.get('/csvtest', function(req, res) {
-  pool.query(
-    'SELECT * FROM categories'
-  )
-  .then(function(result) {
-    res.attachment('testing.csv');
-    var headers = Object.keys(result.rows[0]);
-    result.rows.unshift(headers);
-    res.csv(
-      result.rows
-    );
-  })
-  .catch(function(err) {
-    console.log('GET all donations err:', err);
-    res.status(500).send(err);
-  });
-});
+function toDateString(timestamp) {
+  return moment(timestamp).format('YYYY-MM-DD');
+}
 
 module.exports = router;
