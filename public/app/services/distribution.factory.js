@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', function($http, Auth, $q, CategoryFactory){
-=======
-app.factory("DistributionFactory", ["$http", "Auth", '$q', "toastr", function($http, Auth, $q, toastr){
->>>>>>> toasts are working
+app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 'toastr', function($http, Auth, $q, CategoryFactory, toastr){
  var verbose = false;
  var self = this;
  var distributions = {

@@ -313,17 +313,6 @@ router.get('/csvtest', function(req, res) {
     'SELECT * FROM categories'
   )
   .then(function(result) {
-<<<<<<< HEAD
-//     'SELECT contacts.id, contacts.org_name, contacts.first_name, contacts.last_name, contacts.org_type, contacts.org, donation_id, produce, dairy, date ' +
-// 'FROM crosstab(SELECT donation_id, name, amount FROM donation_details ' +
-// 'JOIN categories ON categories.id = donation_details.category_id ORDER BY 1,2) ' +
-// 'AS ct(donation_id INTEGER, Produce NUMERIC, Dairy NUMERIC) ' +
-// 'JOIN donations ON ct.donation_id = donations.id ' +
-// 'JOIN contacts ON donations.contact_id = contacts.id'
-    console.log('result: ', result.rows);
-=======
-    // console.log('result: ', result.rows);
->>>>>>> Redo post routes for donations and distributions
     res.attachment('testing.csv');
     var headers = Object.keys(result.rows[0]);
     result.rows.unshift(headers);
