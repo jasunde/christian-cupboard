@@ -180,20 +180,19 @@
               <delete-glyph boolean="distribution.saving"></delete-glyph>
             </button>
           </span>
-          <!-- Editable -->
-          <span ng-if="distribution.editable">
-            <button
-                type="button"
-                class="btn btn-primary"
-                ng-click="ddc.updateDistribution(distribution)">
-              <save-glyph boolean="distribution.saving"></save-glyph>
-            </button>
-            <button
-                type="button"
-                class="btn btn-danger"
-                ng-click="ddc.deleteDistribution(distribution)">
-                <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
-                <delete-glyph boolean="distribution.saving"></delete-glyph>
+            <!-- Editable -->
+            <span ng-if="distribution.editable">
+              <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-click="ddc.updateDistribution(distribution)">
+                <save-glyph boolean="distribution.saving"></save-glyph>
+              </button>
+              <button
+                  type="button"
+                  class="btn btn-default"
+                  ng-click="ddc.toggleEditable(distribution)">
+                <span class="glyphicon glyphicon-remove"></span> Cancel
               </button>
             </span>
           </td>
