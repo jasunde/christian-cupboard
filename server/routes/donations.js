@@ -242,64 +242,68 @@ router.use(function (req, res, next) {
 })
 
 router.post('/', function (req, res) {
-  var donation = req.body
-  pool.connect(function (err, client, done) {
-    if(err) throw err;
+  if(req.body.categories) {
+    var donation = req.body
+    pool.connect(function (err, client, done) {
+      if(err) throw err;
 
-    client.query('BEGIN', function (err) {
-      if(err) return rollback(client, done, res);
+      client.query('BEGIN', function (err) {
+        if(err) return rollback(client, done, res);
 
-      process.nextTick(function () {
-        var date = new Date()
-
-        var query = {
-          text: 'INSERT INTO donations (contact_id, timestamp, date, added_by, date_entered) '+
-          'VALUES ($1, $2, $3, $4, $5) '+
-          'RETURNING id',
-          values: [
-            req.contact.id,
-            donation.timestamp,
-            donation.timestamp,
-            req.user.id,
-            date.toISOString()
-          ]
-        }
-
-        client.query(query, function (err, result) {
-          if(err) return rollback(client, done, res);
-          
-          var donation_id = result.rows[0].id
-
-          var categories = Object.keys(donation.categories);
-
-          var param = 1;
+        process.nextTick(function () {
+          var date = new Date()
 
           var query = {
+            text: 'INSERT INTO donations (contact_id, timestamp, date, added_by, date_entered) '+
+            'VALUES ($1, $2, $3, $4, $5) '+
+            'RETURNING id',
+            values: [
+              req.contact.id,
+              donation.timestamp,
+              donation.timestamp,
+              req.user.id,
+              date.toISOString()
+            ]
+          }
+
+          client.query(query, function (err, result) {
+            if(err) return rollback(client, done, res);
+
+            var donation_id = result.rows[0].id
+
+            var categories = Object.keys(donation.categories);
+
+            var param = 1;
+
+            var query = {
               text: 'INSERT INTO donation_details (donation_id, category_id, amount) '+
               'VALUES ',
               values: [],
               name: 'insert-donation-details'
             }
 
-          categories.forEach(function (category, index) {
-            query.text += '($' + (param++) +', $' + (param++) +', $' + (param++) +')'
-            if(index < categories.length - 1) {
-              query.text += ', '
-            }
-            query.values.push(donation_id, category, donation.categories[category])
-          });
-          
-          client.query(query, function (err) {
-            if(err) return rollback(client, done, res);
-            client.query('COMMIT', function () {
-              done()
-              res.sendStatus(200)
+            categories.forEach(function (category, index) {
+              query.text += '($' + (param++) +', $' + (param++) +', $' + (param++) +')'
+              if(index < categories.length - 1) {
+                query.text += ', '
+              }
+              query.values.push(donation_id, category, donation.categories[category])
             });
+
+            client.query(query, function (err) {
+              if(err) return rollback(client, done, res);
+              client.query('COMMIT', function () {
+                done()
+                res.sendStatus(200)
+              });
+            })
           })
         })
       })
     })
-  })
+  } else {
+    res.status(500).send('No categories');
+  }
 })
 
 router.put('/', function (req, res) {
