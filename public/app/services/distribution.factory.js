@@ -144,12 +144,13 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
     });
   }
 
-  function getCsv(){
+  function getCsv(params){
     $http({
       method: 'GET',
-      url: '/distributions/csvtest',
+      url: '/distributions/csv',
       dataType: "text/csv",
-      headers: {id_token: Auth.user.idToken}
+      headers: {id_token: Auth.user.idToken},
+      params: params
     })
     .then(function(result) {
 

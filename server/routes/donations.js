@@ -96,7 +96,7 @@ function buildQuery(query, categories, toCsv) {
     if(query.start_date) {
       result.text += ' date >= $' + param
       param++
-      result.values.push(query.start_date)
+      result.values.push(moment(query.start_date).format('YYYY-MM-DD'))
     }
 
     if(query.start_date && query.end_date) {
@@ -104,9 +104,9 @@ function buildQuery(query, categories, toCsv) {
     }
 
     if(query.end_date) {
-      result.text += ' date <= $' + param
+      result.text += ' date < $' + param
       param++
-      result.values.push(query.end_date)
+      result.values.push(moment(query.end_date).add(1, 'day').format('YYYY-MM-DD'))
     }
   } else {
     result.text += ' LIMIT ' + MAX_GET
