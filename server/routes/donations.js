@@ -17,6 +17,10 @@ var rollback = function (client, done, res) {
 
 var MAX_GET = 1000
 
+function notParam(param) {
+  return param.indexOf('!') > -1;
+}
+
 function buildQuery(query, categories, toCsv) {
   var param = 1;
   var categoryList = ''
@@ -67,8 +71,14 @@ function buildQuery(query, categories, toCsv) {
     result.values.push(query.contact_id)
     param++
   } else if (query.org_type) {
-    result.text += ' WHERE org_type = $' + param
-    result.values.push(query.org_type)
+    if(notParam(query.org_type)) {
+      result.text += ' WHERE NOT org_type = $' + param +
+        ' OR org_type IS NULL'
+      result.values.push(query.org_type.replace('!', ''))
+    } else {
+      result.text += ' WHERE org_type = $' + param
+      result.values.push(query.org_type)
+    }
     param++
   } else if (query.donation_id) {
     result.text += ' WHERE donation_id = $' + param

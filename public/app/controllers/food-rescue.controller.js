@@ -1,6 +1,6 @@
 app.controller("FoodRescueController", 
-  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory', 'toastr',
-    function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory, toastr){
+  ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory', 'toastr', 'DateRangeFactory',
+    function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory, toastr, DateRangeFactory){
 
       var self = this;
       var verbose = true;
@@ -17,26 +17,7 @@ app.controller("FoodRescueController",
       self.rescueDonations = DonationsFactory.donations;
       self.user = Auth.user;
       
-      $scope.daterange = {
-        start: new Date(),
-        end: new Date()
-      };
-
-      function pickStartDate(isAdmin) {
-        var monthsPrior = 0;
-        if(isAdmin) {
-          monthsPrior = 2;
-        } else {
-          monthsPrior = 1;
-        }
-        return moment().subtract(monthsPrior, 'months').toDate();
-      }
-
-      function setStartDate(isAdmin) {
-        $scope.daterange.start = pickStartDate(isAdmin);
-      }
-
-      console.log(self.rescueDonations);
+      $scope.daterange = DateRangeFactory.daterange;
 
       if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
         self.gotData = true;
@@ -45,16 +26,19 @@ app.controller("FoodRescueController",
       }
 
       function getData() {
+        var params = {
+          start_date: DateRangeFactory.start,
+          end_date: DateRangeFactory.end
+        };
+
         $q.all([
-          DonationsFactory.getDonations(),
+          DonationsFactory.getDonations(params),
           ContactsFactory.getContacts()
         ])
           .then(function (response) {
-            DistributionFactory.getDistributions();
+            DistributionFactory.getDistributions(params);
             self.gotData = true;
           });
-
-        setStartDate(Auth.user.is_admin);
       }
       
       // start loader

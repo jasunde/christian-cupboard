@@ -23,7 +23,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
     return donations;
   }
 
- function getDonations(){
+ function getDonations(params){
    if(Auth.user.idToken) {
      if(verbose){console.log("Getting Donations");}
      return $http({
@@ -31,7 +31,8 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
        url: '/donations',
        headers: {
          id_token: Auth.user.idToken
-       }
+       },
+       params: params
      })
      .then(function (result) {
        donations.list = result.data;
