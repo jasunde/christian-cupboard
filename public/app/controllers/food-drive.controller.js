@@ -201,5 +201,13 @@ app.controller('DriveCtrl', function ($uibModalInstance, donation, action, categ
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+
+      $ctrl.toggleEditable = function (donation) {
+      if(donation.editable) {
+        donation.editable = false;
+      } else {
+        donation.editable = true;
+      }
+    };
 });
 
