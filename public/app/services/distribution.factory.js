@@ -144,16 +144,22 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
     });
   }
 
-  function getCsv(){
+  function getCsv(params){
     $http({
       method: 'GET',
-      url: '/distributions/csvtest',
+      url: '/distributions/csv',
       dataType: "text/csv",
-      headers: {id_token: Auth.user.idToken}
+      headers: {id_token: Auth.user.idToken},
+      params: params
     })
     .then(function(result) {
+
       console.log(result);
-      // var headers = result.headers()
+      var headers = result.headers
+      var headersArray = []
+      for(i = 0; i < headers.length; i++){
+        headersArray.push(result.headers);
+      }
       var blob = new Blob([result.data], { type: result.config.dataType })
       var windowUrl = (window.URL || window.webkitURL)
       var downloadUrl = windowUrl.createObjectURL(blob)
