@@ -23,8 +23,8 @@ app.controller("SubDistributionController",
 
       function getData() {
         var params = {
-          start_date: DateRangeFactory.start,
-          end_date: DateRangeFactory.end
+          start_date: $scope.daterange.start,
+          end_date: $scope.daterange.end
         };
 
         $q.all([
@@ -34,6 +34,7 @@ app.controller("SubDistributionController",
           .then(function (response) {
             DonationsFactory.getDonations(params);
             self.gotData = true;
+            console.log('got data', DistributionFactory.distributions);
           });
       }
 
@@ -47,6 +48,8 @@ app.controller("SubDistributionController",
           getData();
         }
       });
+
+      $scope.$watchCollection('daterange', getData);
 
       self.addSubDistribution = function () {
         self.newSubDistribution.saving = true;

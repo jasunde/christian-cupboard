@@ -33,7 +33,6 @@ app.controller("DailyDistributionController",
           .then(function (response) {
             DonationsFactory.getDonations(params);
             self.gotData = true;
-            console.log('got data', DistributionFactory.distributions);
           });
       }
 
