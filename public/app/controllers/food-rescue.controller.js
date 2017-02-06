@@ -27,8 +27,8 @@ app.controller("FoodRescueController",
 
       function getData() {
         var params = {
-          start_date: DateRangeFactory.start,
-          end_date: DateRangeFactory.end
+          start_date: $scope.daterange.start,
+          end_date: $scope.daterange.end
         };
 
         $q.all([
@@ -51,6 +51,8 @@ app.controller("FoodRescueController",
           getData();
         }
       });
+      
+      $scope.$watchCollection('daterange', getData);
 
       self.submitDonation = function() {
         if(verbose) {console.log("Submitting newDonation", self.newDonation); }

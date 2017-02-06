@@ -12,7 +12,6 @@ app.controller("DailyDistributionController",
       self.dailyDistributions = DistributionFactory.distributions;
       self.categories = CategoryFactory.categories;
       self.user = Auth.user;
-      console.log(self.categories);
 
       $scope.daterange = DateRangeFactory.daterange;
 
@@ -24,8 +23,8 @@ app.controller("DailyDistributionController",
 
       function getData() {
         var params = {
-          start_date: DateRangeFactory.start,
-          end_date: DateRangeFactory.end
+          start_date: $scope.daterange.start,
+          end_date: $scope.daterange.end
         };
 
         $q.all([
@@ -34,6 +33,7 @@ app.controller("DailyDistributionController",
           .then(function (response) {
             DonationsFactory.getDonations(params);
             self.gotData = true;
+            console.log('got data', DistributionFactory.distributions);
           });
       }
 
@@ -47,6 +47,8 @@ app.controller("DailyDistributionController",
           getData();
         }
       });
+
+      $scope.$watchCollection('daterange', getData);
 
       self.toggleEditable = function (distribution) {
         if(distribution.editable) {
