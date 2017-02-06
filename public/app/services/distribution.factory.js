@@ -20,31 +20,32 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
     return distributions;
   }
 
- function getDistributions(){
-   if(Auth.user.idToken) {
-     if(verbose){console.log("Getting distributions");}
-    return $http({
-       method: 'GET',
-       url: '/distributions',
-       headers: {
-         id_token: Auth.user.idToken
-       }
-     })
-     .then(function (result) {
-       distributions.list = result.data
-       distributions = categoryPropsToObject(distributions)
-       distributions.list.forEach(function (distribution) {
-         distribution.timestamp = new Date(distribution.timestamp);
-       });
-       if (verbose) {console.log('distributions', distributions.list);}
-     })
-     .catch(function (err) {
-       console.log('GET distributions error:', err);
-       distributions.list = null;
-     })
-   } else {
-    if(verbose) {console.log('No token, no distributions!');}
-    distributions.list = null;
+  function getDistributions(params){
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Getting distributions");}
+      return $http({
+        method: 'GET',
+        url: '/distributions',
+        headers: {
+          id_token: Auth.user.idToken
+        },
+        params: params
+      })
+        .then(function (result) {
+          distributions.list = result.data
+          distributions = categoryPropsToObject(distributions)
+          distributions.list.forEach(function (distribution) {
+            distribution.timestamp = new Date(distribution.timestamp);
+          });
+          if (verbose) {console.log('distributions', distributions.list);}
+        })
+        .catch(function (err) {
+          console.log('GET distributions error:', err);
+          distributions.list = null;
+        })
+    } else {
+      if(verbose) {console.log('No token, no distributions!');}
+      distributions.list = null;
     }
   }
 
