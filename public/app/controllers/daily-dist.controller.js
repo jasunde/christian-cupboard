@@ -120,4 +120,27 @@ app.controller("DailyDistributionController",
         DistributionFactory.getCsv(params);
       }
 
-    }]);
+  self.valueCheck = function () {
+    if(hasOne(self.newDistribution.categories)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function hasOne(obj) {
+    var result = false;
+    if(obj) {
+      var keys = Object.keys(obj);
+
+      if(keys) {
+        result = keys.some(function (key) {
+          return obj[key];
+        });
+      }
+
+    }
+    return result;
+  }
+
+}]);

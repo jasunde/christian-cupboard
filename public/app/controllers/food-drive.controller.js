@@ -13,8 +13,10 @@ app.controller("FoodDriveController",
       self.driveContacts = ContactsFactory.contacts;
       self.driveDonations = DonationsFactory.donations;
       self.user = Auth.user
+      self.atLeastOneWeight = false;
 
       $scope.daterange = DateRangeFactory.daterange;
+
 
       if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
         self.gotData = true;
@@ -108,6 +110,14 @@ app.controller("FoodDriveController",
         }
       };
 
+      self.valueCheck = function () {
+        if(hasOne(self.newDonation.categories)) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+
       self.openModal = function (size, donation, action, categories) {
         // var parentElem = parentSelector ? 
         //   angular.element($document[0].querySelector(parentSelector)) : undefined;
@@ -158,6 +168,20 @@ app.controller("FoodDriveController",
         DonationsFactory.getCsv(params);
       }
 
+
+      function hasOne(obj) {
+        var result = false;
+        if(obj) {
+          var keys = Object.keys(obj);
+
+          if(keys) {
+            result = keys.some(function (key) {
+              return obj[key];
+            });
+          }
+        }
+        return result;
+      }
     }]);
 
 app.controller('DriveCtrl', function ($uibModalInstance, donation, action, categories) {
