@@ -1,21 +1,22 @@
-app.controller("FoodDriveController",
-  ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', 'ConfirmFactory', '$uibModal',
-    function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q, dateRangeFilter, ConfirmFactory, $uibModal){
+app.controller("FoodDriveController", 
+  ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', 'ConfirmFactory', '$uibModal', 'DateRangeFactory',
+    function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q, dateRangeFilter, ConfirmFactory, $uibModal, DateRangeFactory){
       var self = this;
-      var verbose = true;
+      var verbose = false;
 
       self.newDonation = {
         contact_id: undefined,
         timestamp: new Date(),
       };
 
-      self.thisDonation = {};
-
       self.driveCategories = CategoryFactory.categories;
       self.driveContacts = ContactsFactory.contacts;
       self.driveDonations = DonationsFactory.donations;
-      self.user = Auth.user;
+      self.user = Auth.user
       self.atLeastOneWeight = false;
+
+      $scope.daterange = DateRangeFactory.daterange;
+
 
       if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
         self.gotData = true;
@@ -23,28 +24,29 @@ app.controller("FoodDriveController",
         self.gotData = false;
       }
 
-      if(Auth.user.idToken){
+      function getData() {
+        var params = {
+          start_date: DateRangeFactory.start,
+          end_date: DateRangeFactory.end
+        };
+
         $q.all([
-          DonationsFactory.getDonations(),
+          DonationsFactory.getDonations(params),
           ContactsFactory.getContacts()
         ])
           .then(function (response) {
-            DistributionFactory.getDistributions();
+            DistributionFactory.getDistributions(params);
             self.gotData = true;
           });
       }
 
-      $scope.$on('user:updated', function (event, data) {
+      if(Auth.user.idToken){
+        getData()
+      }
 
+      $scope.$on('user:updated', function (event, data) {
         if(Auth.user.idToken){
-          $q.all([
-            DonationsFactory.getDonations(),
-            ContactsFactory.getContacts()
-          ])
-            .then(function (response) {
-              DistributionFactory.getDistributions();
-              self.gotData = true;
-            });
+          getData();
         }
       });
 
@@ -106,32 +108,6 @@ app.controller("FoodDriveController",
         }
       };
 
-      self.getCsv = function () {
-        DonationsFactory.getCsv();
-      }
-
-      var today = new Date();
-      var dd = today.getDate();
-      var mm = today.getMonth()+1; //January is 0!
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-        mm='0'+mm
-      }
-      today = mm+'/'+dd+'/'+yyyy;
-
-
-      var now = new Date().getTime();
-      $scope.date = new Date(2015, 10, 10);
-      $scope.ago = now < $scope.date.getTime();
-      $scope.before = now > $scope.date.getTime();
-      $scope.daterange = {
-        start: new Date(today),
-        end: new Date(today)
-      };
-
       self.valueCheck = function () {
         if(hasOne(self.newDonation.categories)) {
           return false;
@@ -175,6 +151,20 @@ app.controller("FoodDriveController",
           // $log.info('Modal dismissed at: ' + new Date());
         });
       };
+
+      function packageParams() {
+        return {
+          start_date: $scope.daterange.start,
+          end_date: $scope.daterange.end,
+          org_type: '!food_rescue',
+          contact_id: self.org_id
+        };
+      }
+
+      self.getCsv = function () {
+        var params = packageParams();
+        DonationsFactory.getCsv(params);
+      }
 
 
       function hasOne(obj) {

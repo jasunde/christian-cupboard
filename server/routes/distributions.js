@@ -3,7 +3,7 @@ var router = express.Router();
 var pgEscape = require('pg-escape')
 var contactService = require('../modules/contactService')
 var pg = require('pg');
-
+var moment = require('moment')
 var config = require('../config')
 
 var pool = new pg.Pool(config.pg)
@@ -17,7 +17,11 @@ var rollback = function (client, done, res) {
 
 var MAX_GET = 1000;
 
-function buildQuery(query, categories) {
+function notParam(param) {
+  return param.indexOf('!') > -1;
+}
+
+function buildQuery(query, categories, toCsv) {
   var param = 1;
   // console.log('categories', categories);
   var categoryList = ''
@@ -27,21 +31,28 @@ function buildQuery(query, categories) {
       categoryList += ', '
     } 
   })
+
+  if(toCsv) {
+    var selection = 'contacts.org_name, contacts.first_name, contacts.last_name, ct.*';
+  } else {
+    selection = '*';
+  }
+
   var result = {
-    text: `SELECT * FROM 
+    text: `SELECT ${selection} FROM 
           crosstab(
-          'SELECT 
-            distributions.id AS distribution_id, 
-            distributions.date AS date, 
-            distributions.contact_id AS contact_id, 
-            distributions.timestamp AS timestamp, 
-            name, amount 
-          FROM distributions 
-          LEFT JOIN distribution_details ON distributions.id = distribution_details.distribution_id 
-          LEFT JOIN categories ON categories.id = distribution_details.category_id 
-          ORDER BY 1,2', 
-          'SELECT name FROM categories') 
-          AS ct(
+            'SELECT 
+              distributions.id AS distribution_id, 
+              distributions.date AS date, 
+              distributions.contact_id AS contact_id, 
+              distributions.timestamp AS timestamp, 
+              name, amount 
+            FROM distributions 
+            LEFT JOIN distribution_details ON distributions.id = distribution_details.distribution_id 
+            LEFT JOIN categories ON categories.id = distribution_details.category_id 
+            ORDER BY 1,2', 
+            'SELECT name FROM categories'
+          ) AS ct(
             distribution_id INTEGER, 
             date DATE, 
             contact_id INTEGER, 
@@ -57,8 +68,14 @@ function buildQuery(query, categories) {
     result.values.push(query.contact_id)
     param++
   } else if (query.org_type) {
-    result.text += ' WHERE org_type = $' + param
-    result.values.push(query.org_type)
+    if(notParam(query.org_type)) {
+      result.text += ' WHERE NOT org_type = $' + param +
+        ' OR org_type IS NULL'
+      result.values.push(query.org_type.replace('!', ''))
+    } else {
+      result.text += ' WHERE org_type = $' + param
+      result.values.push(query.org_type)
+    }
     param++
   }
 
@@ -69,55 +86,28 @@ function buildQuery(query, categories) {
       result.text += ' WHERE'
     }
 
-    result.text += ' date >= $' + param
-    param++
-    result.text += ' AND date <= $' + param
-    param++
-    result.values.push(query.start_date, query.end_date)
+    if(query.start_date) {
+      result.text += ' date >= $' + param
+      param++
+      result.values.push(moment(query.start_date).format('YYYY-MM-DD'))
+    }
+
+    if(query.start_date && query.end_date) {
+      result.text += ' AND'
+    }
+
+    if(query.end_date) {
+      result.text += ' date < $' + param
+      param++
+      result.values.push(moment(query.end_date).add(1, 'day').format('YYYY-MM-DD'))
+    }
   } else {
     result.text += ' LIMIT ' + MAX_GET
   }
 
-  // console.log('result', result);
+  console.log('result', result);
   return result
 }
-
-// function getDetails(distributions, client, res) {
-//   if(distributions.length) {
-//     distributions.forEach(function(distribution, index) {
-//       client.query(
-//         'SELECT * FROM distribution_details '+
-//         'WHERE distribution_id = $1',
-//         [distribution.distribution_id]
-//       )
-//         .then(function(result) {
-//           distribution.categories = result.rows.reduce(function(total, current) {
-//             total[current.category_id] = parseFloat(current.amount);
-//             return total;
-//           }, {})
-//           if(distributions.length === index + 1) {
-//             client.release();
-//           }
-//         });
-
-//     });
-//   } else {
-//     client.release();
-//     res.send(distributions);
-//   }
-
-//   // client.on('drain', client.end.bind(client) )
-
-//   client.on('end', function() {
-//     res.send(distributions)
-//   });
-
-//   client.on('error', function(err) {
-//     res.status(500).send(err)
-//   });
-
-
-// }
 
 //get all organizations
 router.get('/organizations', function(req, res) {
@@ -194,6 +184,37 @@ router.delete('/:id', function(req, res) {
       req.sendStatus(500)
     })
 })
+
+router.get('/csv', function(req, res) {
+  pool.query(
+    'SELECT * FROM categories'
+  )
+  .then(function(result) {
+    var query = buildQuery(req.query, result.rows, true);
+
+    pool.query(query)
+      .then(function (result) {
+        var data = result.rows.map(function (row) {
+          row.date = toDateString(row.date);
+          row.distribution_entered = toDateString(row.distribution_entered)
+          return row;
+        });
+        res.attachment('testing.csv');
+        var headers = Object.keys(result.rows[0]);
+        data.unshift(headers);
+        res.csv(data);
+      })
+      .catch(function (err) {
+        console.log('GET distribution error:', err)
+        res.status(500).send(err)
+      });
+  })
+  .catch(function(err) {
+    console.log('GET all distributions err:', err);
+    res.status(500).send(err);
+  });
+});
+
 
 router.use(contactService.find)
 router.use(function (req, res, next) {
@@ -344,21 +365,8 @@ router.put('/', function(req, res) {
   })
 })
 
-router.get('/csvtest', function(req, res) {
-  pool.query(
-    'SELECT * FROM distributions'
-  )
-  .then(function(result) {
-    console.log('result: ', result.rows);
-    res.attachment('testing.csv');
-    res.csv(
-      result.rows
-    );
-  })
-  .catch(function(err) {
-    console.log('GET all distributions err:', err);
-    res.status(500).send(err);
-  });
-});
+function toDateString(timestamp) {
+  return moment(timestamp).format('YYYY-MM-DD');
+}
 
 module.exports = router;
