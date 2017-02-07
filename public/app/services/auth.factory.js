@@ -1,5 +1,5 @@
 app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootScope', '$q', function AuthFactory($firebaseAuth, $http, firebase, $location, $rootScope, $q) {
-  var verbose = true;
+  var verbose = false;
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt: 'select_account'});
   var auth = $firebaseAuth();
@@ -23,6 +23,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
           is_user = true;
           return getToken(firebaseUser.user)
           .then(function (token) {
+            if(verbose){console.log('token', token);}
             return isUser(firebaseUser.user, token, 'user:login');
           });
       }
@@ -60,7 +61,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
         logOut();
         reject();
       });
-    });  
+    });
   }
 
   function getToken(firebaseUser) {
@@ -87,7 +88,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
       if(!is_user) {
         getToken(firebaseUser)
           .then(function (token) {
-            console.log('token', token);
+            if(verbose){console.log('token', token);}
             isUser(firebaseUser, token, 'user:updated');
           });
       }

@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", 
+app.controller("DailyDistributionController",
   ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', 'ConfirmFactory',
   function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q, ConfirmFactory){
 
@@ -54,6 +54,7 @@ $scope.$on('user:updated', function (event, data) {
 
   self.addDistribution = function () {
     if(verbose) {console.log(self.newDistribution);}
+    if ($scope.dailyDistForm.$valid) {
     console.log('adding');
     self.newDistribution.saving = true;
     DistributionFactory.addDistribution(self.newDistribution)
@@ -66,6 +67,7 @@ $scope.$on('user:updated', function (event, data) {
       .catch(function (err) {
         self.newDistribution.saving = false;
       });
+    };
   };
 
   self.updateDistribution = function (distribution) {
@@ -127,4 +129,28 @@ $scope.$on('user:updated', function (event, data) {
     start: new Date(today),
     end: new Date(today)
   };
+
+  self.valueCheck = function () {
+    if(hasOne(self.newDistribution.categories)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function hasOne(obj) {
+    var result = false;
+    if(obj) {
+      var keys = Object.keys(obj);
+
+      if(keys) {
+        result = keys.some(function (key) {
+          return obj[key];
+        });
+      }
+
+    }
+    return result;
+  }
+
 }]);

@@ -179,8 +179,8 @@ function post(req, res) {
   var contact = req.contact;
   var date = new Date();
   return pool.query(
-    'INSERT INTO contacts (donor, org, org_type, org_id, org_name, first_name, last_name, address, city, state, postal_code, email, phone_number, is_active, date_entered)'+
-    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) '+
+    'INSERT INTO contacts (donor, org, org_type, org_id, org_name, first_name, last_name, address, city, state, postal_code, email, phone_number, is_active, date_entered, family_size)'+
+    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) '+
     'RETURNING id',
     [
       contact.donor,
@@ -197,7 +197,8 @@ function post(req, res) {
       contact.email,
       contact.phone_number,
       true,
-      date.toISOString()
+      date.toISOString(),
+      contact.family_size
     ]
   )
   .then(function(result) {
@@ -214,8 +215,8 @@ function put(req, res) {
   var contact = req.contact;
   return pool.query(
     'UPDATE contacts '+
-    'SET donor = $1, org = $2, org_type = $3, org_id = $4, org_name = $5, first_name = $6, last_name = $7, address = $8, city = $9, state = $10, postal_code = $11, email = $12, phone_number = $13, is_active = $14 '+
-    'WHERE id = $15',
+    'SET donor = $1, org = $2, org_type = $3, org_id = $4, org_name = $5, first_name = $6, last_name = $7, address = $8, city = $9, state = $10, postal_code = $11, email = $12, phone_number = $13, is_active = $14, family_size = $15 '+
+    'WHERE id = $16',
     [
       contact.donor,
       contact.org,
@@ -231,6 +232,7 @@ function put(req, res) {
       contact.email,
       contact.phone_number,
       contact.is_active,
+      contact.family_size,
       contact.id
     ]
   )
