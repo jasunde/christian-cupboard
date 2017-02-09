@@ -5,16 +5,24 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
   }
 
   if(Auth.user) {
-    daterange.start = getFilterStartDate(Auth.user.is_admin);
-      console.log('daterange', daterange);
+    init();
   }
 
   $rootScope.$on('user:updated', function (event, data) {
-    if(Auth.user && Auth.user.is_admin) {
-      daterange.start = getFilterStartDate(Auth.user.is_admin);
-      console.log('daterange', daterange);
-    }
+    console.log('user updated');
+    init();
   });
+
+  $rootScope.$on('user:login', function (event, data) {
+    console.log('user login');
+    init();
+  })
+
+  function init() {
+    if(Auth.user) {
+      daterange.start = getFilterStartDate(Auth.user.is_admin);
+    }
+  }
 
   function getFilterStartDate(isAdmin) {
     var start;
@@ -29,7 +37,7 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
   function getQueryRange(isAdmin) {
     var queryRange = {};
     if(isAdmin) {
-      queryRange = dateRange;
+      queryRange = daterange;
     } else {
       queryRange.start = moment().subtract(1, 'months').toDate();
       queryRange.end = new Date();

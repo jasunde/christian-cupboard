@@ -25,7 +25,7 @@ app.controller("FoodDriveController",
       }
 
       function getData() {
-        var queryRange = DateRangeFactory.getQueryRange();
+        var queryRange = DateRangeFactory.getQueryRange(Auth.user.is_admin);
         var params = {
           start_date: queryRange.start,
           end_date: queryRange.end,
