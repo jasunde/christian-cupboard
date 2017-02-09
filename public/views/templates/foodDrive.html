@@ -192,12 +192,12 @@
 
              <!--Telephone -->
             <td>{{donation.phone_number}}</td>
-            
+
             <!-- Organization Name -->
             <td>{{donation.org_name}}</td>
-            
+
             <!-- Categories -->
-            <td 
+            <td
               ng-repeat="category in fdc.driveCategories.list | filter: {food_drive: true}">
               {{donation.categories[category.id]}}
             </td>
