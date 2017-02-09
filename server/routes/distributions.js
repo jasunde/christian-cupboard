@@ -46,7 +46,9 @@ function buildQuery(query, categories, toCsv) {
               distributions.date AS date, 
               distributions.contact_id AS contact_id, 
               distributions.timestamp AS timestamp, 
-              name, amount 
+              distributions.date_entered AS distribution_entered,
+              name, 
+              amount 
             FROM distributions 
             LEFT JOIN distribution_details ON distributions.id = distribution_details.distribution_id 
             LEFT JOIN categories ON categories.id = distribution_details.category_id 
@@ -57,6 +59,7 @@ function buildQuery(query, categories, toCsv) {
             date DATE, 
             contact_id INTEGER, 
             timestamp TIMESTAMP, 
+            distribution_entered TIMESTAMP,
             ${categoryList}
           ) 
           LEFT JOIN contacts ON contacts.id = contact_id`,
