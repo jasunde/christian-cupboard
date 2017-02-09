@@ -25,7 +25,6 @@ app.controller("FoodRescueController",
 
       function getData() {
         var queryRange = DateRangeFactory.getQueryRange(Auth.user.is_admin);
-        console.log('queryRange', queryRange);
         var params = {
           start_date: queryRange.start,
           end_date: queryRange.end,
