@@ -102,7 +102,6 @@
   </div>
 
 
-
 <table wt-responsive-table class="table-control table">
   <div>
   <thead class="table-header">
@@ -129,6 +128,7 @@
       | filter: ddc.search
       | filter: {org: false}
       | orderBy: '-timestamp'
+      | filter: {org: false}
       | dateRange:'timestamp':daterange.start:daterange.end))">
 
         <!-- Date Weighed -->
@@ -169,7 +169,7 @@
             {{distribution.last_name}}
           </span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.last_name">
+            <input class="form-control" type="text" ng-model="distribution.last_name" maxlength="3">
           </span>
         </td>
 

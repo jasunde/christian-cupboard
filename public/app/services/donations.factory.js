@@ -1,4 +1,3 @@
-
 app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', function($http, Auth, CategoryFactory, toastr){
  var verbose = false;
  var donations = {
@@ -24,7 +23,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
     return donations;
   }
 
- function getDonations(){
+ function getDonations(params){
    if(Auth.user.idToken) {
      if(verbose){console.log("Getting Donations");}
      return $http({
@@ -32,7 +31,8 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
        url: '/donations',
        headers: {
          id_token: Auth.user.idToken
-       }
+       },
+       params: params
      })
      .then(function (result) {
        donations.list = result.data;
@@ -121,15 +121,15 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
       }
   }
 
-  function getCsv(){
+  function getCsv(params){
     $http({
       method: 'GET',
-      url: '/donations/csvtest',
+      url: '/donations/csv',
       dataType: 'text/csv',
-      headers: {id_token: Auth.user.idToken}
+      headers: {id_token: Auth.user.idToken},
+      params: params
     })
     .then(function(result) {
-      console.log(result);
       // var headers = result.headers()
       var blob = new Blob([result.data], { type: result.config.dataType })
       var windowUrl = (window.URL || window.webkitURL)
@@ -144,6 +144,9 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
       windowUrl.revokeObjectURL(blob)
 
     })
+    .catch(function (err) {
+      console.log('GET csv error:', err)
+    });
   }
 
   return {
