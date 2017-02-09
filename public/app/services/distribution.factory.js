@@ -20,31 +20,32 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
     return distributions;
   }
 
- function getDistributions(){
-   if(Auth.user.idToken) {
-     if(verbose){console.log("Getting distributions");}
-    return $http({
-       method: 'GET',
-       url: '/distributions',
-       headers: {
-         id_token: Auth.user.idToken
-       }
-     })
-     .then(function (result) {
-       distributions.list = result.data
-       distributions = categoryPropsToObject(distributions)
-       distributions.list.forEach(function (distribution) {
-         distribution.timestamp = new Date(distribution.timestamp);
-       });
-       if (verbose) {console.log('distributions', distributions.list);}
-     })
-     .catch(function (err) {
-       console.log('GET distributions error:', err);
-       distributions.list = null;
-     })
-   } else {
-    if(verbose) {console.log('No token, no distributions!');}
-    distributions.list = null;
+  function getDistributions(params){
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Getting distributions");}
+      return $http({
+        method: 'GET',
+        url: '/distributions',
+        headers: {
+          id_token: Auth.user.idToken
+        },
+        params: params
+      })
+        .then(function (result) {
+          distributions.list = result.data
+          distributions = categoryPropsToObject(distributions)
+          distributions.list.forEach(function (distribution) {
+            distribution.timestamp = new Date(distribution.timestamp);
+          });
+          if (verbose) {console.log('distributions', distributions.list);}
+        })
+        .catch(function (err) {
+          console.log('GET distributions error:', err);
+          distributions.list = null;
+        })
+    } else {
+      if(verbose) {console.log('No token, no distributions!');}
+      distributions.list = null;
     }
   }
 
@@ -61,10 +62,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
         })
         .then(function (result) {
           getDistributions()
-          .then(function(){
-            toastr.success('Distribution Successful');
-          })
           .then(function (result) {
+            toastr.success('Distribution Successful');
             resolve(result);
           })
           .catch(function (err) {
@@ -96,10 +95,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
         })
           .then(function (result) {
             getDistributions()
-            .then(function(){
-            toastr.info('Distribution Edited');
-            })
               .then(function (result) {
+                toastr.info('Distribution Edited');
                 resolve(result)
               })
               .catch(function (err) {
@@ -129,11 +126,10 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
           }
         })
           .then(function (result) {
+            console.log('getting distributions')
             getDistributions()
-            .then(function(){
-              toastr.error('Distribution Deleted');
-            })
             .then(function (result) {
+              toastr.error('Distribution Deleted');
               resolve(result);
             })
             .catch(function (err) {
@@ -149,16 +145,22 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
     });
   }
 
-  function getCsv(){
+  function getCsv(params){
     $http({
       method: 'GET',
-      url: '/distributions/csvtest',
+      url: '/distributions/csv',
       dataType: "text/csv",
-      headers: {id_token: Auth.user.idToken}
+      headers: {id_token: Auth.user.idToken},
+      params: params
     })
     .then(function(result) {
+
       console.log(result);
-      // var headers = result.headers()
+      var headers = result.headers
+      var headersArray = []
+      for(i = 0; i < headers.length; i++){
+        headersArray.push(result.headers);
+      }
       var blob = new Blob([result.data], { type: result.config.dataType })
       var windowUrl = (window.URL || window.webkitURL)
       var downloadUrl = windowUrl.createObjectURL(blob)

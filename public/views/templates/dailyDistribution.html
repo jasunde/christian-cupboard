@@ -9,7 +9,6 @@
   <h2>Daily Distribution</h2>
 
   <div class= "row form-card" ng-if="ddc.user.is_admin">
-    <form>
       <div class="form-group col-sm-3">
         <label>Start Date</label>
         <input class = "form-control" type="date" ng-model="daterange.start">
@@ -36,36 +35,71 @@
   </div>
 
   <div class = "form-card row">
+  <form name="dailyDistForm" novalidate>
     <div class = "col-sm-4">
-      <label>Date:</label>
-      <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
+      <label>Date*</label>
+      <input class="form-control"
+             type="date"
+             ng-model="ddc.newDistribution.timestamp"
+             required>
     </div>
 
+  <ng-form name="dDFirstName">
     <div class = "col-sm-4">
-      <label>First Name</label>
-      <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+      <label>First Name*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.first_name"
+             required>
     </div>
+  </ng-form>
 
     <div class = "col-sm-4">
-      <label>Last Name</label>
-      <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
+      <label>Last 3 Initals*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.last_name"
+             maxlength="3"
+             required>
     </div>
 
-    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-2">
-      <label>{{category.name}}</label><input type="number"
-      ng-model="ddc.newDistribution.categories[category.id]"
-      class="form-control">
-    </p>
+    <div class = "col-sm-2">
+      <label>Family Size*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.family_size"
+             maxlength="3"
+             required>
+    </div>
+
+    <ng-form name="categoryFields">
+      <div class = "col-sm-2"
+        ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}"
+        ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty}">
+
+          <label>{{category.name}}</label>
+          <input
+            class="form-control"
+            type="number"
+            ng-model="ddc.newDistribution.categories[category.id]"
+            ng-required="ddc.valueCheck()">
+      </div>
+      <div class = "col-sm-4" ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
+        <label></label>
+        <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$dirty">*Amount Required for One Category</p>
+      </div>
+    </ng-form>
     <div class="col-sm-1 align-button">
         <button
           type="button"
           class="btn btn-success form-control"
-          ng-click="ddc.addDistribution()">
+          ng-click="ddc.addDistribution()"
+          ng-disabled="dailyDistForm.$invalid">
           <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
         </button>
     </div>
+  </form>
   </div>
-
 
 
 <table wt-responsive-table class="table-control table">
@@ -94,6 +128,7 @@
       | filter: ddc.search
       | filter: {org: false}
       | orderBy: '-timestamp'
+      | filter: {org: false}
       | dateRange:'timestamp':daterange.start:daterange.end))">
 
         <!-- Date Weighed -->
@@ -134,7 +169,7 @@
             {{distribution.last_name}}
           </span>
           <span ng-if="distribution.editable">
-            <input class="form-control" type="text" ng-model="distribution.last_name">
+            <input class="form-control" type="text" ng-model="distribution.last_name" maxlength="3">
           </span>
         </td>
 
