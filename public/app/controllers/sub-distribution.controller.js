@@ -22,10 +22,13 @@ app.controller("SubDistributionController",
       }
 
       function getData() {
+        var queryRange = DateRangeFactory.getQueryRange(Auth.user.is_admin);
         var params = {
-          start_date: $scope.daterange.start,
-          end_date: $scope.daterange.end
+          start_date: queryRange.start,
+          end_date: queryRange.end,
         };
+
+        $scope.filterProp = selectFilter(Auth.user.is_admin);
 
         $q.all([
           DistributionFactory.getDistributions(params),
@@ -36,6 +39,14 @@ app.controller("SubDistributionController",
             self.gotData = true;
             console.log('got data', DistributionFactory.distributions);
           });
+      }
+
+      function selectFilter(is_admin) {
+        var filter = 'distribution_entered';
+        if(is_admin) {
+          filter = 'timestamp';
+        }
+        return filter;
       }
 
       // start loader
@@ -108,9 +119,10 @@ app.controller("SubDistributionController",
       }
 
       function packageParams() {
+        var queryRange = DateRangeFactory.getQueryRange();
         return {
-          start_date: $scope.daterange.start,
-          end_date: $scope.daterange.end,
+          start_date: queryRange.start,
+          end_date: queryRange.end,
           org_type: 'sub_distribution',
           contact_id: self.org_id
         };

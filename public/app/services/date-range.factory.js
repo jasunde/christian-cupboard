@@ -5,30 +5,48 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
   }
 
   if(Auth.user) {
-    daterange.start = pickStartDate(Auth.user.is_admin);
+    init();
   }
 
   $rootScope.$on('user:updated', function (event, data) {
-    if(Auth.user && Auth.user.is_admin) {
-      daterange.start = pickStartDate(Auth.user.is_admin);
-    }
+    console.log('user updated');
+    init();
   });
 
-  function pickStartDate(isAdmin) {
-    var monthsPrior = 0;
-    if(isAdmin) {
-      monthsPrior = 2;
-    } else {
-      monthsPrior = 1;
+  $rootScope.$on('user:login', function (event, data) {
+    console.log('user login');
+    init();
+  })
+
+  function init() {
+    if(Auth.user) {
+      daterange.start = getFilterStartDate(Auth.user.is_admin);
     }
-    return moment().subtract(monthsPrior, 'months').toDate();
   }
 
-  function setStartDate(isAdmin) {
-    daterange.start = pickStartDate(isAdmin);
+  function getFilterStartDate(isAdmin) {
+    var start;
+    if(isAdmin) {
+      start = moment().subtract(2, 'months').toDate();
+    } else {
+      start = moment().toDate();
+    }
+    return start;
+  }
+
+  function getQueryRange(isAdmin) {
+    var queryRange = {};
+    if(isAdmin) {
+      queryRange = daterange;
+    } else {
+      queryRange.start = moment().subtract(1, 'months').toDate();
+      queryRange.end = new Date();
+    }
+    return queryRange;
   }
 
   return {
-    daterange: daterange
+    daterange: daterange,
+    getQueryRange: getQueryRange
   };
 }]);
