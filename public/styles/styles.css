@@ -6345,7 +6345,9 @@ input[type=date]::-webkit-inner-spin-button {
 
 @media (max-width: 760px) {
   h1 {
-    text-align: center; } }
+    text-align: center; }
+  .nav li:first-child {
+    margin-top: 30px; } }
 
 .banner {
   position: absolute;
@@ -6375,6 +6377,3 @@ input[type=date]::-webkit-inner-spin-button {
 .align-button {
   margin-top: 29px;
   float: right; }
-
-.nav li:first-child {
-  margin-top: 30px; }
