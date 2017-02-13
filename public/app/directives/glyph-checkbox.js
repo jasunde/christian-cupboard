@@ -5,5 +5,5 @@ app.directive('glyphCheckbox', function () {
       boolean: "="
     },
     templateUrl: 'views/directives/glyph-checkbox.html'
-  }
-})
+  };
+});

@@ -15,7 +15,7 @@ var authorized = {
   "admin": ["FireAuth", 'Auth', '$q', function (FireAuth, Auth, $q) {
     return $q(function (resolve, reject) {
       if(Auth.user.is_admin) {
-        resolve()
+        resolve();
       } else {
         return FireAuth.$requireSignIn()
         .then(function (firebaseUser) {
@@ -24,9 +24,9 @@ var authorized = {
             Auth.isUser(firebaseUser, token, 'user:updated')
               .then(function (result) {
                 if(Auth.user.is_admin) {
-                  resolve()
+                  resolve();
                 } else {
-                  reject("ADMIN_REQUIRED")
+                  reject("ADMIN_REQUIRED");
                 }
               })
               .catch(function (err) {
@@ -34,8 +34,8 @@ var authorized = {
               });
           })
           .catch(function (err) {
-            reject("AUTH_REQUIRED")
-          })
+            reject("AUTH_REQUIRED");
+          });
         })
         .catch(function (err) {
           reject("AUTH_REQUIRED");

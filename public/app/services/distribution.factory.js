@@ -7,13 +7,13 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
 
   function categoryPropsToObject(distributions) {
     distributions.list.forEach(function (distribution) {
-      distribution.categories = {}
+      distribution.categories = {};
       for(prop in distribution) {
         if(CategoryFactory.categories.map.hasOwnProperty(prop)) {
           if(distribution[prop]) {
             distribution.categories[CategoryFactory.categories.map[prop]] = parseFloat(distribution[prop]);
           }
-          delete distribution[prop]
+          delete distribution[prop];
         }
       }
     });
@@ -32,8 +32,8 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
         params: params
       })
         .then(function (result) {
-          distributions.list = result.data
-          distributions = categoryPropsToObject(distributions)
+          distributions.list = result.data;
+          distributions = categoryPropsToObject(distributions);
           distributions.list.forEach(function (distribution) {
             distribution.timestamp = new Date(distribution.timestamp);
           });
@@ -42,7 +42,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
         .catch(function (err) {
           console.log('GET distributions error:', err);
           distributions.list = null;
-        })
+        });
     } else {
       if(verbose) {console.log('No token, no distributions!');}
       distributions.list = null;
@@ -68,7 +68,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
           })
           .catch(function (err) {
             console.log('GET distributions error:', err);
-            reject(err)
+            reject(err);
           });
         })
         .catch(function (err) {
@@ -97,11 +97,11 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
             getDistributions()
               .then(function (result) {
                 toastr.info('Distribution Edited');
-                resolve(result)
+                resolve(result);
               })
               .catch(function (err) {
                 console.log('GET distributions error:', err);
-                reject(err)
+                reject(err);
               });
           })
         .catch(function (err) {
@@ -126,7 +126,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
           }
         })
           .then(function (result) {
-            console.log('getting distributions')
+            console.log('getting distributions');
             getDistributions()
             .then(function (result) {
               toastr.error('Distribution Deleted');
@@ -134,7 +134,7 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
             })
             .catch(function (err) {
               console.log('GET distributions error:', err);
-              reject(err)
+              reject(err);
             });
           })
           .catch(function (err) {
@@ -156,24 +156,24 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 't
     .then(function(result) {
 
       console.log(result);
-      var headers = result.headers
-      var headersArray = []
+      var headers = result.headers;
+      var headersArray = [];
       for(i = 0; i < headers.length; i++){
         headersArray.push(result.headers);
       }
-      var blob = new Blob([result.data], { type: result.config.dataType })
-      var windowUrl = (window.URL || window.webkitURL)
-      var downloadUrl = windowUrl.createObjectURL(blob)
-      var anchor = document.createElement("a")
-      anchor.href = downloadUrl
+      var blob = new Blob([result.data], { type: result.config.dataType });
+      var windowUrl = (window.URL || window.webkitURL);
+      var downloadUrl = windowUrl.createObjectURL(blob);
+      var anchor = document.createElement("a");
+      anchor.href = downloadUrl;
       // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
       // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
-      anchor.download = "distributions.csv"
-      document.body.appendChild(anchor)
-      anchor.click()
-      windowUrl.revokeObjectURL(blob)
+      anchor.download = "distributions.csv";
+      document.body.appendChild(anchor);
+      anchor.click();
+      windowUrl.revokeObjectURL(blob);
 
-    })
+    });
   }
 
   return {

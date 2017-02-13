@@ -10,7 +10,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
     currentUser: null,
     idToken: null,
     is_admin: false
-  }
+  };
 
 
   /**
@@ -31,7 +31,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
       console.log("Authentication failed: ", error);
       is_user = false;
     });
-  };
+  }
 
   function isUser(firebaseUser, token, event) {
     return $q(function (resolve, reject) {
@@ -76,7 +76,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
           is_user = false;
           reject(err);
         });
-    })
+    });
   }
 
   /**
@@ -123,7 +123,7 @@ app.factory('Auth', ['$firebaseAuth', '$http', 'firebase', '$location', '$rootSc
     .catch(function (err) {
       console.log('firebase log out error:', err);
     });
-  };
+  }
 
   return {
     isUser: isUser,

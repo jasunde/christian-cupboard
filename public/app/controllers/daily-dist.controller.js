@@ -1,4 +1,4 @@
-app.controller("DailyDistributionController", 
+app.controller("DailyDistributionController",
   ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', 'ConfirmFactory', 'DateRangeFactory',
     function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q, ConfirmFactory, DateRangeFactory){
 
@@ -130,7 +130,7 @@ app.controller("DailyDistributionController",
       self.getCsv = function() {
         var params = packageParams();
         DistributionFactory.getCsv(params);
-      }
+      };
 
   self.valueCheck = function () {
     if(hasOne(self.newDistribution.categories)) {
@@ -138,7 +138,7 @@ app.controller("DailyDistributionController",
     } else {
       return true;
     }
-  }
+  };
 
   function hasOne(obj) {
     var result = false;

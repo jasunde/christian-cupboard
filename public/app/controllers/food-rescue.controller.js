@@ -1,4 +1,4 @@
-app.controller("FoodRescueController", 
+app.controller("FoodRescueController",
   ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'dateRangeFilter', 'mergeCategoriesFilter', 'ConfirmFactory', 'toastr', 'DateRangeFactory',
     function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, dateRangeFilter, mergeCategoriesFilter, ConfirmFactory, toastr, DateRangeFactory){
 
@@ -14,7 +14,7 @@ app.controller("FoodRescueController",
       self.rescueContacts = ContactsFactory.contacts;
       self.rescueDonations = DonationsFactory.donations;
       self.user = Auth.user;
-      
+
       $scope.daterange = DateRangeFactory.daterange;
 
       if(CategoryFactory.categories.list && ContactsFactory.contacts.list && DonationsFactory.donations.list) {
@@ -41,7 +41,7 @@ app.controller("FoodRescueController",
             self.gotData = true;
           });
       }
-      
+
       function selectFilter(is_admin) {
         var filter = 'donation_entered';
         if(is_admin) {
@@ -60,7 +60,7 @@ app.controller("FoodRescueController",
           getData();
         }
       });
-      
+
       $scope.$watchCollection('daterange', getData);
 
       self.submitDonation = function() {
@@ -129,7 +129,7 @@ app.controller("FoodRescueController",
       self.getCsv = function () {
         var params = packageParams();
         DonationsFactory.getCsv(params);
-      }
+      };
 
       self.toggleEditable = function (donation) {
         if(donation.editable) {
@@ -145,7 +145,7 @@ app.controller("FoodRescueController",
     } else {
       return true;
     }
-  }
+  };
 
   function hasOne(obj) {
     var result = false;

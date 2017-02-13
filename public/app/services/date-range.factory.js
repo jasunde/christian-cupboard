@@ -2,7 +2,7 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
   var daterange = {
     start: new Date(),
     end: new Date()
-  }
+  };
 
   if(Auth.user) {
     init();
@@ -16,7 +16,7 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
   $rootScope.$on('user:login', function (event, data) {
     console.log('user login');
     init();
-  })
+  });
 
   function init() {
     if(Auth.user) {

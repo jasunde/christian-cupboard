@@ -5,5 +5,5 @@ app.directive('saveGlyph', function () {
       boolean: '='
     },
     templateUrl: 'views/directives/save-glyph.html'
-  }
-})
+  };
+});

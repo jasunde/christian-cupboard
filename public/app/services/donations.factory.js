@@ -6,7 +6,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
 
   function categoryPropsToObject(donations) {
     donations.list.forEach(function (donation) {
-      donation.categories = {}
+      donation.categories = {};
 
       for(prop in donation) {
 
@@ -14,7 +14,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
           if(donation[prop]) {
             donation.categories[CategoryFactory.categories.map[prop]] = parseFloat(donation[prop]);
           }
-          delete donation[prop]
+          delete donation[prop];
         }
 
       }
@@ -68,7 +68,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
         return getDonations()
         .then(function (){
         toastr.success('Donation Submitted');
-        })
+      });
       });
     }
   }
@@ -88,7 +88,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
         return getDonations()
         .then(function(){
           toastr.info('Donation Edited');
-        })
+        });
       })
       .catch(function (err) {
         console.log('POST donation error:', err);
@@ -113,7 +113,7 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
             return getDonations()
             .then(function(){
               toastr.error('Donation Deleted');
-            })
+            });
           })
         .catch(function (err) {
           console.log('DELETE donation error:', err);
@@ -131,21 +131,21 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
     })
     .then(function(result) {
       // var headers = result.headers()
-      var blob = new Blob([result.data], { type: result.config.dataType })
-      var windowUrl = (window.URL || window.webkitURL)
-      var downloadUrl = windowUrl.createObjectURL(blob)
-      var anchor = document.createElement("a")
-      anchor.href = downloadUrl
+      var blob = new Blob([result.data], { type: result.config.dataType });
+      var windowUrl = (window.URL || window.webkitURL);
+      var downloadUrl = windowUrl.createObjectURL(blob);
+      var anchor = document.createElement("a");
+      anchor.href = downloadUrl;
       // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
       // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
-      anchor.download = "donations.csv"
-      document.body.appendChild(anchor)
-      anchor.click()
-      windowUrl.revokeObjectURL(blob)
+      anchor.download = "donations.csv";
+      document.body.appendChild(anchor);
+      anchor.click();
+      windowUrl.revokeObjectURL(blob);
 
     })
     .catch(function (err) {
-      console.log('GET csv error:', err)
+      console.log('GET csv error:', err);
     });
   }
 

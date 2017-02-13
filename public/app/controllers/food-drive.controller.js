@@ -1,4 +1,4 @@
-app.controller("FoodDriveController", 
+app.controller("FoodDriveController",
   ['DonationsFactory', 'CategoryFactory', 'ContactsFactory', 'DistributionFactory', '$scope', 'Auth', '$q', 'dateRangeFilter', 'ConfirmFactory', '$uibModal', 'DateRangeFactory',
     function(DonationsFactory, CategoryFactory, ContactsFactory, DistributionFactory, $scope, Auth, $q, dateRangeFilter, ConfirmFactory, $uibModal, DateRangeFactory){
       var self = this;
@@ -12,7 +12,7 @@ app.controller("FoodDriveController",
       self.driveCategories = CategoryFactory.categories;
       self.driveContacts = ContactsFactory.contacts;
       self.driveDonations = DonationsFactory.donations;
-      self.user = Auth.user
+      self.user = Auth.user;
       self.atLeastOneWeight = false;
 
       $scope.daterange = DateRangeFactory.daterange;
@@ -52,7 +52,7 @@ app.controller("FoodDriveController",
       }
 
       if(Auth.user.idToken){
-        getData()
+        getData();
       }
 
       $scope.$on('user:updated', function (event, data) {
@@ -127,10 +127,10 @@ app.controller("FoodDriveController",
         } else {
           return true;
         }
-      }
+      };
 
       self.openModal = function (size, donation, action, categories) {
-        // var parentElem = parentSelector ? 
+        // var parentElem = parentSelector ?
         //   angular.element($document[0].querySelector(parentSelector)) : undefined;
         var modalInstance = $uibModal.open({
           animation: self.animationsEnabled,
@@ -178,7 +178,7 @@ app.controller("FoodDriveController",
       self.getCsv = function () {
         var params = packageParams();
         DonationsFactory.getCsv(params);
-      }
+      };
 
 
       function hasOne(obj) {
@@ -215,4 +215,3 @@ app.controller('DriveCtrl', function ($uibModalInstance, donation, action, categ
     $uibModalInstance.dismiss('cancel');
   };
 });
-

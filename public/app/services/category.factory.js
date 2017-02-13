@@ -11,9 +11,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', "toastr", f
 
   $rootScope.$on('user:updated', function (event, data) {
     if(verbose) {console.log('user update categories');}
-  
+
     if(Auth.user.currentUser) {
-      if(verbose) {console.log('calling getting categories')}
+      if(verbose) {console.log('calling getting categories');
+    }
       getCategories();
     }
   });
@@ -39,7 +40,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', "toastr", f
         .catch(function (err) {
           console.log('GET categories error:', err);
           categories.list = null;
-        })
+        });
     } else {
       if(verbose) {console.log('Not token, no categories');}
       categories.list = null;
@@ -61,7 +62,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', "toastr", f
           getCategories()
             .then(function(){
               toastr.success('Category Added');
-            })
+            });
           resolve(result);
         })
         .catch(function (err) {
@@ -89,7 +90,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', "toastr", f
             getCategories()
               .then(function(){
               toastr.info('Category Updated');
-            })
+            });
             resolve(result);
           })
           .catch(function (err) {

@@ -10,8 +10,8 @@ app.controller('LoginController', ['Auth', '$location', '$scope', function (Auth
       if(Auth.user.currentUser) {
         $location.path('/foodRescue');
       }
-    })
-  }
+    });
+  };
 
   // $scope.$on('user:updated', function () {
   //   if(Auth.user.currentUser) {

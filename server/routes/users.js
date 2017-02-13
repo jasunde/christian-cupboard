@@ -1,22 +1,22 @@
-var express = require('express')
-var router = express.Router()
-var pg = require('pg')
-var config = require('../config')
+var express = require('express');
+var router = express.Router();
+var pg = require('pg');
+var config = require('../config');
 
-var pool = new pg.Pool(config.pg)
+var pool = new pg.Pool(config.pg);
 
 router.get('/', function (req, res) {
   pool.query(
     'SELECT * FROM users'
   )
   .then(function (result) {
-    res.send(result.rows)
+    res.send(result.rows);
   })
   .catch(function (err) {
-    console.log('GET users error:', err)
-    res.sendStatus(500)
-  })
-})
+    console.log('GET users error:', err);
+    res.sendStatus(500);
+  });
+});
 
 router.get('/id/:id', function (req, res) {
   pool.query(
@@ -25,16 +25,16 @@ router.get('/id/:id', function (req, res) {
     [req.params.id]
   )
   .then(function (result) {
-    res.send(result.rows[0])
+    res.send(result.rows[0]);
   })
   .catch(function (err) {
     console.log('GET user by id error:', err);
-    res.sendStatus(500)
-  })
-})
+    res.sendStatus(500);
+  });
+});
 
 router.post('/', function (req, res) {
-  var user = req.body
+  var user = req.body;
   pool.query(
     'INSERT INTO users (first_name, last_name, email, is_admin, is_active) '+
     'VALUES ($1, $2, $3, $4, $5)',
@@ -47,16 +47,16 @@ router.post('/', function (req, res) {
     ]
   )
   .then(function (response) {
-    res.sendStatus(200)
+    res.sendStatus(200);
   })
   .catch(function (err) {
     console.log('POST user error:', err);
-    res.sendStatus(500)
-  })
-})
+    res.sendStatus(500);
+  });
+});
 
 router.put('/', function (req, res) {
-  var user = req.body
+  var user = req.body;
   pool.query(
     'UPDATE users '+
     'SET first_name = $1, last_name = $2, email = $3, is_admin = $4, is_active = $5 '+
@@ -71,13 +71,13 @@ router.put('/', function (req, res) {
     ]
   )
   .then(function (response) {
-    res.sendStatus(204)
+    res.sendStatus(204);
   })
   .catch(function (err) {
     console.log('PUT user error:', err);
-    res.sendStatus(500)
-  })
-})
+    res.sendStatus(500);
+  });
+});
 
 //toggle is_active
 router.put('/active/:id', function(req, res) {
@@ -90,12 +90,12 @@ console.log('putting now');
     ]
   )
   .then(function(response) {
-    res.sendStatus(204)
+    res.sendStatus(204);
   })
   .catch(function(err) {
     console.log('PUT user error: ', err);
-    res.status(500).send(err)
+    res.status(500).send(err);
   });
 });
 
-module.exports = router
+module.exports = router;

@@ -1,4 +1,4 @@
-app.controller("SubDistributionController", 
+app.controller("SubDistributionController",
   ['$scope', 'Auth', 'CategoryFactory', 'ContactsFactory', 'DonationsFactory', 'DistributionFactory', '$q', 'ConfirmFactory', 'DateRangeFactory',
     function($scope, Auth, CategoryFactory, ContactsFactory, DonationsFactory, DistributionFactory, $q, ConfirmFactory, DateRangeFactory){
       var self = this;
@@ -116,7 +116,7 @@ app.controller("SubDistributionController",
         })
           .catch(function (err) {
           });
-      }
+      };
 
       function packageParams() {
         var queryRange = DateRangeFactory.getQueryRange();
@@ -130,8 +130,8 @@ app.controller("SubDistributionController",
 
       self.getCsv = function() {
         var params = packageParams();
-        DistributionFactory.getCsv(params)
-      }
+        DistributionFactory.getCsv(params);
+      };
 
 
       self.valueCheck = function () {
@@ -140,7 +140,7 @@ app.controller("SubDistributionController",
         } else {
           return true;
         }
-      }
+      };
 
       function hasOne(obj) {
         var result = false;
