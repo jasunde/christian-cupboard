@@ -344,7 +344,10 @@ router.put('/', function (req, res) {
             if(index < categories.length - 1) {
               details += ', ';
             }
-            values.push(donation.donation_id, category, donation.categories[category]);
+            if(donation.categories[category] === '') {
+              donation.categories[category] = 0;
+            }
+            values.push(donation.donation_id, category, donation.categories[category])
           });
           console.log('values', values);
 

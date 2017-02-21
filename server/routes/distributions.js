@@ -342,7 +342,10 @@ router.put('/', function(req, res) {
             if(index < categories.length - 1) {
               details += ', ';
             }
-            values.push(distribution.distribution_id, category, distribution.categories[category]);
+            if(distribution.categories[category] === '') {
+              distribution.categories[category] = 0;
+            }
+            values.push(distribution.distribution_id, category, distribution.categories[category])
           });
 
           var updateDetails = {
