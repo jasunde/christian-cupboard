@@ -112,7 +112,7 @@ function buildQuery(query, categories, toCsv) {
     result.text += ' LIMIT ' + MAX_GET;
   }
 
-
+  console.log('query', result.values);
   return result;
 }
 
@@ -193,8 +193,10 @@ router.get('/csv', function(req, res) {
             return row;
           });
           res.attachment('testing.csv');
-          var headers = Object.keys(result.rows[0]);
-          data.unshift(headers);
+          if(result.rows.length) {
+            var headers = Object.keys(result.rows[0]);
+            data.unshift(headers);
+          }
           res.csv(data);
         })
         .catch(function (err) {

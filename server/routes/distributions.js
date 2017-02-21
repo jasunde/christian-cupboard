@@ -108,7 +108,7 @@ function buildQuery(query, categories, toCsv) {
     result.text += ' LIMIT ' + MAX_GET;
   }
 
-  console.log('result', result);
+  // console.log('result', result);
   return result;
 }
 

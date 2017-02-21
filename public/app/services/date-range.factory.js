@@ -24,9 +24,9 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
     }
   }
 
-  function getFilterStartDate(isAdmin) {
+  function getFilterStartDate() {
     var start;
-    if(isAdmin) {
+    if(Auth.user.is_admin) {
       start = moment().subtract(2, 'months').toDate();
     } else {
       start = moment().toDate();
@@ -34,9 +34,9 @@ app.factory('DateRangeFactory', ['$rootScope', 'Auth', function($rootScope, Auth
     return start;
   }
 
-  function getQueryRange(isAdmin) {
+  function getQueryRange() {
     var queryRange = {};
-    if(isAdmin) {
+    if(Auth.user.is_admin) {
       queryRange = daterange;
     } else {
       queryRange.start = moment().subtract(1, 'months').toDate();

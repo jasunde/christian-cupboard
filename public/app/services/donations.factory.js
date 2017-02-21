@@ -131,6 +131,11 @@ app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', f
     })
     .then(function(result) {
       // var headers = result.headers()
+      var headers = result.headers;
+      var headersArray = [];
+      for(i = 0; i < headers.length; i++){
+        headersArray.push(result.headers);
+      }
       var blob = new Blob([result.data], { type: result.config.dataType });
       var windowUrl = (window.URL || window.webkitURL);
       var downloadUrl = windowUrl.createObjectURL(blob);

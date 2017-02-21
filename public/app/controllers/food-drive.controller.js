@@ -177,6 +177,7 @@ app.controller("FoodDriveController",
 
       self.getCsv = function () {
         var params = packageParams();
+        console.log('params', params);
         DonationsFactory.getCsv(params);
       };
 
