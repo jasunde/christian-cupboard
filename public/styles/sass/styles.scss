@@ -152,11 +152,12 @@ input[type=date]::-webkit-inner-spin-button {
   white-space: nowrap;
   input {
     text-align: center;
+    padding-left: 0; 
+    padding-right: 0; 
   }
   th:first-child {
     border-radius: 6px 0 0 0;
   }
-
   th:last-child {
     border-radius: 0 6px 0 0;
   }
@@ -167,6 +168,10 @@ input[type=date]::-webkit-inner-spin-button {
   th, td, tr {
     border-bottom: 1px solid gainsboro;
     text-align: center;
+  }
+  tbody > tr > td {
+    padding-left: 0; 
+    padding-right: 0; 
   }
 }
 
