@@ -1,7 +1,7 @@
-var pg = require('pg')
-var config = require('../config')
+var pg = require('pg');
+var config = require('../config');
 
-var pool = new pg.Pool(config.pg)
+var pool = new pg.Pool(config.pg);
 
 module.exports = function (req, res, next) {
   pool.query(
@@ -10,7 +10,7 @@ module.exports = function (req, res, next) {
     [req.decodedToken.email]
   )
   .then(function (result) {
-    req.user = result.rows[0]
+    req.user = result.rows[0];
     if(req.user) {
       next();
     } else {
@@ -19,6 +19,6 @@ module.exports = function (req, res, next) {
   })
   .catch(function (err) {
     console.log('User access error:', err);
-    res.sendStatus(403)
-  })
-}
+    res.sendStatus(403);
+  });
+};

@@ -34,8 +34,8 @@ var tokenDecoder = function(req, res, next){
       res.sendStatus(403);
     });
   } else {
-    res.sendStatus(403)
+    res.sendStatus(403);
   }
-}
+};
 
 module.exports = tokenDecoder;

@@ -1,34 +1,51 @@
-app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
+app.factory("DistributionFactory", ["$http", "Auth", '$q', 'CategoryFactory', 'toastr', function($http, Auth, $q, CategoryFactory, toastr){
  var verbose = false;
  var self = this;
  var distributions = {
    list: null
  };
 
- function getDistributions(){
-   if(Auth.user.idToken) {
-     if(verbose){console.log("Getting distributions");}
-    return $http({
-       method: 'GET',
-       url: '/distributions',
-       headers: {
-         id_token: Auth.user.idToken
-       }
-     })
-     .then(function (result) {
-       distributions.list = result.data
-       distributions.list.forEach(function (distribution) {
-         distribution.timestamp = new Date(distribution.timestamp);
-       });
-       if (verbose) {console.log('distributions', distributions.list);}
-     })
-     .catch(function (err) {
-       console.log('GET distributions error:', err);
-       distributions.list = null;
-     })
-   } else {
-    if(verbose) {console.log('No token, no distributions!');}
-    distributions.list = null;
+  function categoryPropsToObject(distributions) {
+    distributions.list.forEach(function (distribution) {
+      distribution.categories = {};
+      for(prop in distribution) {
+        if(CategoryFactory.categories.map.hasOwnProperty(prop)) {
+          if(distribution[prop]) {
+            distribution.categories[CategoryFactory.categories.map[prop]] = parseFloat(distribution[prop]);
+          }
+          delete distribution[prop];
+        }
+      }
+    });
+    return distributions;
+  }
+
+  function getDistributions(params){
+    if(Auth.user.idToken) {
+      if(verbose){console.log("Getting distributions");}
+      return $http({
+        method: 'GET',
+        url: '/distributions',
+        headers: {
+          id_token: Auth.user.idToken
+        },
+        params: params
+      })
+        .then(function (result) {
+          distributions.list = result.data;
+          distributions = categoryPropsToObject(distributions);
+          distributions.list.forEach(function (distribution) {
+            distribution.timestamp = new Date(distribution.timestamp);
+          });
+          if (verbose) {console.log('distributions', distributions.list);}
+        })
+        .catch(function (err) {
+          console.log('GET distributions error:', err);
+          distributions.list = null;
+        });
+    } else {
+      if(verbose) {console.log('No token, no distributions!');}
+      distributions.list = null;
     }
   }
 
@@ -46,11 +63,12 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
         .then(function (result) {
           getDistributions()
           .then(function (result) {
+            toastr.success('Distribution Successful');
             resolve(result);
           })
           .catch(function (err) {
             console.log('GET distributions error:', err);
-            reject(err)
+            reject(err);
           });
         })
         .catch(function (err) {
@@ -78,15 +96,16 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           .then(function (result) {
             getDistributions()
               .then(function (result) {
-                resolve(result)
+                toastr.info('Distribution Edited');
+                resolve(result);
               })
               .catch(function (err) {
                 console.log('GET distributions error:', err);
-                reject(err)
+                reject(err);
               });
           })
         .catch(function (err) {
-          console.log('PUT user error:', err);
+          console.log('PUT distribution error:', err);
           reject();
         });
       } else {
@@ -107,13 +126,15 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
           }
         })
           .then(function (result) {
+            console.log('getting distributions');
             getDistributions()
             .then(function (result) {
+              toastr.error('Distribution Deleted');
               resolve(result);
             })
             .catch(function (err) {
               console.log('GET distributions error:', err);
-              reject(err)
+              reject(err);
             });
           })
           .catch(function (err) {
@@ -124,29 +145,35 @@ app.factory("DistributionFactory", ["$http", "Auth", '$q', function($http, Auth,
     });
   }
 
-  function getCsv(){
+  function getCsv(params){
     $http({
       method: 'GET',
-      url: '/distributions/csvtest',
+      url: '/distributions/csv',
       dataType: "text/csv",
-      headers: {id_token: Auth.user.idToken}
+      headers: {id_token: Auth.user.idToken},
+      params: params
     })
     .then(function(result) {
+
       console.log(result);
-      // var headers = result.headers()
-      var blob = new Blob([result.data], { type: result.config.dataType })
-      var windowUrl = (window.URL || window.webkitURL)
-      var downloadUrl = windowUrl.createObjectURL(blob)
-      var anchor = document.createElement("a")
-      anchor.href = downloadUrl
+      var headers = result.headers;
+      var headersArray = [];
+      for(i = 0; i < headers.length; i++){
+        headersArray.push(result.headers);
+      }
+      var blob = new Blob([result.data], { type: result.config.dataType });
+      var windowUrl = (window.URL || window.webkitURL);
+      var downloadUrl = windowUrl.createObjectURL(blob);
+      var anchor = document.createElement("a");
+      anchor.href = downloadUrl;
       // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
       // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
-      anchor.download = "distributions.csv"
-      document.body.appendChild(anchor)
-      anchor.click()
-      windowUrl.revokeObjectURL(blob)
+      anchor.download = "distributions.csv";
+      document.body.appendChild(anchor);
+      anchor.click();
+      windowUrl.revokeObjectURL(blob);
 
-    })
+    });
   }
 
   return {

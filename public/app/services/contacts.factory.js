@@ -1,4 +1,4 @@
-app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q){
+app.factory("ContactsFactory", ["$http", "Auth", '$q', 'toastr', function($http, Auth, $q, toastr){
 
   var verbose = false;
   var contacts = {};
@@ -79,6 +79,9 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
         .then(function (result) {
           console.log('Added contact', result);
           getNonClients()
+          .then(function(){
+              toastr.sucess('Contact Added');
+            })
           .then(function (result) {
             resolve(result);
           })
@@ -109,6 +112,9 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
         .then(function (result) {
           console.log('updated contact', result);
           getNonClients()
+          .then(function(){
+              toastr.info('Contact Updated');
+            })
           .then(function (result) {
             resolve(result);
           })
@@ -136,19 +142,19 @@ app.factory("ContactsFactory", ["$http", "Auth", '$q', function($http, Auth, $q)
        .then(function(result) {
          console.log(result);
          // var headers = result.headers()
-         var blob = new Blob([result.data], { type: result.config.dataType })
-         var windowUrl = (window.URL || window.webkitURL)
-         var downloadUrl = windowUrl.createObjectURL(blob)
-         var anchor = document.createElement("a")
-         anchor.href = downloadUrl
+         var blob = new Blob([result.data], { type: result.config.dataType });
+         var windowUrl = (window.URL || window.webkitURL);
+         var downloadUrl = windowUrl.createObjectURL(blob);
+         var anchor = document.createElement("a");
+         anchor.href = downloadUrl;
          // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
          // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
-         anchor.download = "contacts.csv"
-         document.body.appendChild(anchor)
-         anchor.click()
-         windowUrl.revokeObjectURL(blob)
+         anchor.download = "contacts.csv";
+         document.body.appendChild(anchor);
+         anchor.click();
+         windowUrl.revokeObjectURL(blob);
 
-       })
+       });
      }
 
    return {

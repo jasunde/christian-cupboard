@@ -1,130 +1,158 @@
-app.controller("DailyDistributionController", 
-  ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', 'ConfirmFactory',
-  function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q, ConfirmFactory){
+app.controller("DailyDistributionController",
+  ['$scope', 'Auth', 'DonationsFactory', 'DistributionFactory', 'CategoryFactory', '$scope', '$q', 'ConfirmFactory', 'DateRangeFactory',
+    function($scope, Auth, DonationsFactory, DistributionFactory, CategoryFactory, $scope, $q, ConfirmFactory, DateRangeFactory){
 
-  var self = this;
-  var verbose = false;
-  var distribution = {};
-  self.newDistribution = {
-    timestamp: new Date()
-  };
+      var self = this;
+      var verbose = false;
+      var distribution = {};
+      self.newDistribution = {
+        timestamp: new Date()
+      };
 
-  self.dailyDistributions = DistributionFactory.distributions;
-  self.categories = CategoryFactory.categories;
-  self.user = Auth.user;
-  console.log(self.categories);
+      self.dailyDistributions = DistributionFactory.distributions;
+      self.categories = CategoryFactory.categories;
+      self.user = Auth.user;
 
-if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
-  self.gotData = true;
-} else {
-  self.gotData = false;
-}
+      $scope.daterange = DateRangeFactory.daterange;
 
-// start loader
-if(Auth.user.idToken){
-  $q.all([
-    DistributionFactory.getDistributions()
-  ])
-  .then(function (response) {
-    DonationsFactory.getDonations();
-    self.gotData = true;
-  });
-}
+      if(CategoryFactory.categories.list && DistributionFactory.distributions.list) {
+        self.gotData = true;
+      } else {
+        self.gotData = false;
+      }
 
-$scope.$on('user:updated', function (event, data) {
+      function getData() {
+        var queryRange = DateRangeFactory.getQueryRange(Auth.user.is_admin);
+        var params = {
+          start_date: queryRange.start,
+          end_date: queryRange.end,
+        };
 
-  if(Auth.user.idToken){
-    $q.all([
-      DistributionFactory.getDistributions()
-    ])
-    .then(function (response) {
-      DonationsFactory.getDonations();
-      self.gotData = true;
-    });
-  }
-});
+        $scope.filterProp = selectFilter(Auth.user.is_admin);
 
-  self.toggleEditable = function (distribution) {
-    if(distribution.editable) {
-      distribution.editable = false;
+        $q.all([
+          DistributionFactory.getDistributions(params)
+        ])
+          .then(function (response) {
+            DonationsFactory.getDonations(params);
+            self.gotData = true;
+          });
+      }
+
+      function selectFilter(is_admin) {
+        var filter = 'distribution_entered';
+        if(is_admin) {
+          filter = 'timestamp';
+        }
+        return filter;
+      }
+
+      // start loader
+      if(Auth.user.idToken){
+        getData();
+      }
+
+      $scope.$on('user:updated', function (event, data) {
+        if(Auth.user.idToken){
+          getData();
+        }
+      });
+
+      $scope.$watchCollection('daterange', getData);
+
+      self.toggleEditable = function (distribution) {
+        if(distribution.editable) {
+          distribution.editable = false;
+        } else {
+          distribution.editable = true;
+        }
+      };
+
+      self.addDistribution = function () {
+        if(verbose) {console.log(self.newDistribution);}
+        console.log('adding');
+        self.newDistribution.saving = true;
+        DistributionFactory.addDistribution(self.newDistribution)
+          .then(function (result) {
+            self.newDistribution = {
+              timestamp: new Date()
+            };
+            self.newDistribution.saving = false;
+          })
+          .catch(function (err) {
+            self.newDistribution.saving = false;
+          });
+      };
+
+      self.updateDistribution = function (distribution) {
+        console.log('distribution', distribution);
+        distribution.saving = true;
+        DistributionFactory.updateDistribution(distribution)
+          .then(function (result) {
+            distribution.saving = false;
+            distribution.editable = false;
+          })
+          .catch(function (err) {
+            distribution.saving = false;
+            distribution.editable = false;
+          });
+      };
+
+      self.deleteDistribution = function (distribution) {
+        if(verbose) {console.log('deleting');}
+
+        var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Distribution', item: distribution});
+
+        confirm.result
+          .then(function (config) {
+            distribution.saving = true;
+
+            DistributionFactory.deleteDistribution(distribution)
+              .then(function (result) {
+                distribution.saving = false;
+              });
+          })
+          .catch(function (err) {
+
+          });
+      };
+
+      function packageParams() {
+        var queryRange = DateRangeFactory.getQueryRange();
+        return {
+          start_date: queryRange.start,
+          end_date: queryRange.end,
+          org_type: '!sub_distribution',
+          contact_id: self.org_id
+        };
+      }
+
+      self.getCsv = function() {
+        var params = packageParams();
+        DistributionFactory.getCsv(params);
+      };
+
+  self.valueCheck = function () {
+    if(hasOne(self.newDistribution.categories)) {
+      return false;
     } else {
-      distribution.editable = true;
+      return true;
     }
   };
 
-  self.addDistribution = function () {
-    if(verbose) {console.log(self.newDistribution);}
-    console.log('adding');
-    self.newDistribution.saving = true;
-    DistributionFactory.addDistribution(self.newDistribution)
-      .then(function (result) {
-        self.newDistribution = {
-          timestamp: new Date()
-        };
-        self.newDistribution.saving = false;
-      })
-      .catch(function (err) {
-        self.newDistribution.saving = false;
-      });
-  };
+  function hasOne(obj) {
+    var result = false;
+    if(obj) {
+      var keys = Object.keys(obj);
 
-  self.updateDistribution = function (distribution) {
-    console.log('distribution', distribution);
-    distribution.saving = true;
-    DistributionFactory.updateDistribution(distribution)
-      .then(function (result) {
-        distribution.saving = false;
-        distribution.editable = false;
-      })
-      .catch(function (err) {
-        distribution.saving = false;
-        distribution.editable = false;
-      });
-  };
-
-    self.deleteDistribution = function (distribution) {
-      if(verbose) {console.log('deleting');}
-
-      var confirm = ConfirmFactory.confirm('sm', {action: 'Delete', type: 'Distribution', item: distribution});
-
-      confirm.result
-        .then(function (config) {
-        distribution.saving = true;
-
-        DistributionFactory.deleteDistribution(distribution)
-          .then(function (result) {
-            distribution.saving = false;
-          });
-        })
-        .catch(function (err) {
-
+      if(keys) {
+        result = keys.some(function (key) {
+          return obj[key];
         });
-    };
+      }
 
-  self.getCsv = function() {
-    DistributionFactory.getCsv()
+    }
+    return result;
   }
 
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
-  var yyyy = today.getFullYear();
-  if(dd<10) {
-      dd='0'+dd
-  }
-  if(mm<10) {
-      mm='0'+mm
-  }
-  today = mm+'/'+dd+'/'+yyyy;
-
-
-  var now = new Date().getTime();
-  $scope.date = new Date(2015, 10, 10);
-  $scope.ago = now < $scope.date.getTime();
-  $scope.before = now > $scope.date.getTime();
-
-  $scope.daterange = {
-    start: new Date(today),
-    end: new Date(today)
-  };
 }]);

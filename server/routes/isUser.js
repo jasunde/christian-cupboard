@@ -1,10 +1,10 @@
-var express = require('express')
-var router = express.Router()
+var express = require('express');
+var router = express.Router();
 
-var pg = require('pg')
-var config = require('../config')
+var pg = require('pg');
+var config = require('../config');
 
-var pool = new pg.Pool(config.pg)
+var pool = new pg.Pool(config.pg);
 
 
 router.get('/:email', function (req, res) {
@@ -14,12 +14,12 @@ router.get('/:email', function (req, res) {
     [req.params.email]
   )
   .then(function (result) {
-    res.send(result.rows[0])
+    res.send(result.rows[0]);
   })
   .catch(function (err) {
     console.log('GET user by email error:', err);
-    res.sendStatus(500)
-  })
-})
+    res.sendStatus(500);
+  });
+});
 
-module.exports = router
+module.exports = router;

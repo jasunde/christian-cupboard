@@ -1,10 +1,29 @@
-app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
+app.factory("DonationsFactory", ["$http", "Auth", 'CategoryFactory', 'toastr', function($http, Auth, CategoryFactory, toastr){
  var verbose = false;
  var donations = {
    list: null
  };
 
- function getDonations(){
+  function categoryPropsToObject(donations) {
+    donations.list.forEach(function (donation) {
+      donation.categories = {};
+
+      for(prop in donation) {
+
+        if(CategoryFactory.categories.map.hasOwnProperty(prop)) {
+          if(donation[prop]) {
+            donation.categories[CategoryFactory.categories.map[prop]] = parseFloat(donation[prop]);
+          }
+          delete donation[prop];
+        }
+
+      }
+    });
+
+    return donations;
+  }
+
+ function getDonations(params){
    if(Auth.user.idToken) {
      if(verbose){console.log("Getting Donations");}
      return $http({
@@ -12,10 +31,12 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
        url: '/donations',
        headers: {
          id_token: Auth.user.idToken
-       }
+       },
+       params: params
      })
      .then(function (result) {
        donations.list = result.data;
+        donations = categoryPropsToObject(donations);
        for (var i = 0; i < donations.list.length; i++) {
          donations.list[i].timestamp = new Date(donations.list[i].timestamp);
        }
@@ -44,7 +65,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        return getDonations();
+        return getDonations()
+        .then(function (){
+        toastr.success('Donation Submitted');
+      });
       });
     }
   }
@@ -61,7 +85,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
         }
       })
       .then(function (result){
-        return getDonations();
+        return getDonations()
+        .then(function(){
+          toastr.info('Donation Edited');
+        });
       })
       .catch(function (err) {
         console.log('POST donation error:', err);
@@ -83,7 +110,10 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
           }
         })
           .then(function (result){
-            return getDonations();
+            return getDonations()
+            .then(function(){
+              toastr.error('Donation Deleted');
+            });
           })
         .catch(function (err) {
           console.log('DELETE donation error:', err);
@@ -91,29 +121,32 @@ app.factory("DonationsFactory", ["$http", "Auth", function($http, Auth){
       }
   }
 
-  function getCsv(){
+  function getCsv(params){
     $http({
       method: 'GET',
-      url: '/donations/csvtest',
+      url: '/donations/csv',
       dataType: 'text/csv',
-      headers: {id_token: Auth.user.idToken}
+      headers: {id_token: Auth.user.idToken},
+      params: params
     })
     .then(function(result) {
-      console.log(result);
       // var headers = result.headers()
-      var blob = new Blob([result.data], { type: result.config.dataType })
-      var windowUrl = (window.URL || window.webkitURL)
-      var downloadUrl = windowUrl.createObjectURL(blob)
-      var anchor = document.createElement("a")
-      anchor.href = downloadUrl
+      var blob = new Blob([result.data], { type: result.config.dataType });
+      var windowUrl = (window.URL || window.webkitURL);
+      var downloadUrl = windowUrl.createObjectURL(blob);
+      var anchor = document.createElement("a");
+      anchor.href = downloadUrl;
       // var fileNamePattern = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
       // anchor.download = fileNamePattern.exec(headers['content-disposition'])[1]
-      anchor.download = "donations.csv"
-      document.body.appendChild(anchor)
-      anchor.click()
-      windowUrl.revokeObjectURL(blob)
+      anchor.download = "donations.csv";
+      document.body.appendChild(anchor);
+      anchor.click();
+      windowUrl.revokeObjectURL(blob);
 
     })
+    .catch(function (err) {
+      console.log('GET csv error:', err);
+    });
   }
 
   return {

@@ -5,5 +5,5 @@ app.directive('deleteGlyph', function () {
       boolean: '='
     },
     templateUrl: 'views/directives/delete-glyph.html'
-  }
-})
+  };
+});

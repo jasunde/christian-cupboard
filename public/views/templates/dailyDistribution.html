@@ -9,18 +9,17 @@
   <h2>Daily Distribution</h2>
 
   <div class= "row form-card" ng-if="ddc.user.is_admin">
-    <form>
       <div class="form-group col-sm-3">
-        <label>Start Date:</label>
+        <label>Start Date</label>
         <input class = "form-control" type="date" ng-model="daterange.start">
       </div>
       <div class="form-group col-sm-3">
-        <label>End Date:</label>
+        <label>End Date</label>
         <input class = "form-control" type="date" ng-model="daterange.end">
       </div>
 
       <div class="form-group col-sm-4">
-        <label>Search:</label>
+        <label>Search</label>
         <input class="form-control" type="search" ng-model="ddc.search">
       </div>
 
@@ -29,142 +28,193 @@
           type="button"
           class="btn btn-primary form-control"
           ng-click="ddc.getCsv()">
-          Download as CSV
+          Download<span class="hidden-sm hidden-md"> as CSV</span>
         </button>
       </div>
     </form>
   </div>
 
   <div class = "form-card row">
+  <form name="dailyDistForm" novalidate>
     <div class = "col-sm-4">
-      <label>Date:</label>
-      <input class="form-control" type="date" ng-model="ddc.newDistribution.timestamp">
+      <label>Date*</label>
+      <input class="form-control"
+             type="date"
+             ng-model="ddc.newDistribution.timestamp"
+             required>
     </div>
 
+  <ng-form name="dDFirstName">
     <div class = "col-sm-4">
-      <label>First Name:</label>
-      <input class="form-control" type="text" ng-model="ddc.newDistribution.first_name">
+      <label>First Name*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.first_name"
+             required>
     </div>
+  </ng-form>
 
     <div class = "col-sm-4">
-      <label>Last Name:</label>
-      <input class="form-control" type="text" ng-model="ddc.newDistribution.last_name" maxlength="3">
+      <label>Last 3 Initals*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.last_name"
+             maxlength="3"
+             required>
     </div>
 
-    <p ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}" class= "col-sm-3">
-      <label>{{category.name}}:</label><input type="number"
-      ng-model="ddc.newDistribution.categories[category.id]"
-      class="form-control">
-    </p>
+    <div class = "col-sm-2">
+      <label>Family Size*</label>
+      <input class="form-control"
+             type="text"
+             ng-model="ddc.newDistribution.family_size"
+             maxlength="3"
+             required>
+    </div>
+
+    <ng-form name="categoryFields">
+      <div class = "col-sm-2"
+        ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}"
+        ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty}">
+
+          <label>{{category.name}}</label>
+          <input
+            class="form-control"
+            type="number"
+            ng-model="ddc.newDistribution.categories[category.id]"
+            ng-required="ddc.valueCheck()">
+      </div>
+      <div class = "col-sm-4" ng-class="{ 'has-error' : categoryFields.$invalid && categoryFields.$dirty }">
+        <label></label>
+        <p class="help-block" ng-show="categoryFields.$invalid && categoryFields.$dirty">*Amount Required for One Category</p>
+      </div>
+    </ng-form>
     <div class="col-sm-1 align-button">
         <button
           type="button"
           class="btn btn-success form-control"
-          ng-click="ddc.addDistribution()">
+          ng-click="ddc.addDistribution()"
+          ng-disabled="dailyDistForm.$invalid">
           <add-glyph boolean="ddc.newDistribution.saving"></add-glyph>
         </button>
     </div>
+  </form>
   </div>
 
-  <table wt-responsive-table class="table-control table">
-    <div>
-      <thead class="table-header">
 
-        <!-- Headings -->
-        <tr>
-          <th>Date</th>
-          <th>First Name</th>
-          <th>Last Name Initals</th>
-          <!-- Switch to Angular Repeat from Category Factory -->
-          <th
-            ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}">
-            {{category.name}}
-          </th>
-          <!-- End Angular Category Repeat -->
-          <th></th>
-        </tr>
-      </thead>
+<table wt-responsive-table class="table-control table">
+  <div>
+  <thead class="table-header">
 
-      <tbody>
-        <!-- Add Distribution -->
-        <tr ng-repeat="distribution in (filtered = (ddc.dailyDistributions.list
-        | filter: ddc.search
-        | orderBy: '-timestamp'
-        | filter: {org: false}
-        | dateRange:'timestamp':daterange.start:daterange.end))">
+    <!-- Headings -->
+    <tr>
+      <th>Date</th>
+      <th>First Name</th>
+      <th>Last Name Initals</th>
+      <!-- Switch to Angular Repeat from Category Factory -->
+      <th
+        ng-repeat="category in ddc.categories.list | filter: {daily_dist: true}">
+        {{category.name}}
+      </th>
+      <!-- End Angular Category Repeat -->
+      <!-- <th>Time Weighed</th> -->
+      <th></th>
+    </tr>
+  </thead>
 
-          <!-- Date Weighed -->
-          <td>
-            <span
-              disabled
-              type="date"
-              ng-if="!distribution.editable">
-              {{distribution.timestamp | date: 'MM/dd/yyyy'}}
-            </span>
-            <span ng-if="distribution.editable">
-              <input class="form-control"
-              type="date"
-              ng-model="distribution.timestamp" required>
-            </span>
-          </td>
+    <tbody>
+      <!-- Add Distribution -->
+      <tr ng-repeat="distribution in (filtered = (ddc.dailyDistributions.list
+      | filter: ddc.search
+      | filter: {org: false}
+      | orderBy: '-timestamp'
+      | filter: {org: false}
+      | dateRange:filterProp:daterange.start:daterange.end))">
 
-          <!-- First Name -->
-          <td>
-            <span
-              disabled
-              ng-if="!distribution.editable">
-              {{distribution.first_name}}
-            </span>
-            <span ng-if="distribution.editable">
-              <input class="form-control" type="text" ng-model="distribution.first_name">
-            </span>
-          </td>
+        <!-- Date Weighed -->
+        <td>
+          <span
 
-          <!-- Last Name -->
-          <td>
-            <span
-              disabled
-              ng-if="!distribution.editable">
-              {{distribution.last_name}}
-            </span>
-            <span ng-if="distribution.editable">
-              <input class="form-control" type="text" ng-model="distribution.last_name" maxlength="3">
-            </span>
-          </td>
+            disabled
+            type="date"
+            ng-if="!distribution.editable">
+            {{distribution.timestamp | date: 'MM/dd/yyyy'}}
+          </span>
+          <span ng-if="distribution.editable">
+            <input class="form-control"
+            type="date"
+            ng-model="distribution.timestamp" required>
+          </span>
+        </td>
 
-          <!-- Categories -->
-          <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
-            <span
-              disabled
-              ng-if="!distribution.editable">
-              {{distribution.categories[category.id]}}
-            </span>
-            <span ng-if="distribution.editable">
-              <input
-                class="form-control"
-                type="text"
-                ng-model="distribution.categories[category.id]">
-            </span>
-          </td>
+        <!-- First Name -->
+        <td>
+          <span
 
-          <!-- Edit -->
-          <td>
-            <!-- Not editable -->
-            <span ng-if="!distribution.editable">
-              <button
-                  type="button"
-                  class="btn btn-primary"
-                  ng-click="ddc.toggleEditable(distribution)">
-                <span class="glyphicon glyphicon-pencil"></span>
-              </button>
-              <button
+            disabled
+            ng-if="!distribution.editable">
+            {{distribution.first_name}}
+          </span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.first_name">
+          </span>
+        </td>
+
+        <!-- Last Name -->
+        <td>
+          <span
+
+            disabled
+            ng-if="!distribution.editable">
+            {{distribution.last_name}}
+          </span>
+          <span ng-if="distribution.editable">
+            <input class="form-control" type="text" ng-model="distribution.last_name" maxlength="3">
+          </span>
+        </td>
+
+        <!-- Categories -->
+        <td ng-repeat="category in ddc.categories.list  | filter: {daily_dist: true}">
+          <span
+
+            disabled
+            ng-if="!distribution.editable">
+            {{distribution.categories[category.id]}}
+          </span>
+          <span ng-if="distribution.editable">
+            <input
+              class="form-control"
+              type="text"
+              ng-model="distribution.categories[category.id]">
+          </span>
+        </td>
+
+        <!-- Time Weighed -->
+        <!-- <td> -->
+        <!--   <span class="form-control" disabled ng-if="!distribution.editable">{{distribution.time_weighed}}</span> -->
+        <!--   <span ng-if="distribution.editable"> -->
+        <!--     <input class="form-control" type="date" ng-model="distribution.time_weighed"> -->
+        <!--   </span> -->
+        <!-- </td> -->
+
+        <!-- Edit -->
+        <td>
+          <!-- Not editable -->
+          <span ng-if="!distribution.editable">
+            <button
                 type="button"
-                class="btn btn-danger"
-                ng-click="ddc.deleteDistribution(distribution)">
-                <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
-                <delete-glyph boolean="distribution.saving"></delete-glyph>
-              </button>
-            </span>
+                class="btn btn-primary"
+                ng-click="ddc.toggleEditable(distribution)">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              ng-click="ddc.deleteDistribution(distribution)">
+              <!-- <span class="glyphicon glyphicon-trash"></span> Delete -->
+              <delete-glyph boolean="distribution.saving"></delete-glyph>
+            </button>
+          </span>
             <!-- Editable -->
             <span ng-if="distribution.editable">
               <button
@@ -177,7 +227,7 @@
                   type="button"
                   class="btn btn-default"
                   ng-click="ddc.toggleEditable(distribution)">
-                <span class="glyphicon glyphicon-remove"></span> Cancel
+                <span class="glyphicon glyphicon-remove"></span> 
               </button>
             </span>
           </td>
@@ -195,3 +245,4 @@
     </div>
   </table>
  </div>
+</div>

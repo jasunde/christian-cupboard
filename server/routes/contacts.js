@@ -1,20 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var csv = require('express-csv');
-var contactService = require('../modules/contactService')
+var contactService = require('../modules/contactService');
 
 var pg = require('pg');
-var config = require('../config')
+var config = require('../config');
 
 var pool = new pg.Pool(config.pg);
 
 // middleware to facilitate contact upsert
 router.use(function (req, res, next) {
   if(req.body) {
-    req.contact = req.body
+    req.contact = req.body;
   }
-  next()
-})
+  next();
+});
 
 router.get('/all', function(req, res) {
   pool.query(
@@ -35,12 +35,12 @@ router.get('/non-clients', function (req, res) {
     'WHERE NOT (donor = FALSE AND org = FALSE)'
   )
   .then(function (result) {
-    res.send(result.rows)
+    res.send(result.rows);
   })
   .catch(function (err) {
-    console.log('GET non-client contacts error:', err)
+    console.log('GET non-client contacts error:', err);
     res.status(500).send(err);
-  })
+  });
 });
 
 router.get('/', function(req, res) {
@@ -66,7 +66,7 @@ router.get('/organizations/:org_type', function(req, res) {
     ]
   )
   .then(function(result) {
-    res.send(result.rows)
+    res.send(result.rows);
   })
   .catch(function(err) {
     console.log('GET by type error:', err);
@@ -81,27 +81,27 @@ router.get('/id/:id', function(req, res) {
   contactService.getByID(req, res, req.params.id)
   .then(function (result) {
     if(result) {
-      res.send(result.rows)
+      res.send(result.rows);
     }
-  })
+  });
 });
 
 router.post('/', function (req, res) {
-  req.body.donor = true
+  req.body.donor = true;
   if(req.body.org_name) {
-    req.body.org = true
+    req.body.org = true;
     if(!req.body.org_type) {
-      req.body.org_type = 'food_rescue'
+      req.body.org_type = 'food_rescue';
     }
   } else {
-    req.body.org = false
+    req.body.org = false;
   }
   contactService.post(req,res)
   .then(function (response) {
     if(response) {
-      res.sendStatus(204)
+      res.sendStatus(204);
     }
-  })
+  });
 });
 
 router.put('/', function (req, res) {
@@ -109,9 +109,9 @@ router.put('/', function (req, res) {
   contactService.put(req, res)
   .then(function (response) {
     if(response) {
-      res.sendStatus(204)
+      res.sendStatus(204);
     }
-  })
+  });
 });
 
 //toggle is_active
@@ -125,11 +125,11 @@ console.log('putting now');
     ]
   )
   .then(function(response) {
-    res.sendStatus(204)
+    res.sendStatus(204);
   })
   .catch(function(err) {
     console.log('PUT contact error: ', err);
-    res.status(500).send(err)
+    res.status(500).send(err);
   });
 });
 
@@ -140,7 +140,7 @@ router.get('/donors/org', function(req, res) {
     'WHERE donor = TRUE AND org = TRUE'
   )
   .then(function(result) {
-    res.send(result.rows)
+    res.send(result.rows);
   })
   .catch(function(err) {
     console.log('GET by type error:', err);
@@ -155,7 +155,7 @@ router.get('/donors/individual', function(req, res) {
     'WHERE donor = TRUE and org = FALSE'
   )
   .then(function(result) {
-    res.send(result.rows)
+    res.send(result.rows);
   })
   .catch(function(err) {
     console.log('GET by type error:', err);
@@ -170,6 +170,8 @@ router.get('/csvtest', function(req, res) {
   .then(function(result) {
     console.log('result: ', result.rows);
     res.attachment('testing.csv');
+    var headers = Object.keys(result.rows[0]);
+    result.rows.unshift(headers);
     res.csv(
       result.rows
     );

@@ -1,4 +1,4 @@
-app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($http, Auth, $rootScope, $q) {
+app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', "toastr", function ($http, Auth, $rootScope, $q, toastr) {
   var verbose = false;
   var categories = {
     list: null,
@@ -11,9 +11,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
 
   $rootScope.$on('user:updated', function (event, data) {
     if(verbose) {console.log('user update categories');}
-  
+
     if(Auth.user.currentUser) {
-      if(verbose) {console.log('calling getting categories')}
+      if(verbose) {console.log('calling getting categories');
+    }
       getCategories();
     }
   });
@@ -31,7 +32,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
         .then(function (result) {
           categories.list = result.data;
           categories.map = categories.list.reduce(function (catMap, category) {
-            catMap[category.id] = undefined;
+            catMap[category.name] = category.id;
             return catMap;
           }, {});
           if(verbose) {console.log('map', categories.list);}
@@ -39,7 +40,7 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
         .catch(function (err) {
           console.log('GET categories error:', err);
           categories.list = null;
-        })
+        });
     } else {
       if(verbose) {console.log('Not token, no categories');}
       categories.list = null;
@@ -58,7 +59,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           }
         })
         .then(function (result) {
-          getCategories();
+          getCategories()
+            .then(function(){
+              toastr.success('Category Added');
+            });
           resolve(result);
         })
         .catch(function (err) {
@@ -83,7 +87,10 @@ app.factory("CategoryFactory", ["$http", "Auth", '$rootScope', '$q', function ($
           }
         })
           .then(function (result) {
-            getCategories();
+            getCategories()
+              .then(function(){
+              toastr.info('Category Updated');
+            });
             resolve(result);
           })
           .catch(function (err) {

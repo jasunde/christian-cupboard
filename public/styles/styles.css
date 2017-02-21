@@ -6332,7 +6332,9 @@ input[type=date]::-webkit-inner-spin-button {
   border-spacing: 0;
   white-space: nowrap; }
   .table-control input {
-    text-align: center; }
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0; }
   .table-control th:first-child {
     border-radius: 6px 0 0 0; }
   .table-control th:last-child {
@@ -6342,10 +6344,15 @@ input[type=date]::-webkit-inner-spin-button {
   .table-control th, .table-control td, .table-control tr {
     border-bottom: 1px solid gainsboro;
     text-align: center; }
+  .table-control tbody > tr > td {
+    padding-left: 0;
+    padding-right: 0; }
 
 @media (max-width: 760px) {
   h1 {
-    text-align: center; } }
+    text-align: center; }
+  .nav li:first-child {
+    margin-top: 30px; } }
 
 .banner {
   position: absolute;

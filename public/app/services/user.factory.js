@@ -1,4 +1,4 @@
-app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http, Auth, $rootScope, $q) {
+app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', 'toastr', function ($http, Auth, $rootScope, $q, toastr) {
   var users = {
     list: null
   };
@@ -52,6 +52,9 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
         })
         .then(function (result) {
           getUsers()
+          .then(function(){
+              toastr.sucess('User Added');
+            })
           .then(function (result) {
             resolve(result);
           })
@@ -83,6 +86,9 @@ app.factory('UserFactory', ['$http', 'Auth', '$rootScope', '$q', function ($http
         })
         .then(function (result) {
           getUsers()
+          .then(function(){
+              toastr.info('User Updated');
+            })
           .then(function (result) {
             resolve(result);
           })

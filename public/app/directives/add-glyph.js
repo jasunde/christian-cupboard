@@ -5,5 +5,5 @@ app.directive('addGlyph', function () {
       boolean: '='
     },
     templateUrl: 'views/directives/add-glyph.html'
-  }
-})
+  };
+});

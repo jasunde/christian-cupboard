@@ -10,9 +10,9 @@ app.filter('mergeCategories', function () {
           } else {
             totals[category] = item.categories[category];
           }
-        })
+        });
       });
     }
     return totals;
-  }
-})
+  };
+});

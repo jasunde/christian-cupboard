@@ -1,4 +1,4 @@
-app.controller('ContactController', 
+app.controller('ContactController',
   ['Auth', 'ContactsFactory', '$scope', '$uibModal', '$document', 'dateRangeFilter',
     function (Auth, ContactsFactory, $scope, $uibModal, $document, dateRangeFilter) {
       var self = this;
@@ -18,10 +18,10 @@ app.controller('ContactController',
       var mm = today.getMonth()+1; //January is 0!
       var yyyy = today.getFullYear();
       if(dd<10) {
-        dd='0'+dd
+        dd='0'+dd;
       }
       if(mm<10) {
-        mm='0'+mm
+        mm='0'+mm;
       }
       today = mm+'/'+dd+'/'+yyyy;
 
@@ -114,7 +114,7 @@ app.controller('ContactController',
       self.animationsEnabled = false;
 
       self.openModal = function (size, contact, action) {
-        // var parentElem = parentSelector ? 
+        // var parentElem = parentSelector ?
         //   angular.element($document[0].querySelector(parentSelector)) : undefined;
         var modalInstance = $uibModal.open({
           animation: self.animationsEnabled,
@@ -159,8 +159,8 @@ app.controller('ContactController',
       };
 
   self.getCsv = function(){
-    ContactsFactory.getCsv()
-  }
+    ContactsFactory.getCsv();
+  };
 
 }]);
 
